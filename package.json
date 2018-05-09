@@ -1,0 +1,28 @@
+{
+  "name": "sdk-starter",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@boundlessgeo/sdk": "^2.3.12",
+    "bootstrap": "^4.1.1",
+    "node-sass-chokidar": "^1.2.2",
+    "ol": "^4.6.5",
+    "ol-mapbox-style": "^2.11.2",
+    "react": "^16.3.2",
+    "react-dnd": "^2.6.0",
+    "react-dnd-html5-backend": "^2.6.0",
+    "react-dom": "^16.3.2",
+    "react-redux": "^5.0.7",
+    "react-scripts": "1.1.4",
+    "reactstrap": "^6.0.1",
+    "redux": "^4.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "build-css": "node-sass-chokidar src/ --include-path node_modules/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ --include-path node_modules/ -o src/ --watch --recursive"
+  }
+}
