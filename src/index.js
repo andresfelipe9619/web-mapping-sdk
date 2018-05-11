@@ -1,19 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'semantic-ui-css/semantic.min.css';
 import './index.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import App from './App';
+import App from "./app/App.js";
+import store from "./app/store";
+import {Provider} from "react-redux";
+import {BrowserRouter as Router} from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
-import { Provider } from 'react-redux';
-import {createStore, combineReducers} from 'redux';
-import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
-
-
-const store = createStore(combineReducers({'map': SdkMapReducer}), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render( 
     <Provider store={store}>
+    <Router>
+        <div>
             <App/>
+        </div>
+    </Router> 
 </Provider>, window.document.getElementById('root'));
 
 registerServiceWorker();

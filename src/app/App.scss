@@ -1,4 +1,7 @@
 @import "@boundlessgeo/sdk/stylesheet/sdk.scss";
+
+$primary-color: #2699FB;
+
 .App {
   text-align: center;
 }
@@ -26,4 +29,16 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.navbar {
+  background-color: $primary;
+  color: white;
+}
+
+.footer{
+
+  background-color: $primary-color;  
+  /* Set the fixed height of the footer here */
+
 }

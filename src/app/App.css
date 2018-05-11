@@ -252,3 +252,16 @@ li.sdk-layer {
     transform: rotate(0deg); }
   to {
     transform: rotate(360deg); } }
+
+.navbar {
+  background-color: #2699FB;
+  color: white; }
+
+.footer {
+  bottom: 0;
+  width: 100%;
+  background-color: #2699FB;
+  /* Set the fixed height of the footer here */
+  height: 200px;
+  line-height: 60px;
+  margin-top: 40px; }
