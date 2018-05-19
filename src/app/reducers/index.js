@@ -1,6 +1,8 @@
 import { combineReducers } from "redux";
 
 import SdkMapReducer from '@boundlessgeo/sdk/reducers/map';
+import SdkWfsReducer from '@boundlessgeo/sdk/reducers/wfs';
+
 import homeReducer from "./home";
 import dashboardReducer from "./dashboard";
 import authReducer from "./auth";
@@ -11,6 +13,7 @@ import loginReducer from "./login"
 
 export default combineReducers({
   map : SdkMapReducer,
+  wfs: SdkWfsReducer,
   homeReducer,
   dashboardReducer,
   authReducer,

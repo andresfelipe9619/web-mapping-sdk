@@ -20,8 +20,8 @@ export class Footer extends Component {
           vertical
           style={{
           margin: '5em 0em 0em',
-          padding: '5em 0em',
-          backgroundColor:'#3BA2FB'
+          padding: '5em 0em'
+          // backgroundColor:'#3BA2FB'
         }}>
           <Container textAlign='center'>
             <Grid divided inverted stackable>

@@ -3,8 +3,11 @@ import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
 import Scaleline from '@boundlessgeo/sdk/components/map/scaleline';
 import LayerList from '@boundlessgeo/sdk/components/layer-list';
 // import MapPanel from '@boundlessgeo/sdk/components/MapPanel';
+import WMSCapabilitiesFormat from 'ol/format/wmscapabilities';
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import * as SdkMapActions from '@boundlessgeo/sdk/actions/map';
+import * as SdkWfsActions from '@boundlessgeo/sdk/actions/wfs';
+
 // import { REGISTER_FAILURE } from './actions/constants/ActionTypes';
 import { connect } from 'react-redux';
 import {
@@ -21,8 +24,8 @@ class Map extends Component {
         this.props.initialLoad();
     }
 
-    render(){
-        const mBorder = {borderStyle: 'solid', borderColor: '#3BA2FB'};
+    render() {
+        const mBorder = { borderStyle: 'solid', borderColor: '#3BA2FB' };
         return (
             <div>
                 <Grid>
@@ -54,51 +57,39 @@ const mapDispatchToProps = dispatch => {
             // add an OSM layer
             dispatch(SdkMapActions.addLayer({ id: 'osm', source: 'osm' }));
 
+            const url = 'http://localhost:8080/geoserver/my_web_app/wms?service=WMS&request=GetCapabilities';
+            fetch(url).then(
+                response => response.text(),
+                error => console.error('An error occured.', error
+                ))
+                .then((xml) => {
+                    const info = new WMSCapabilitiesFormat().read(xml);
+                    const root = info.Capability.Layer.Layer;
+                    console.log('ROOT', root)
+                    root.map((layer) => {
+                        if (layer.Title == 'mallas' || layer.Title == 'clasificadoras' || layer.Title == 'bandas' || layer.Title == 'productocrudo' || layer.Title == 'productofinal') {
+                            const layerUrl = `http://localhost:8080/geoserver/my_web_app/wms?service=WMS&version=1.1.0&request=GetMap&layers=my_web_app:${layer.Name}&styles=&bbox=1060980.05,879701.83,1061502.75,880039.71&width=768&height=496&srs=EPSG:3115&format=image/png&transparent=true`
+                            dispatch(SdkMapActions.addSource(layer.Name, {
+                                type: 'raster',
+                                tileSize: 256,
+                                tiles: [layerUrl],
+                            }));
 
-            const clasificadorasUrl = `http://localhost:8080/geoserver/my_web_app/wms?service=WMS&version=1.1.0&request=GetMap&layers=my_web_app:clasificadoras&styles=&bbox=1061365.36661719,879657.369418114,1061459.79364869,879702.249508635&width=768&height=365&srs=EPSG:3115&format=image%2Fpng&TRANSPARENT=TRUE`;
-
-            // this requires CORS headers on the geoserver instance.
-            // const url = 'https://demo.boundlessgeo.com/geoserver/wms?service=WMS&request=GetCapabilities';
-
-            // const getMapUrl = `https://demo.boundlessgeo.com/geoserver/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&SRS=EPSG:900913&LAYERS=${layer.Name}&STYLES=&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}`;
-            dispatch(SdkMapActions.addSource('clasificadoras', {
-              type: 'raster',
-              tileSize: 256,
-              tiles: [clasificadorasUrl],
-            }));
-            dispatch(SdkMapActions.addLayer({
-              type: 'raster',
-              metadata: {
-                'bnd:title': 'clasificadoras',
-              },
-              id: 'clasificadoras',
-              source: 'clasificadoras',
-            }));
+                            dispatch(SdkMapActions.addLayer({
+                                type: 'raster',
+                                metadata: {
+                                  'bnd:title': layer.Title,
+                                  'bnd:queryable': layer.queryable,
+                                },
+                                id: layer.Name,
+                                source: layer.Name,
+                            }));
+                        }
+                    })
+                })
         }
     }
 }
 
 
 export default connect(null, mapDispatchToProps)(Map);
-
-// fetch(url).then(response => response.text(), error => console.error('An error occured.', error), ).then(xml => {
-//     //   const info = new WMSCapabilitiesFormat().read(xml);
-//     //   const root = info.Capability.Layer;
-
-//     // fetch(mallasUrl).then(result => console.log(result));
-
-//     dispatch(SdkMapActions.addSource('mallas', {
-//         type: 'raster',
-//         tileSize: 256,
-//         tiles: [mallasUrl]
-//     }));
-
-//     dispatch(SdkMapActions.addLayer({
-//         type: 'raster',
-//         metadata: {
-//             'bnd:title': 'mallas'
-//         },
-//         id: 'mallas',
-//         source: 'mallas'
-//     }));
-// })
