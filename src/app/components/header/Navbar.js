@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
     Container,
     Image,
@@ -10,7 +10,7 @@ import {
     Header,
     Icon
 } from 'semantic-ui-react'
-import {logout} from "../../actions/authActions";
+import { logout } from "../../actions/authActions";
 
 
 class Navbar extends Component {
@@ -22,19 +22,19 @@ class Navbar extends Component {
         // this.handleLogoutClick = this.handleLogoutClick.bind(this);
 
     }
-    handleItemClick = (e, {name}) => this.setState({activeItem: name})
+    handleItemClick = (e, { name }) => this.setState({ activeItem: name })
     // handleLogoutClick(e) {     this.props.requestLogout(); }
     render() {
-        const {activeItem} = this.state;
+        const { activeItem } = this.state;
         return (
             <div>
                 <Segment
-                color='blue'
+                    color='blue'
                     style={{
-                    marginBottom: '50px',
-                }}>
-                    <Menu fixed='top'>
-                        <Container >
+                        marginBottom: '50px',
+                    }}>
+                    <Menu fixed='top' icon='labeled' >
+                        <Menu.Menu position='right' style={{ marginRight: '10em' }}>
                             <Menu.Item
                                 name='inicio'
                                 active={activeItem === 'inicio'}
@@ -43,20 +43,54 @@ class Navbar extends Component {
                                 to="/"
                                 header
                                 color='blue'>
+                                <Icon name='home' />
                                 Inicio
                             </Menu.Item>
                             <Menu.Item
+                                color='blue'
                                 name='mapa'
                                 active={activeItem === 'mapa'}
                                 onClick={this.handleItemClick}
                                 as={Link}
-                                to="/mapa">Mapa</Menu.Item>
+                                to="/mapa">
+                                <Icon name='map' />
+                                Mapa</Menu.Item>
                             <Menu.Item
-                                name='acciones'
-                                active={activeItem === 'acciones'}
+                                color='blue'
+                                name='sql'
+                                active={activeItem === 'sql'}
                                 onClick={this.handleItemClick}
-                                to="/acciones"
-                                as={Link}>Acciones</Menu.Item>
+                                to="/sql"
+                                as={Link}>
+                                <Icon name='code' />
+                                SQL</Menu.Item>
+                            <Menu.Item
+                                color='blue'
+                                name='usuarios'
+                                active={activeItem === 'usuarios'}
+                                onClick={this.handleItemClick}
+                                to="/usuarios"
+                                as={Link}>
+                                <Icon name='users' />
+                                Usuarios</Menu.Item>
+                            <Menu.Item
+                                color='blue'
+                                name='despachos'
+                                active={activeItem === 'despachos'}
+                                onClick={this.handleItemClick}
+                                to="/despachos"
+                                as={Link}>
+                                <Icon name='shopping basket' />
+                                Despachos</Menu.Item>
+                            <Menu.Item
+                                color='blue'
+                                name='ingreso'
+                                active={activeItem === 'ingreso'}
+                                onClick={this.handleItemClick}
+                                to="/ingreso"
+                                as={Link}>
+                                <Icon name='sign in' />
+                                Ingreso</Menu.Item>
                             {/* {this.props.user.admin
                                 ? <Menu.Item
                                         name='dashboard'
@@ -81,7 +115,7 @@ class Navbar extends Component {
                                             to = "/registro" style = {{marginLeft: '0.5em'}} > Registrarse </Button>
                                 </Segment>   }
                             </Menu.Item> */}
-                        </Container>
+                        </Menu.Menu>
                     </Menu>
                 </Segment>
             </div>
