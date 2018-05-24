@@ -115,15 +115,13 @@ const mapDispatchToProps = dispatch => {
                             })
                             .then((features) => {
                                 features.map((feature) => {
+                                    console.log('Feature', feature)
+                                    
                                     dispatch(SdkMapActions.addFeatures(layersName[i], [{
                                         type: 'Feature',
                                         properties: {
                                             id: feature.id,
-                                            nombre: feature.properties.nombre,
-                                            estado: feature.properties.estado,
-                                            capacidad: feature.properties.capacidad,
-                                            velocidad: feature.properties.velocidad,
-
+                                            ...feature.properties
                                         },
                                         geometry: {
                                             type: feature.geometry.type,
