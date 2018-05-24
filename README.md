@@ -1,5 +1,4 @@
 # Web Mapping - Boundless Sdk
-An information system for a fruit store, that helps admins to manage their orders and invoices, and users to order easily
 
 ### Prerequisites
 
