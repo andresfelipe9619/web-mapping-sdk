@@ -60,7 +60,7 @@ class Navbar extends Component {
                                 name='sql'
                                 active={activeItem === 'sql'}
                                 onClick={this.handleItemClick}
-                                to="/sql"
+                                to="mapa/sql"
                                 as={Link}>
                                 <Icon name='code' />
                                 SQL</Menu.Item>
@@ -69,7 +69,7 @@ class Navbar extends Component {
                                 name='usuarios'
                                 active={activeItem === 'usuarios'}
                                 onClick={this.handleItemClick}
-                                to="/usuarios"
+                                to="/dashboard/usuarios"
                                 as={Link}>
                                 <Icon name='users' />
                                 Usuarios</Menu.Item>
@@ -78,7 +78,7 @@ class Navbar extends Component {
                                 name='despachos'
                                 active={activeItem === 'despachos'}
                                 onClick={this.handleItemClick}
-                                to="/despachos"
+                                to="/dashboard/despachos"
                                 as={Link}>
                                 <Icon name='shopping basket' />
                                 Despachos</Menu.Item>

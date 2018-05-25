@@ -5,7 +5,6 @@ import Login from './components/auth/Login.js';
 import Navbar from './components/header/Navbar'
 import Register from './components/auth/Register.js';
 import Footer from './components/footer/Footer.js';
-import UserActions from './components/userActions/UserActions.js'
 import Dashboard from './components/dashboard/Dashboard.js';
 import NoMatch from './components/home/NoMatch.js';
 import PrivateRoute from './components/auth/PrivateRoute';
@@ -32,8 +31,7 @@ class App extends Component {
           <Switch>
             <Route exact path='/' component={Home} />
             <Route path='/mapa' component={Map} />
-            <Route path='/acciones' component={UserActions} />
-            <Route path='/dashboard' component={Dashboard} />
+            <Route path='/dashboard' component={Dashboard} /> 
             <Route exact path='/ingreso' component={Login} />
             <Route exact path='/registro' component={Register} />
             <Route component={NoMatch} />

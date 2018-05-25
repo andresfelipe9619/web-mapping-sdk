@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
-import Scaleline from '@boundlessgeo/sdk/components/map/scaleline';
 import LayerList from '@boundlessgeo/sdk/components/layer-list';
-// import MapPanel from '@boundlessgeo/sdk/components/MapPanel';
-import WMSCapabilitiesFormat from 'ol/format/wmscapabilities';
+import SdkZoomControl from '@boundlessgeo/sdk/components/map/zoom-control';
+import SdkZoomSlider from '@boundlessgeo/sdk/components/map/zoom-slider';
+import SdkMousePosition from '@boundlessgeo/sdk/components/map/mouseposition';
+import SdkScaleLine from '@boundlessgeo/sdk/components/map/scaleline';
 import SdkMap from '@boundlessgeo/sdk/components/map';
+
 import * as SdkMapActions from '@boundlessgeo/sdk/actions/map';
 import * as SdkWfsActions from '@boundlessgeo/sdk/actions/wfs';
+
+import WMSCapabilitiesFormat from 'ol/format/wmscapabilities';
 import Table from './Table'
 
 // import { REGISTER_FAILURE } from './actions/constants/ActionTypes';
@@ -32,9 +35,11 @@ class Map extends Component {
                 <Grid>
                     <Grid.Row>
                         <Grid.Column width={14} style={mBorder}>
-                            <SdkMap>
+                            <SdkMap >
+                                <SdkScaleLine />
+                                <SdkMousePosition style={{ position: 'absolute', top: 20, right: 12, zIndex: 1, width: '5em' }} />
                                 <SdkZoomControl />
-                                <Scaleline />
+                                <SdkZoomSlider />
                             </SdkMap>
                         </Grid.Column>
                         <Grid.Column width={2} style={mBorder}>
@@ -73,7 +78,8 @@ const mapDispatchToProps = dispatch => {
                     const root = info.Capability.Layer.Layer;
                     console.log('ROOT WMS', root)
                     root.map((layer) => {
-                        if (layer.Title == 'mallas' || layer.Title == 'clasificadoras' || layer.Title == 'bandas' || layer.Title == 'productocrudo' || layer.Title == 'productofinal') {
+                        if (layer.Title == 'mallas' || layer.Title == 'clasificadoras' || layer.Title == 'cantera' ||
+                            layer.Title == 'bandas' || layer.Title == 'productocrudo' || layer.Title == 'productofinal' || layer.Title == 'trituradoras' || layer.Title == 'mezclas') {
                             const layerUrl = `http://localhost:8080/geoserver/my_web_app/wms?service=WMS&version=1.1.0&request=GetMap&layers=my_web_app:${layer.Name}&styles=&bbox=1060980.05,879701.83,1061502.75,880039.71&width=768&height=496&srs=EPSG:3115&format=image/png&transparent=true`
 
                             layersName.push(layer.Title);
@@ -116,7 +122,7 @@ const mapDispatchToProps = dispatch => {
                             .then((features) => {
                                 features.map((feature) => {
                                     console.log('Feature', feature)
-                                    
+
                                     dispatch(SdkMapActions.addFeatures(layersName[i], [{
                                         type: 'Feature',
                                         properties: {

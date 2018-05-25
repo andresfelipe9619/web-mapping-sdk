@@ -35,12 +35,12 @@ export class MenuDashboard extends Component {
                         onClick={this.handleItemClick}
                         to="/dashboard/usuarios" as={Link}>
                         <Header as='h4'>
-                            <Icon name='user' size='mini'/>
+                            <Icon name='users' size='mini'/>
                             <Header.Content>
                                 Usuarios
                             </Header.Content>
                         </Header>
-                        <Label color='teal'>1</Label>
+                    
                     </Menu.Item>
 
                     <Menu.Item
@@ -54,21 +54,21 @@ export class MenuDashboard extends Component {
                                 Productos
                             </Header.Content>
                         </Header>
-                        <Label>51</Label>
+                    
                     </Menu.Item>
 
                     <Menu.Item
-                        name='pedidos'
-                        active={activeItem === 'pedidos'}
+                        name='despachos'
+                        active={activeItem === 'despachos'}
                         onClick={this.handleItemClick}
-                        to="/dashboard/pedidos" as={Link}>
+                        to="/dashboard/despachos" as={Link}>
                         <Header as='h4'>
-                            <Icon name='shopping bag' size='mini'/>
+                            <Icon name='shopping basket' size='mini'/>
                             <Header.Content>
-                                Pedidos
+                                Despachos
                             </Header.Content>
                         </Header>
-                        <Label>1</Label>
+                    
 
                     </Menu.Item>
                 </Menu>
