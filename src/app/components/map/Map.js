@@ -10,7 +10,10 @@ import * as SdkMapActions from '@boundlessgeo/sdk/actions/map';
 import * as SdkWfsActions from '@boundlessgeo/sdk/actions/wfs';
 
 import WMSCapabilitiesFormat from 'ol/format/wmscapabilities';
-import Table from './Table'
+import Table from './SdkTable'
+import FilterComponent from './Filter';
+// import ModalSql from './Modal';
+
 
 // import { REGISTER_FAILURE } from './actions/constants/ActionTypes';
 import { connect } from 'react-redux';
@@ -22,6 +25,7 @@ import {
     Loader,
     Container
 } from "semantic-ui-react";
+
 class Map extends Component {
 
     componentDidMount() {
@@ -43,8 +47,11 @@ class Map extends Component {
                             </SdkMap>
                         </Grid.Column>
                         <Grid.Column width={2} style={mBorder}>
-                            <LayerList></LayerList>
+                            <LayerList/>
                         </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <FilterComponent source="clasificadoras" />
                     </Grid.Row>
                     <Grid.Row>
                         <Table />
@@ -78,8 +85,8 @@ const mapDispatchToProps = dispatch => {
                     const root = info.Capability.Layer.Layer;
                     console.log('ROOT WMS', root)
                     root.map((layer) => {
-                        if (layer.Title == 'mallas' || layer.Title == 'clasificadoras' || layer.Title == 'cantera' ||
-                            layer.Title == 'bandas' || layer.Title == 'productocrudo' || layer.Title == 'productofinal' || layer.Title == 'trituradoras' || layer.Title == 'mezclas') {
+                        if (layer.Title === 'mallas3' || layer.Title === 'clasificadoras' || layer.Title === 'cantera' ||
+                            layer.Title === 'bandas' || layer.Title === 'productocrudo' || layer.Title === 'productofinal' || layer.Title === 'trituradoras' || layer.Title === 'mezclas') {
                             const layerUrl = `http://localhost:8080/geoserver/my_web_app/wms?service=WMS&version=1.1.0&request=GetMap&layers=my_web_app:${layer.Name}&styles=&bbox=1060980.05,879701.83,1061502.75,880039.71&width=768&height=496&srs=EPSG:3115&format=image/png&transparent=true`
 
                             layersName.push(layer.Title);
@@ -131,16 +138,18 @@ const mapDispatchToProps = dispatch => {
                                         },
                                         geometry: {
                                             type: feature.geometry.type,
-                                            // this generates a point somewhere on the planet, unbounded.
                                             coordinates: feature.geometry.coordinates,
                                         },
                                     }]))
                                 })
                             })
                     }
-
-
-                }).catch(err => {
+                })
+                // .then(()=>{
+                //      dispatch(SdkMapActions.updateLayer('clasificadoras', {filter: ["==","velocidad", 3]}));
+                
+                // })
+                .catch(err => {
                     console.log(err)
                 })
         }

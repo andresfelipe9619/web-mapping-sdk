@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { MenuDashboard } from "./Menu.js";
-import { UsersTable } from "./users/UsersTable";
+import  UsersTable  from "./users/UsersTable";
 import { connect } from "react-redux";
 import { loadDashboard } from "../../actions/dashboardActions";
 // import { ProductsTable } from "./products/ProductsTable";
@@ -31,7 +31,7 @@ class Dashboard extends Component {
           </Dimmer>
         </Segment>
       );
-    } else {
+    } else if (this.props.message){
       return (
         <Grid>
           <Grid.Column width={4}>
@@ -39,17 +39,11 @@ class Dashboard extends Component {
           </Grid.Column>
           <Grid.Column width={12}>
             <Header as="h2">Usuarios</Header>
-            <Route path={match.url + "/usuarios"} component={UsersTable} />
-            {/* <Route path={match.url + "/facturas"} component={InvoicesTable} /> */}
-            {/* <Route
-              path={match.url + "/devoluciones"}
-              component={DevolutionsTable}
-            /> */}
-            {/* <UsersTable /> */}
+            <Route exact path={match.url + "/clientes"} component={UsersTable} />
           </Grid.Column>
         </Grid>
       );
-    }
+    }else return false;
   }
 }
 const mapStateToProps = state => {

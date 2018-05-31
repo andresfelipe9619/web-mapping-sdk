@@ -69,19 +69,11 @@ class Navbar extends Component {
                                 name='usuarios'
                                 active={activeItem === 'usuarios'}
                                 onClick={this.handleItemClick}
-                                to="/dashboard/usuarios"
+                                to="/usuarios"
                                 as={Link}>
                                 <Icon name='users' />
                                 Usuarios</Menu.Item>
-                            <Menu.Item
-                                color='blue'
-                                name='despachos'
-                                active={activeItem === 'despachos'}
-                                onClick={this.handleItemClick}
-                                to="/dashboard/despachos"
-                                as={Link}>
-                                <Icon name='shopping basket' />
-                                Despachos</Menu.Item>
+
                             <Menu.Item
                                 color='blue'
                                 name='ingreso'

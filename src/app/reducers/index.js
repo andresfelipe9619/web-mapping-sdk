@@ -9,6 +9,7 @@ import authReducer from "./auth";
 import SdkDrawingReducer from '@boundlessgeo/sdk/reducers/drawing';
 import loginReducer from "./login"
 // import alertReducer from "./alert"
+import userReducer from './user';
 
 
 export default combineReducers({
@@ -20,5 +21,6 @@ export default combineReducers({
   dashboardReducer,
   authReducer,
   loginReducer,
+  userReducer
   // alertReducer
 });

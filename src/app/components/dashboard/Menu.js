@@ -15,7 +15,7 @@ export class MenuDashboard extends Component {
                     size='large'
                     vertical>
                     <Menu.Item
-                        name='dashboard'
+                        name='usuarios'
                         style={{
                         background: 'grey'
                     }}
@@ -24,48 +24,48 @@ export class MenuDashboard extends Component {
                         <Header as='h4'>
                             <Icon name='setting' size='mini'/>
                             <Header.Content>
-                                Dashboard
-                            </Header.Content>
-                        </Header>
-                    </Menu.Item>
-
-                    <Menu.Item
-                        name='usuarios'
-                        active={activeItem === 'usuarios'}
-                        onClick={this.handleItemClick}
-                        to="/dashboard/usuarios" as={Link}>
-                        <Header as='h4'>
-                            <Icon name='users' size='mini'/>
-                            <Header.Content>
                                 Usuarios
                             </Header.Content>
                         </Header>
-                    
                     </Menu.Item>
 
                     <Menu.Item
-                        name='productos'
-                        active={activeItem === 'productos'}
+                        name='clientes'
+                        active={activeItem === 'clientes'}
                         onClick={this.handleItemClick}
-                        to="/dashboard/productos" as={Link}>
+                        to="/usuarios/clientes" as={Link}>
                         <Header as='h4'>
-                            <Icon name='cubes' size='mini'/>
+                            <Icon name='users' size='mini'/>
                             <Header.Content>
-                                Productos
+                                Clientes
                             </Header.Content>
                         </Header>
                     
                     </Menu.Item>
 
                     <Menu.Item
-                        name='despachos'
-                        active={activeItem === 'despachos'}
+                        name='operarios'
+                        active={activeItem === 'operarios'}
                         onClick={this.handleItemClick}
-                        to="/dashboard/despachos" as={Link}>
+                        to="/usuarios/operarios" as={Link}>
+                        <Header as='h4'>
+                            <Icon name='cubes' size='mini'/>
+                            <Header.Content>
+                                Operarios
+                            </Header.Content>
+                        </Header>
+                    
+                    </Menu.Item>
+
+                    <Menu.Item
+                        name='jefesProduccion'
+                        active={activeItem === 'jefesProduccion'}
+                        onClick={this.handleItemClick}
+                        to="/usuarios/jefseProduccion" as={Link}>
                         <Header as='h4'>
                             <Icon name='shopping basket' size='mini'/>
                             <Header.Content>
-                                Despachos
+                                Jefes de Produccion
                             </Header.Content>
                         </Header>
                     
