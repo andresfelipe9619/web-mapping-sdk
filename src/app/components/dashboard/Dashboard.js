@@ -9,6 +9,7 @@ import { loadDashboard } from "../../actions/dashboardActions";
 // import { DevolutionsTable } from "./devolutions/DevolutionsTable";
 import { Grid, Header, Segment, Dimmer, Loader } from "semantic-ui-react";
 import { Route, Switch} from "react-router-dom";
+import ClientDispatcheds from './users/ClientDispatcheds';
 class Dashboard extends Component {
   componentDidMount() {
     this.props.loadPage();
@@ -39,7 +40,11 @@ class Dashboard extends Component {
           </Grid.Column>
           <Grid.Column width={12}>
             <Header as="h2">Usuarios</Header>
+            <Switch>
             <Route exact path={match.url + "/clientes"} component={UsersTable} />
+            <Route exact path={match.url + "/clientes/:clientid"} component={ClientDispatcheds} />
+            
+            </Switch>
           </Grid.Column>
         </Grid>
       );

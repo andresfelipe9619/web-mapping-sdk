@@ -1,16 +1,9 @@
 import React, { Component } from 'react'
 import { Table, Checkbox, Button, Icon, Header, Segment, Dimmer, Loader } from 'semantic-ui-react';
+import { Link } from 'react-router-dom'
 
-export class EditField extends React.Component {
-    render() {
-        // If row is edited return input
-        if (this.props.editRow) {
-            return (<input type="text" placeholder={this.props.value} onBlur={this.props.onBlur} />);
-        } else {
-            return (<span>{this.props.value}</span>);
-        }
-    }
-}
+
+
 
 export default class DataTable extends Component {
 
@@ -50,6 +43,7 @@ export default class DataTable extends Component {
 
     // Build out the headers based on supplied list of properties
     buildTableHeader(properties) {
+        const Actions = this.props.actions;
         const th = [];
         if (properties.length === 0) {
             return;
@@ -83,16 +77,22 @@ export default class DataTable extends Component {
                 // Build list of properties for each feature
                 const featureValue = features[i].properties[properties[j]];
                 row.push(
-                    <Table.Cell key={i+','+j}>
-                        <EditField editRow={this.state.editRow === i} value={featureValue} onBlur={(evt) => this.updateFeature(evt.target.value, properties[j])} />
+                    <Table.Cell key={i + ',' + j}>
+                       {featureValue}
                     </Table.Cell>);
             }
+            if (Actions) {
+                row.push(
+                    <Table.Cell key={i}>
+                        <Actions />
+                    </Table.Cell>
+                )
+            } else if (features[i].properties['idcli']) {
+                row.push(
+                    <Link to={`${this.props.match.url}/${features[i].properties['idcli']}`}>Ver Despachos</Link>
+                )
+            }
 
-            row.push(
-                <Table.Cell key={i}>
-                <Actions />
-                </Table.Cell>
-            )
 
             body.push(<Table.Row key={i}>{row}</Table.Row>);
             // Reset the row
@@ -106,22 +106,30 @@ export default class DataTable extends Component {
 
     render() {
 
-        // Get full list of properties
-        const propertyList = this.getTableHeaders(this.props.data);
+        if (this.props.data.length < 1) {
+            return (
+                <div>
+                    <h2>No hay datos para mostrar</h2>
+                </div>
+            )
+        } else {
+            // Get full list of properties
+            const propertyList = this.getTableHeaders(this.props.data);
 
-        // // Build table header
-        const tableHeader = this.buildTableHeader(propertyList);
-        // // Build table body
-        const tableBody = this.buildTableBody(propertyList, this.props.data);
+            // // Build table header
+            const tableHeader = this.buildTableHeader(propertyList);
+            // // Build table body
+            const tableBody = this.buildTableBody(propertyList, this.props.data);
 
 
-        return (
-            <div>
-                <Table celled selectable>
-                    {tableHeader}
-                    {tableBody}
-                </Table>
-            </div>
-        );
+            return (
+                <div>
+                    <Table celled selectable >
+                        {tableHeader}
+                        {tableBody}
+                    </Table>
+                </div>
+            );
+        }
     }
 }

@@ -39,43 +39,11 @@ function fetchUsersSuccess(state = null , action) {
     }
 }
 
-function fetchUserDispatchedsFailure(state = false, action) {
-    switch (action.type) {
-        case FETCH_USERS_FAILURE:
-            return action.error;
-        default:
-            return state;
-    }
-}
-
-
-function fetchUserDispatchedsRequest(state = null, action) {
-    switch (action.type) {
-        case FETCH_USERS_REQUEST:
-            return action.user;
-        default:
-            return state;
-    }
-}
-
-
-function fetchUserDispatchedsSuccess(state = null , action) {
-    switch (action.type) {
-        case FETCH_USERS_SUCCESS:
-            return action.dispatcheds; 
-        default:
-            return state;
-    }
-}
-
-
 export default function userReducer(state = {}, action){
     return {
         fetchUsersFailure: fetchUsersFailure(state.fetchUsersFailure, action),
         fetchUsersRequest: fetchUsersRequest(state.fetchUsersRequest, action),
         fetchUsersSuccess: fetchUsersSuccess(state.fetchUsersSuccess, action),
-        fetchUserDispatchedsFailure: fetchUserDispatchedsFailure(state.fetchUserDispatchedsFailure, action),
-        fetchUserDispatchedsRequest: fetchUserDispatchedsRequest(state.fetchUserDispatchedsRequest, action),
-        fetchUserDispatchedsSuccess: fetchUserDispatchedsSuccess(state.fetchUserDispatchedsSuccess, action)
+
     }
 }

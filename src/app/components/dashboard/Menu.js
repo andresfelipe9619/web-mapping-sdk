@@ -22,7 +22,7 @@ export class MenuDashboard extends Component {
                         onClick={this.handleItemClick}>
 
                         <Header as='h4'>
-                            <Icon name='setting' size='mini'/>
+                            <Icon name='users' size='mini'/>
                             <Header.Content>
                                 Usuarios
                             </Header.Content>
@@ -35,7 +35,7 @@ export class MenuDashboard extends Component {
                         onClick={this.handleItemClick}
                         to="/usuarios/clientes" as={Link}>
                         <Header as='h4'>
-                            <Icon name='users' size='mini'/>
+                            <Icon name='user' size='mini'/>
                             <Header.Content>
                                 Clientes
                             </Header.Content>
@@ -49,7 +49,7 @@ export class MenuDashboard extends Component {
                         onClick={this.handleItemClick}
                         to="/usuarios/operarios" as={Link}>
                         <Header as='h4'>
-                            <Icon name='cubes' size='mini'/>
+                            <Icon name='male' size='mini'/>
                             <Header.Content>
                                 Operarios
                             </Header.Content>
@@ -61,9 +61,9 @@ export class MenuDashboard extends Component {
                         name='jefesProduccion'
                         active={activeItem === 'jefesProduccion'}
                         onClick={this.handleItemClick}
-                        to="/usuarios/jefseProduccion" as={Link}>
+                        to="/usuarios/jefesProduccion" as={Link}>
                         <Header as='h4'>
-                            <Icon name='shopping basket' size='mini'/>
+                            <Icon name='id card' size='mini'/>
                             <Header.Content>
                                 Jefes de Produccion
                             </Header.Content>
