@@ -36,7 +36,7 @@ function fetchUsersFailure(error) {
 }
 
 
-export function fetchUsers() {
+export function fetchClients() {
 
     return dispatch => {
         dispatch(fetchUsersRequest(true));

@@ -1,15 +1,11 @@
 import React, { Component } from "react";
 import { MenuDashboard } from "./Menu.js";
-import  UsersTable  from "./users/UsersTable";
 import { connect } from "react-redux";
 import { loadDashboard } from "../../actions/dashboardActions";
-// import { ProductsTable } from "./products/ProductsTable";
-// import { OrdersTable } from "./orders/OrdersTable";
-// import { InvoicesTable } from "./invoices/InvoicesTable";
-// import { DevolutionsTable } from "./devolutions/DevolutionsTable";
 import { Grid, Header, Segment, Dimmer, Loader } from "semantic-ui-react";
 import { Route, Switch} from "react-router-dom";
-import ClientDispatcheds from './users/ClientDispatcheds';
+import ClientsTable from './users/client/ClientsTable';
+import FeatureTable from './../table/FeatureTable';
 class Dashboard extends Component {
   componentDidMount() {
     this.props.loadPage();
@@ -39,12 +35,7 @@ class Dashboard extends Component {
             <MenuDashboard />
           </Grid.Column>
           <Grid.Column width={12}>
-            <Header as="h2">Usuarios</Header>
-            <Switch>
-            <Route exact path={match.url + "/clientes"} component={UsersTable} />
-            <Route exact path={match.url + "/clientes/:clientid"} component={ClientDispatcheds} />
-            
-            </Switch>
+            <Route exact path={match.url + "/clientes"} component={ClientsTable} />
           </Grid.Column>
         </Grid>
       );

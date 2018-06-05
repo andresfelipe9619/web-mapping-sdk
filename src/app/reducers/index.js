@@ -11,6 +11,7 @@ import loginReducer from "./login"
 // import alertReducer from "./alert"
 import userReducer from './user';
 import dispatchedReducer from './dispatcheds'
+import productReducer from './product'
 
 
 export default combineReducers({
@@ -23,6 +24,7 @@ export default combineReducers({
   authReducer,
   loginReducer,
   userReducer,
-  dispatchedReducer
+  dispatchedReducer,
+  productReducer
   // alertReducer
 });

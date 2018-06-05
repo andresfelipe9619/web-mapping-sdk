@@ -7,13 +7,16 @@ import SdkScaleLine from '@boundlessgeo/sdk/components/map/scaleline';
 import SdkPopup from '@boundlessgeo/sdk/components/map/popup';
 import SdkMap from '@boundlessgeo/sdk/components/map';
 import Menu from './MenuMapa'
-
+import Clasificadoras from '../dashboard/proccess/Clasificadoras'
+import Mallas from '../dashboard/proccess/Mallas'
+import Trituradoras from '../dashboard/proccess/Trituradoras'
 import * as SdkMapActions from '@boundlessgeo/sdk/actions/map';
 import * as SdkWfsActions from '@boundlessgeo/sdk/actions/wfs';
 import WMSCapabilitiesFormat from 'ol/format/wmscapabilities';
 import Table from './SdkTable'
 import FilterComponent from './Filter';
 import { connect } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
 import {
     Grid,
     Header,
@@ -25,29 +28,6 @@ import {
 
 class MarkFeaturesPopup extends SdkPopup {
 
-    // constructor(props) {
-    //     super(props);
-    //     this.markFeatures = this.markFeatures.bind(this);
-    // }
-
-    // markFeatures(evt) {
-    //     const feature_ids = [];
-    //     const features = this.props.features;
-
-    //     for (let i = 0, ii = features.length; i < ii; i++) {
-    //         // create an array of ids to be removed from the map.
-    //         feature_ids.push(features[i].properties.id);
-    //         // set the feature property to "marked".
-    //         features[i].properties.isMarked = true;
-    //     }
-
-    //     // remove the old unmarked features
-    //     store.dispatch(mapActions.removeFeatures('points', ['in', 'id'].concat(feature_ids)));
-    //     // add the new freshly marked features.
-    //     store.dispatch(mapActions.addFeatures('points', features));
-    //     // close this popup.
-    //     this.close(evt);
-    // }
 
     render() {
         const feature_ids = this.props.features.map(f => f.properties.id);
@@ -63,13 +43,6 @@ class MarkFeaturesPopup extends SdkPopup {
                     Feature ID(s):<br />
                     <code>{feature_ids.join(', ')}</code>
                     <br />
-                    {/* <button className="sdk-btn" ref={(c) => {
-                        if (c) {
-                            c.addEventListener('click', this.markFeatures);
-                        }
-                    }}>
-                        Mark this feature
-            </button> */}
                 </p>
             </div>
         ));
@@ -77,6 +50,12 @@ class MarkFeaturesPopup extends SdkPopup {
 }
 
 class Map extends Component {
+    constructor(props) {
+        super();
+        this.state = {
+            data: null
+        }
+    }
 
     componentDidMount() {
         this.props.initialLoad();
@@ -84,44 +63,46 @@ class Map extends Component {
 
     render() {
         const mBorder = { borderStyle: 'solid', borderColor: '#3BA2FB' };
+        const { match } = this.props;
         return (
             <div>
                 <Grid>
                     <Grid.Row>
                         <Grid.Column width={4}>
-                        <Menu></Menu>
+                            <Menu></Menu>
                         </Grid.Column>
                         <Grid.Column width={10} style={mBorder}>
                             <SdkMap
                                 includeFeaturesOnClick
-                                onClick={(map, xy, featuresPromise) => {
-                                    console.log('PROMISE', featuresPromise)
-                                    featuresPromise.then((featureGroups) => {
-                                        // setup an array for all the features returned in the promise.
-                                        let features = [];
-                                        console.log('GROUPSSSSSSSSSSS', featureGroups)
-                                        // featureGroups is an array of objects. The key of each object
-                                        // is a layer from the map.
-                                        for (let g = 0, gg = featureGroups.length; g < gg; g++) {
-                                            // collect every feature from each layer.
-                                            const layers = Object.keys(featureGroups[g]);
-                                            for (let l = 0, ll = layers.length; l < ll; l++) {
-                                                const layer = layers[l];
-                                                features = features.concat(featureGroups[g][layer]);
-                                            }
-                                        }
+                            // onClick={(map, xy, featuresPromise) => {
+                            //     console.log('PROMISE', featuresPromise)
+                            //     featuresPromise.then((featureGroups) => {
+                            //         // setup an array for all the features returned in the promise.
+                            //         let features = [];
+                            //         console.log('GROUPSSSSSSSSSSS', featureGroups)
+                            //         // featureGroups is an array of objects. The key of each object
+                            //         // is a layer from the map.
+                            //         for (let g = 0, gg = featureGroups.length; g < gg; g++) {
+                            //             // collect every feature from each layer.
+                            //             const layers = Object.keys(featureGroups[g]);
+                            //             for (let l = 0, ll = layers.length; l < ll; l++) {
+                            //                 const layer = layers[l];
+                            //                 features = features.concat(featureGroups[g][layer]);
+                            //             }
+                            //         }
 
-                                        if (features.length === 0) {
-                                            // no features, :( Let the user know nothing was there.
-                                            map.addPopup(<SdkPopup coordinate={xy} closeable><i>No features found.</i></SdkPopup>);
-                                        } else {
-                                            // Show the super advanced fun popup!
-                                            map.addPopup(<MarkFeaturesPopup coordinate={xy} features={features} closeable />);
-                                        }
-                                    }).catch((exception) => {
-                                        console.error('An error occurred.', exception);
-                                    });
-                                }}>
+                            //         if (features.length === 0) {
+                            //             // no features, :( Let the user know nothing was there.
+                            //             map.addPopup(<SdkPopup coordinate={xy} closeable><i>No features found.</i></SdkPopup>);
+                            //         } else {
+                            //             // Show the super advanced fun popup!
+                            //             map.addPopup(<MarkFeaturesPopup coordinate={xy} features={features} closeable />);
+                            //         }
+                            //     }).catch((exception) => {
+                            //         console.error('An error occurred.', exception);
+                            //     });
+                            // }}
+                            >
                                 <SdkScaleLine />
                                 <SdkMousePosition style={{ position: 'absolute', top: 20, right: 12, zIndex: 1, width: '5em' }} />
                                 <SdkZoomControl />
@@ -133,16 +114,21 @@ class Map extends Component {
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
-                        <FilterComponent source="clasificadoras" />
+                        {/* <FilterComponent source="clasificadoras" /> */}
                     </Grid.Row>
                     <Grid.Row>
-                        <Table />
+                        <Switch>
+                            <Route exact path={match.url + "/mallas"} Component={Mallas} />
+                            <Route exact path={match.url + "/clasificadoras"} render={() => <Clasificadoras />} />
+                            <Route exact path={match.url + "/trituradoras"} render={() => <Trituradoras />} />
+                        </Switch>
                     </Grid.Row>
                 </Grid>
             </div>
         )
     }
 }
+
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -167,8 +153,8 @@ const mapDispatchToProps = dispatch => {
                     const root = info.Capability.Layer.Layer;
                     console.log('ROOT WMS', root)
                     root.map((layer) => {
-                        if (layer.Title === 'mallas3' || layer.Title === 'clasificadoras' || layer.Title === 'cantera' ||
-                            layer.Title === 'bandas' || layer.Title === 'productocrudo' || layer.Title === 'productofinal' || layer.Title === 'trituradoras' || layer.Title === 'mezclas') {
+                        if (layer.Title === 'mallas' || layer.Title === 'clasificadoras' || layer.Title === 'cantera' ||
+                            layer.Title === 'bandas' ||layer.Title === 'trituradoras' ) {
                             const layerUrl = `http://localhost:8080/geoserver/my_web_app/wms?service=WMS&version=1.1.0&request=GetMap&layers=my_web_app:${layer.Name}&styles=&bbox=1060980.05,879701.83,1061502.75,880039.71&width=768&height=496&srs=EPSG:3115&format=image/png&transparent=true`
 
                             layersName.push(layer.Title);
@@ -186,31 +172,42 @@ const mapDispatchToProps = dispatch => {
                                 },
                                 id: layer.Name,
                                 source: layer.Name,
+                                // filter: 
                             }));
+
+                            //     dispatch(SdkMapActions.addSource('mallas', {type: 'geojson', data: 'mallas.geojson'}));
+                            //     dispatch(SdkMapActions.addLayer({
+                            //       id: 'mallas',
+                            //       source: 'mallas',
+                            //       type: 'fill',
+
+                            // }));
 
                         }
                     })
                 })
                 .then(() => {
+                    console.log('Layersname', layersName)
                     for (let i in layersName) {
+                        console.log('iiiiiiiii',i);
                         fetch(`http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:${layersName[i]}&outputFormat=application/json`)
                             .then(
                                 response => response.json(),
                                 error => console.error('An error occured.', error
                                 ))
                             .then((json) => {
+
                                 console.log(json)
                                 if (json) {
-                                    const root = json.features;
-                                    console.log('ROOT WFS', root)
-                                    return root;
+                                    return json;
                                 } else {
                                     return Promise.reject('Bad request');
                                 }
                             })
                             .then((features) => {
+                                console.log('Feature', features)
+                        
                                 features.map((feature) => {
-                                    console.log('Feature', feature)
 
                                     dispatch(SdkMapActions.addFeatures(layersName[i], [{
                                         type: 'Feature',
@@ -226,6 +223,9 @@ const mapDispatchToProps = dispatch => {
                                 })
                             })
                     }
+                    // var feature = this.props.map.sources.trituradoras.data.features[1]
+                    // feature.properties.velocidad = 5;
+                    // dispatch(SdkWfsActions.updateFeature('trituradoras', feature));
                 })
                 // .then(()=>{
                 //      dispatch(SdkMapActions.updateLayer('clasificadoras', {filter: ["==","velocidad", 3]}));

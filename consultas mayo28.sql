@@ -7,22 +7,21 @@ from despachos D INNER JOIN procrudo PC
 ON D.idpc= PC.idpc WHERE D.idcli='52' AND D.idpc='g38'
 
 2 -- la cantidad total de producto final comprado por un cliente
-SELECT D.cliente, PC.nombre, SUM (D.cantidadpc) AS volumen
+SELECT D.cliente, PC.nombre, SUM(CAST(D.cantidadpc AS Integer)) AS volumen
 from despachos D INNER JOIN procrudo PC
 ON D.idpc = PC.idpc WHERE D.idcli='51' AND D.idpc='pp2'
 GROUP BY  D.cliente, PC.nombre
 
-
 3 -- Calcular cota promedio de todas las mallas
 SELECT  AVG (M.cota) as cota_promedio
- from mallas3 M 
+ from mallas M 
 
 4 -- Mallas de origen del producto PP2 vendido al cliente 51
 SELECT D.cliente, D.iddes, PC.idpc, PC.nombre, M.idmal, M.idt, T.id_clasif 
-from mallas3 M
+from mallas M
 INNER JOIN trituradoras T
 ON M.idt = T.idt
-INNER JOIN clasificadores C
+INNER JOIN clasificadoras C
 ON T.id_clasif = C.id_clasif
 INNER JOIN procrudo PC
 ON C.id_clasif= PC.id_clasif
@@ -32,10 +31,10 @@ WHERE D.idcli='51' AND PC.idpc ='pp2'
 
 5 -- Mallas de origen del producto PP2 vendido al cliente 51 del despacho 86
 SELECT D.cliente, D.iddes, PC.idpc, PC.nombre, M.idmal, M.idt, T.id_clasif 
-from mallas3 M
+from mallas M
 INNER JOIN trituradoras T
 ON M.idt = T.idt
-INNER JOIN clasificadores C
+INNER JOIN clasificadoras C
 ON T.id_clasif = C.id_clasif
 INNER JOIN procrudo PC
 ON C.id_clasif= PC.id_clasif
@@ -54,10 +53,10 @@ WHERE D.iddes ='86'
 6 -- Zona a la que pertenece las Mallas de origen
 --del producto PP2 vendido al cliente 51 del despacho 86
 SELECT D.iddes, D.cliente, PC.nombre, M.idmal, M.idzona
-from mallas3 M
+from mallas M
 INNER JOIN trituradoras T
 ON M.idt = T.idt
-INNER JOIN clasificadores C
+INNER JOIN clasificadoras C
 ON T.id_clasif = C.id_clasif
 INNER JOIN procrudo PC
 ON C.id_clasif= PC.id_clasif

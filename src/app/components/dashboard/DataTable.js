@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 
 
 
-
 export default class DataTable extends Component {
 
     constructor(props) {
@@ -88,13 +87,16 @@ export default class DataTable extends Component {
                     </Table.Cell>
                 )
             } else if (features[i].properties['idcli']) {
+                // row.push(
+                //     <Link to={`${this.props.match.url}/${features[i].properties['idcli']}`}>Ver Despachos</Link>
+                // )
+            }else {
                 row.push(
-                    <Link to={`${this.props.match.url}/${features[i].properties['idcli']}`}>Ver Despachos</Link>
+                    <Button primary onClick>Zoom</Button>
                 )
             }
 
-
-            body.push(<Table.Row key={i}>{row}</Table.Row>);
+            body.push(<Table.Row key={i}>{row}</Table.Row>); 
             // Reset the row
             row = [];
         }
@@ -109,7 +111,7 @@ export default class DataTable extends Component {
         if (this.props.data.length < 1) {
             return (
                 <div>
-                    <h2>No hay datos para mostrar</h2>
+                    <p>No hay datos para mostrar</p>
                 </div>
             )
         } else {

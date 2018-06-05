@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {connect} from "react-redux";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import {
   Button,
   Form,
@@ -10,8 +10,8 @@ import {
   Loader,
   Dimmer
 } from "semantic-ui-react";
-import {login} from "../../actions/authActions";
-import {loadLogin} from "../../actions/loginActions";
+import { login } from "../../actions/authActions";
+import { loadLogin } from "../../actions/loginActions";
 // import AlertMessage from "./AlertMessage";
 
 class Login extends Component {
@@ -30,15 +30,10 @@ class Login extends Component {
       .bind(this);
   }
 
-  handleChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  }
 
   handleSubmit(e) {
     e.preventDefault();
-    const {username, password} = this.state;
+    const { username, password } = this.state;
     const user = {
       username,
       password
@@ -48,6 +43,13 @@ class Login extends Component {
       .props
       .requestLogin(user);
   }
+  
+  handleChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
   componentDidMount() {
     this
       .props
@@ -60,9 +62,9 @@ class Login extends Component {
       return (
         <Segment
           style={{
-          marginTop: "7em",
-          height: "20em"
-        }}>
+            marginTop: "7em",
+            height: "20em"
+          }}>
           <Dimmer inverted active>
             <Loader size="big">Loading</Loader>
           </Dimmer>
@@ -75,8 +77,8 @@ class Login extends Component {
           <Grid
             textAlign="center"
             style={{
-            height: "100%"
-          }}
+              height: "100%"
+            }}
             verticalAlign="middle">
             <Grid.Column style={{
               maxWidth: 450
@@ -99,7 +101,7 @@ class Login extends Component {
                     name="username"
                     placeholder="Nombre de usuario"
                     onChange={this.handleChange}
-                    value={this.state.username}/>
+                    value={this.state.username} />
                   <Form.Input
                     required
                     fluid
@@ -109,7 +111,7 @@ class Login extends Component {
                     placeholder="Contraseña"
                     type="password"
                     onChange={this.handleChange}
-                    value={this.state.password}/>
+                    value={this.state.password} />
 
                   <Button color="teal" type="submit" fluid size="large">
                     Iniciar Sesión
