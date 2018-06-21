@@ -1,6 +1,6 @@
 ﻿-- CONSULTAS
 
-1 --los despachos a el cliente 53 del producto asfa
+1 --los despachos a el cliente 52 del producto asfa
 
 SELECT D.iddes, D.cliente, D.idpc, PC.nombre, D.cantidadpc 
 from despachos D INNER JOIN procrudo PC

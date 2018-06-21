@@ -1,61 +1,62 @@
 import React, { Component } from 'react'
-import { Table, Checkbox, Button, Icon, Header, Segment, Dimmer, Grid, Loader, Modal } from 'semantic-ui-react';
-import SortableTbl from 'react-sort-search-table';
+import ReactCollapsingTable from 'react-collapsing-table'
+import {  Segment } from "semantic-ui-react";
 
 class FeatureTable extends Component {
     render() {
-        if (this.props.data) {
-            var mData = [];
-            let tHead = [];
-            let col = [];
 
-            for (var element of this.props.data) {
-                mData.push(element.properties)
+        let { data, component, callbacks, } = this.props;
+        let columns = [];
+        let accessors = [];
+
+
+            for (var element of data) {
+                if(element.properties.nombre){
+                    element.properties.nombre = element.properties.nombre.toUpperCase()
+                }
                 const temp = Object.keys(element.properties);
                 for (let j = 0, jj = temp.length; j < jj; j++) {
-                    // if the feature.properties is new add it to headers
-                    if (tHead.indexOf(temp[j]) < 0) {
-                        tHead.push(temp[j]);
-                        col.push(temp[j])
+                    if (accessors.indexOf(temp[j]) < 0) {
+                        if (temp[j] == 'id') {
+                            continue
+                        } else {
+                            console.log('EMP', temp[j])
+                            accessors.push(temp[j])
+                            columns.push({
+                                accessor: temp[j],
+                                label: temp[j],
+                                priorityLevel: j + 1,
+                                position: j + 1,
+                                minWidth: 50,
+                                key: j
+                            })
+                        }
                     }
                 }
             }
-            if (this.props.actions) {
-                let mActions = [];
-                const mButton = () => <Button primary>Ver Mallas</Button>;
-
-                for (var action of this.props.actions) {
-                    if (tHead.indexOf(action.name) < 0) {
-                        tHead.push(action.name);
-                        col.push(action.name)
-                    }
-                    mActions.push({ custd: mButton, keyItem: action.name })
-                }
+            if (component) {
+                let last = accessors.length
+                columns.push({ accessor: 'acciones', label: 'acciones', priorityLevel: last, position: last, minWidth: 50, CustomComponent: component })
+            }
+            console.log('cols', columns)
+    
+            if (callbacks) {
                 return (
                     <div>
-                        <SortableTbl
-                            tblData={mData}
-                            tHead={tHead}
-                            dKey={col}
-                            customTd={mActions}
-                            search={true}
-                        />
+                        <Segment>
+                        <ReactCollapsingTable rows={data} columns={columns} callbacks={callbacks} showSearch showPagination rowSize={10} />
+                        </Segment>
                     </div>
                 )
-
             } else {
                 return (
                     <div>
-                        <SortableTbl
-                            tblData={mData}
-                            tHead={tHead}
-                            dKey={col}
-                            search={true}
-                        />
+                        <Segment>
+                        <ReactCollapsingTable rows={data} columns={columns} showSearch showPagination rowSize={10} />
+                        </Segment>
                     </div>
                 )
             }
-        } else return null;
     }
 }
 

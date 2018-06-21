@@ -61,7 +61,7 @@ export default class MenuMapa extends Component {
                         name='clasififcadoras'
                         active={activeItem === 'clasififcadoras'}
                         onClick={this.handleItemClick}
-                        to="/mapa/clasififcadoras" as={Link}>
+                        to="/mapa/clasificadoras" as={Link}>
                         <Header as='h4'>
                             <Icon name='map signs' size='mini'/>
                             <Header.Content>

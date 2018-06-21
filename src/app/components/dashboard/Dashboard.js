@@ -35,7 +35,7 @@ class Dashboard extends Component {
             <MenuDashboard />
           </Grid.Column>
           <Grid.Column width={12}>
-            <Route exact path={match.url + "/clientes"} component={ClientsTable} />
+            <Route path={match.url + "/clientes"} component={ClientsTable} />
           </Grid.Column>
         </Grid>
       );

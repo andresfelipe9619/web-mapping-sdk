@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Map from "./components/map/Map";
+// import Map from "./components/map/Map";
+import OpenMap from "./components/map/OpenMap";
 import Home from './components/home/Home.js';
 import Login from './components/auth/Login.js';
 import Navbar from './components/header/Navbar'
@@ -30,13 +31,13 @@ class App extends Component {
         <Container style={{ marginTop: '7em' }}>
           <Switch>
             <Route exact path='/' component={Home} />
-            <Route path='/mapa' component={Map} />
+            <Route path='/mapa' component={OpenMap} />
             <Route path='/usuarios' component={Dashboard} /> 
             <Route exact path='/ingreso' component={Login} />
             <Route exact path='/registro' component={Register} />
             <Route component={NoMatch} />
           </Switch>
-        </Container>
+        </Container>  
         <Footer></Footer>
       </div>
     );

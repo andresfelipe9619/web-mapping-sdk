@@ -36,14 +36,21 @@ function fetchDispatchedsFailure(error) {
 }
 
 
-export function fetchUserDispatcheds(user) {
+export function fetchUserDispatcheds(user, product) {
+    var userDispatcheds = '';
+    if (product) {
+        userDispatcheds = `http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:despachosClienteConProducto&viewparams=cliente:${user};producto:${product}&outputFormat=application%2Fjson`
+    } else {
+        userDispatcheds = `http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:despachosCliente&viewparams=cliente:${user}&outputFormat=application%2Fjson`
 
+    }
     return dispatch => {
+
         dispatch(fetchUserDispatchedsRequest(user));
 
-        // fetch(`http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:despachosCliente&viewparams=cliente:${user}&outputFormat=application%2Fjson`).then(response => {
-        // fetch(`http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:despachosClienteConProducto&viewparams=cliente:${user};producto:g38&outputFormat=application%2Fjson`).then(response => {
-        fetch(`http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:mallasOrigenProductoCliente&viewparams=cliente:52;producto:g38&outputFormat=application%2Fjson`).then(response => {
+        fetch(userDispatcheds).then(response => {
+            // fetch(``).then(response => {
+            // fetch(`http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:mallasOrigenProductoCliente&viewparams=cliente:52;producto:g38&outputFormat=application%2Fjson`).then(response => {
             if (!response.ok) {
                 // dispatch(alertError(response));
                 return Promise.reject(response.statusText);

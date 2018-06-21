@@ -1,21 +1,37 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import DataTable from '../DataTable'
+import FeatureTable from './../../table/FeatureTable';
 
 class Trituradoras extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      trituradoras: null
+    }
+  }
+  componentDidMount() {
+    fetch(`http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:trituradoras&outputFormat=application%2Fjson`)
+      .then(response => {
+        if (!response.ok) {
+          // dispatch(alertError(response));
+          return Promise.reject(response.statusText);
+        }
+        return response.json();
+      }).then((response) => {
+        this.setState({ trituradoras: response.features })
+      })
+  }
+
   render() {
-    return (
-      <div>
-        <DataTable data={this.props.trituradoras} />
-        
-      </div>
-    )
+    if (this.state.trituradoras) {
+      return (
+        <div>
+          <FeatureTable data={this.state.trituradoras} />
+        </div>
+      )
+    } else return null
   }
 }
-const MapStateToProps = state =>{
-    return{
-        trituradoras: state.map.sources.trituradoras.data.features
-    }
-}
 
-export default connect(MapStateToProps,null)(Trituradoras)
+export default Trituradoras

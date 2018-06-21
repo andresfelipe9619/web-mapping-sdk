@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import SortableTbl from 'react-sort-search-table';
 import Select from 'react-select'
-import { Table, Checkbox, Button, Icon, Header, Segment, Dimmer, Grid, Loader, Modal } from 'semantic-ui-react';
+import { Table, Checkbox, Button, Icon, Header, Segment, Dimmer, Grid, Loader, Modal, Form } from 'semantic-ui-react';
 import { connect } from 'react-redux'
 import { fetchClients } from '../../../../actions/userActions';
 import { fetchProducts } from '../../../../actions/productActions';
 import { fetchDispatcheds } from '../../../../actions/dispatchedsActions';
 
 import ClientDispatcheds from './ClientDispatcheds';
-import DispatchedProducts from './DispatchedProducts'
 import { Route, Switch } from "react-router-dom";
 import FeatureTable from '../../../table/FeatureTable'
 
@@ -18,47 +17,56 @@ class ClientsTable extends Component {
     constructor(props) {
         super();
         this.state = {
-            clientes: null,
-            productos: null,
-            despachos: null,
-            options: {
-                Clientes: [],
-                productos: [],
-                despachos: []
+            path: false,
+            query: {
+                client: null,
+                product: null,  
+                dispatched: null,
             }
         }
-        this.handleChange = this.handleChange.bind(this);
+        this.handleChangeClient = this.handleChangeClient.bind(this);
+        this.handleChangeProduct = this.handleChangeProduct.bind(this);
+        this.handleChangeDispatched = this.handleChangeDispatched.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
 
     handleSubmit(e) {
-        e.preventDefault();
-        const { Clientes, productos, despachos } = this.state.options;
-        const query = {
-            Clientes,
-            productos,
-            despachos
-        };
+        // e.preventDefault();
+        console.log('You clicked me')
+        const { query } = this.state;
+        const { history, match } = this.props;
 
-        // this
-        //   .props
-        //   .requestLogin(user);
+        var path = this.evaluateQuery(query);
+
+        if (path) {
+            // this.setState(() => ({
+            //     path: path
+            // }))
+            history.push(path)
+        }
     }
 
     evaluateQuery(query) {
-        // if(query.clientes === 'todos'){
+        const { history, match } = this.props;
 
-        // }else if(query.clientes === ){
-
-        // }else{
-
-        // }
+        var path = false;
+        if (query.client[0] === 'todos') {
+            path = '/clientes';
+        } else if (Number(query.client[0])) {
+            path = `/usuarios/clientes/${query.client[0]}/despachos`
+        }
+        return path;
     }
 
-    handleChange = (event) => {
-        this.setState({ [event.name]: event.value });
-
+    handleChangeClient = (event) => {
+        this.setState({ query: { ...this.state.query, client: [event.value] } });
+    }
+    handleChangeProduct = (event) => {
+        this.setState({ query: { ...this.state.query, product: [event.value] } });
+    }
+    handleChangeDispatched = (event) => {
+        this.setState({ query: { ...this.state.query, dispatched: [event.value] } });
     }
 
     componentDidMount() {
@@ -76,7 +84,11 @@ class ClientsTable extends Component {
         console.log('TABLE PROPS: ', this.props)
         if (this.props.clientsHasErrored) {
             return <h1>Error</h1>;
-        } else if (this.props.clientsIsLoading) {
+        } 
+        // else if (this.state.path) {
+        //     return <Redirect to={this.state.path}></Redirect>
+        // }
+         else if (this.props.clientsIsLoading) {
             return (
                 <Segment
                     style={{
@@ -99,7 +111,7 @@ class ClientsTable extends Component {
             dispatchOptions.push(options[0]);
 
             clients.map(client => {
-                clientOptions.push({ value: client.properties.clid, label: client.properties.nombre })
+                clientOptions.push({ value: client.properties.idcli, label: client.properties.nombre })
             })
 
             products.map(product => {
@@ -110,7 +122,7 @@ class ClientsTable extends Component {
                 dispatchOptions.push({ value: dispatch.properties.iddes, label: dispatch.id })
             })
 
-            const mButton = ()=> <Button>Ver Mallas</Button>;
+            const mButton = () => <Button>Ver Mallas</Button>;
             return (
                 <div>
                     <Header as="h2">Clientes</Header>
@@ -122,9 +134,8 @@ class ClientsTable extends Component {
                                     name="clientes"
                                     options={clientOptions}
                                     defaultValue='Todos'
-                                    onChange={this.handleChange}
+                                    onChange={this.handleChangeClient}
                                     isSearchable={true}
-
                                 />
                             </Grid.Column>
                             <Grid.Column width={4}>
@@ -133,7 +144,7 @@ class ClientsTable extends Component {
                                     name="despachos"
                                     options={dispatchOptions}
                                     defaultValue='Todos'
-                                    onChange={this.handleChange}
+                                    onChange={this.handleChangeDispatched}
                                     isSearchable={true}
                                 />
                             </Grid.Column>
@@ -143,29 +154,29 @@ class ClientsTable extends Component {
                                     name="productos"
                                     options={productOptions}
                                     defaultValue='Todos'
-                                    onChange={this.handleChange}
+                                    onChange={this.handleChangeProduct}
                                     isSearchable={true}
                                 />
                             </Grid.Column>
                             <Grid.Column width={4}>
-                                <Button style={{ marginTop: '20px' }} primary >Consultar</Button>
+                                <Button type='submit' style={{ marginTop: '20px' }} onClick={this.handleSubmit} primary >Consultar</Button>
                             </Grid.Column>
                         </Grid.Row>
                         <br />
                         <Grid.Row>
                             <Grid.Column width={13}>
-                            <Switch>
-                                {/* <Route exact path={match.url} render={() => <FeatureTable data={products} />} /> */}
-
-                                <Route exact path={match.url} component={DispatchedProducts} />
-                                <Route exact path={`${match.url}/despachos`} render={() => <FeatureTable data={dispatcheds} />} />//Todos los despachos
-                                <Route exact path={`${match.url}/productos`} render={() => <FeatureTable data={products} />} />//Todos los despachos
-                                <Route exact path={`${match.url}/:clientid/despachos`} component={ClientDispatcheds} />//Todos los despahos del cliente x
-                                {/* <Route exact path={`${match.url}/:clientid/despachos/productos`} component={ClientDispatcheds} />//Todos los despachos del cliente x con todos los productos */}
-                                <Route exact path={`${match.url}/:clientid/despachos/productos/:productid`} component={ClientDispatcheds} />//Todos los despachos del cliente x con producto y
-                                <Route exact path={`${match.url}/:clientid/despachos/productos/:productid/mallas`} component={ClientDispatcheds} />//Todas las mallas de procedencias delos despachos del cliente x con producto z
-                                <Route exact path={`${match.url}/:clientid/despachos/:despachoid/productos/:productid`} component={ClientDispatcheds} />//Todas las mallas de procedencua del producto x del despacho x 
-                            </Switch>
+                                <Switch>
+                                    {/* <Route exact path={match.url} render={() => <FeatureTable data={products} />} /> */}
+                                    {console.log('match', match.url)}
+                                    <Route exact path={match.url} render={() => <FeatureTable data={clients} />} />//Todos los despachos
+                                    <Route exact path={`${match.url}/despachos`} render={() => <FeatureTable data={dispatcheds} />} />//Todos los despachos
+                                    <Route exact path={`${match.url}/productos`} render={() => <FeatureTable data={products} />} />//Todos los despachos
+                                    <Route exact path={`${match.url}/:clientid/despachos`} component={ClientDispatcheds} />//Todos los despahos del cliente x
+                                    {/* <Route exact path={`${match.url}/:clientid/despachos/productos`} component={ClientDispatcheds} />//Todos los despachos del cliente x con todos los productos */}
+                                    <Route exact path={`${match.url}/:clientid/despachos/productos/:productid`} component={ClientDispatcheds} />//Todos los despachos del cliente x con producto y
+                                    <Route exact path={`${match.url}/:clientid/despachos/productos/:productid/mallas`} component={ClientDispatcheds} />//Todas las mallas de procedencias delos despachos del cliente x con producto z
+                                    <Route exact path={`${match.url}/:clientid/despachos/:despachoid/productos/:productid`} component={ClientDispatcheds} />//Todas las mallas de procedencua del producto x del despacho x 
+                                </Switch>
                             </Grid.Column>
 
                         </Grid.Row>

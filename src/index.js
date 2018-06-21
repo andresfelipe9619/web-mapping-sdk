@@ -5,12 +5,15 @@ import './index.css';
 import App from "./app/App.js";
 import store from "./app/store";
 import {Provider} from "react-redux";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { Router } from 'react-router';
+import createHistory from 'history/createBrowserHistory';
 import registerServiceWorker from './registerServiceWorker';
+export const history =  createHistory()
+// import {BrowserRouter as Router} from 'react-router-dom';
 
 ReactDOM.render( 
     <Provider store={store}>
-    <Router>
+    <Router history={history} >
         <div>
             <App/>
         </div>
