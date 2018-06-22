@@ -8,16 +8,18 @@ class FeatureTable extends Component {
         let { data, component, callbacks, } = this.props;
         let columns = [];
         let accessors = [];
+        let mData = []
 
 
             for (var element of data) {
-                if(element.properties.nombre){
-                    element.properties.nombre = element.properties.nombre.toUpperCase()
-                }
+                // if(element.properties.nombre){
+                //     element.properties.nombre = element.properties.nombre.toUpperCase()
+                // }
+                mData.push(element.properties)
                 const temp = Object.keys(element.properties);
                 for (let j = 0, jj = temp.length; j < jj; j++) {
                     if (accessors.indexOf(temp[j]) < 0) {
-                        if (temp[j] == 'id') {
+                        if (temp[j] == 'bbox' || temp[j] == 'este' || temp[j] == 'norte' || temp[j] == 'gid' ) {
                             continue
                         } else {
                             console.log('EMP', temp[j])
@@ -44,7 +46,7 @@ class FeatureTable extends Component {
                 return (
                     <div>
                         <Segment>
-                        <ReactCollapsingTable rows={data} columns={columns} callbacks={callbacks} showSearch showPagination rowSize={10} />
+                        <ReactCollapsingTable theme={{width:"60px"}} rows={mData} columns={columns} callbacks={callbacks} showSearch showPagination rowSize={10} />
                         </Segment>
                     </div>
                 )
@@ -52,7 +54,7 @@ class FeatureTable extends Component {
                 return (
                     <div>
                         <Segment>
-                        <ReactCollapsingTable rows={data} columns={columns} showSearch showPagination rowSize={10} />
+                        <ReactCollapsingTable rows={mData} columns={columns} showSearch showPagination rowSize={10} />
                         </Segment>
                     </div>
                 )

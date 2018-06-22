@@ -30,6 +30,7 @@ export default class DataTable extends Component {
         for (let i = 0, ii = features.length; i < ii; i++) {
             // Build a list of unique properties for the header list
             const temp = Object.keys(features[i].properties);
+            
             for (let j = 0, jj = temp.length; j < jj; j++) {
                 // if the feature.properties is new add it to headers
                 if (headers.indexOf(temp[j]) < 0) {

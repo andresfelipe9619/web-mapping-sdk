@@ -38,19 +38,19 @@ function fetchDispatchedsFailure(error) {
 
 export function fetchUserDispatcheds(user, product) {
     var userDispatcheds = '';
-    if (product) {
-        userDispatcheds = `http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:despachosClienteConProducto&viewparams=cliente:${user};producto:${product}&outputFormat=application%2Fjson`
-    } else {
-        userDispatcheds = `http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:despachosCliente&viewparams=cliente:${user}&outputFormat=application%2Fjson`
+    // if (product) {
+    //     userDispatcheds = `http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:despachosClienteConProducto&viewparams=cliente:${user};producto:${product}&outputFormat=application%2Fjson`
+    // } else {
+        userDispatcheds = `http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:despachosCliente&viewparams=cliente:${user}&outputFormat=application%2Fjson`
 
-    }
+    // }
     return dispatch => {
 
         dispatch(fetchUserDispatchedsRequest(user));
 
         fetch(userDispatcheds).then(response => {
             // fetch(``).then(response => {
-            // fetch(`http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:mallasOrigenProductoCliente&viewparams=cliente:52;producto:g38&outputFormat=application%2Fjson`).then(response => {
+            // fetch(`http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:mallasOrigenProductoCliente&viewparams=cliente:52;producto:g38&outputFormat=application%2Fjson`).then(response => {
             if (!response.ok) {
                 // dispatch(alertError(response));
                 return Promise.reject(response.statusText);
@@ -72,7 +72,7 @@ export function fetchDispatcheds() {
     return dispatch => {
         dispatch(fetchDispatchedsRequest(true));
 
-        fetch(`http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:despachos&outputFormat=application%2Fjson`).then(response => {
+        fetch(`http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:despachos&outputFormat=application%2Fjson`).then(response => {
             if (!response.ok) {
                 // dispatch(alertError(response));
                 return Promise.reject(response.statusText);

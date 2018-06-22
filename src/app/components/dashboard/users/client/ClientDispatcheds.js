@@ -16,7 +16,7 @@ class ClientDispatcheds extends Component {
         if (match.params.productid) {
             this.props.getUserDispatcheds(match.params.clientid, match.params.productid)
 
-        } else if (match){
+        } else if (match.params.clientid){
             this.props.getUserDispatcheds(match.params.clientid)
         }
     }

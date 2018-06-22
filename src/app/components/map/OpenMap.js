@@ -5,16 +5,18 @@ import Map from 'ol/map';
 import Zoom from 'ol/control/zoom';
 import Scale from 'ol/control/scaleline';
 import MousePosition from 'ol/control/mouseposition';
-
+import condition from 'ol/events/condition';
 import View from 'ol/view';
 import WMSCapabilitiesFormat from 'ol/format/wmscapabilities';
 import TileLayer from 'ol/layer/tile';
 import TileWMS from 'ol/source/tilewms';
 import OSM from 'ol/source/osm';
 import Proj from 'ol/proj';
+import Projection from 'ol/proj/projection';
 import Coordinate from 'ol/coordinate';
 import Overlay from 'ol/overlay';
-import Projection from 'ol/proj/projection';
+import SelectInteraction from 'ol/interaction/select';
+
 import Menu from './MenuMapa'
 import FilterQuery from './FilterQuery'
 import { Switch, Route } from 'react-router-dom';
@@ -73,15 +75,20 @@ class MapComponent extends Component {
 
 
         const projCenter = Proj.fromLonLat([-76.52563361025985, 3.5077020719791223])
+        var projection = new Projection({
+            code: 'EPSG:3115',
+            units: 'm',
+            axisOrientation: 'neu'
+        });
         // const olView = new View({ center: projCenter, zoom: 16 })
         var mLayers = [];
         var layersName = [];
         var bounds = [1060051, 879589, 1061860, 880613]
 
-        const olView = new View({ zoom: 16, center: projCenter })
+        const olView = new View({ zoom: 16, center: [1061480, 879727], projection})
 
 
-        const url = 'http://localhost:8080/geoserver/my_web_app/wms?service=WMS&request=GetCapabilities';
+        const url = 'http://localhost:8080/geoserver/cahibi1/wms?service=WMS&request=GetCapabilities';
         fetch(url).then(
             response => response.text(),
             error => console.error('An error occured.', error
@@ -94,14 +101,16 @@ class MapComponent extends Component {
                     console.log('layer', layer)
                     if (layer.Title === 'clasificadoras' || layer.Title === 'cantera' || layer.Title === 'bandas'
                         || layer.Title === 'trituradoras' || layer.Title === 'procrudo' || layer.Title === 'profinal' || layer.Title === 'mallas') {
-                        const layerUrl = `http://localhost:8080/geoserver/my_web_app/wms?service=WMS&version=1.1.0&request=GetMap&layers=my_web_app:${layer.Name}&styles=&bbox=1061364.75,879657.0625,1061460.375,879702.5&width=768&height=364&srs=EPSG:3115&format=image%2Fpng`
+                        const layerUrl = `http://localhost:8080/geoserver/cahibi1/wms?service=WMS&version=1.1.0&request=GetMap&layers=cahibi1:${layer.Name}&styles=&bbox=1061364.75,879657.0625,1061460.375,879702.5&width=768&height=364&srs=EPSG:3115&format=image%2Fpng`
 
                         let superlayer = new TileLayer({
                             source: new TileWMS({
-                                url: 'http://localhost:8080/geoserver/my_web_app/wms',
+                                // projection:"EPSG:3115",
+                                url: 'http://localhost:8080/geoserver/cahibi1/wms',
                                 params: {
                                     'FORMAT': "image/png",
-                                    'LAYERS': `my_web_app:${layer.Title}`,
+                                    'LAYERS': `cahibi1:${layer.Title}`,
+                                    'SRID': 'EPSG:3115', 
                                     tiled: true,
                                 },
                                 serverType: 'geoserver',
@@ -121,28 +130,44 @@ class MapComponent extends Component {
                     controls: [new Zoom(), new Scale({ units: 'metric' }), new MousePosition()],
                     target: 'map',
                     layers: [
-                        new TileLayer({
-                            source: new OSM()
-                        }),
+
                         ...layers
                     ],
                     view: olView,
                     overlays: [overlay]
                 });
 
+                var selectClick = new SelectInteraction({
+                    condition: condition.click
+                  });
+
+                  if (selectClick !== null) {
+                    map.addInteraction(selectClick);
+                    selectClick.on('select', function(e) {
+                      var extent = e.target.getFeatures().getArray()[0].getGeometry().getExtent();
+                      var view = map.getView().fit(extent);
+                      
+                    //   document.getElementById('status').innerHTML = '&nbsp;' +
+                    //       e.target.getFeatures().getLength() +
+                    //       ' selected features (last operation selected ' + e.selected.length +
+                    //       ' and deselected ' + e.deselected.length + ' features)';
+                    });
+                  }
+
                 map.on('singleclick', function (evt) {
                     var coordinate = evt.coordinate;
-                    var hdms = Coordinate.toStringHDMS(Proj.transform(
-                        coordinate, 'EPSG:3857', 'EPSG:4326'));
+                    // var hdms = Coordinate.toStringHDMS(coordinate
+                    //     // Proj.transform(coordinate, 'EPSG:3857', 'EPSG:4326')
+                    // );
 
-                    content.innerHTML = '<p>You clicked here:</p><code>' + hdms +
+                    content.innerHTML = '<p>You clicked here:</p><code>' + coordinate +
                         '</code>';
                     overlay.setPosition(coordinate);
 
                     document.getElementById('info').innerHTML = '';
                     var viewResolution = /** @type {number} */ (olView.getResolution());
                     var url = layers[1].getSource().getGetFeatureInfoUrl(
-                        evt.coordinate, viewResolution, 'EPSG:3857',
+                        evt.coordinate, viewResolution, 'EPSG:3115',
                         { 'INFO_FORMAT': 'text/html' });
                     if (url) {
                         document.getElementById('info').innerHTML =
@@ -159,8 +184,8 @@ class MapComponent extends Component {
         return (
             <section className="panel-map">
                 <div id="map" className="map" ref="olmap"></div>
-                <div id="popup" class="ol-popup">
-                    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                <div id="popup" className="ol-popup">
+                    <a href="#" id="popup-closer" className="ol-popup-closer"></a>
                     <div id="popup-content"></div>
                     <div id="info">&nbsp;</div>
                 </div>
@@ -197,7 +222,7 @@ class OpenMap extends Component {
                                             return (
 
                                                 <Segment>
-                                                    
+
                                                     <Grid.Row>
 
                                                         <Grid.Column width={4}>

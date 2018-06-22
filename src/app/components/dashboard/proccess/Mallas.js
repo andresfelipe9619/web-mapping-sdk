@@ -15,7 +15,7 @@ class Mallas extends Component {
   }
 
   componentDidMount() {
-    fetch(`http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:mallas&outputFormat=application%2Fjson`)
+    fetch(`http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:mallas&outputFormat=application%2Fjson`)
       .then(response => {
         if (!response.ok) {
           // dispatch(alertError(response));

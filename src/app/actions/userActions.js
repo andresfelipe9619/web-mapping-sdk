@@ -41,7 +41,7 @@ export function fetchClients() {
     return dispatch => {
         dispatch(fetchUsersRequest(true));
 
-        fetch('http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:clientes&outputFormat=application%2Fjson').then(response => {
+        fetch('http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:clientes&outputFormat=application%2Fjson').then(response => {
             if (!response.ok) {
                 // dispatch(alertError(response));
                 return Promise.reject(response.statusText);

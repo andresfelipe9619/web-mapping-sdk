@@ -40,8 +40,8 @@ export function fetchProducts() {
     return dispatch => {
         dispatch(fetchProductsRequest(true));
 
-        fetch(`http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:procrudo&outputFormat=application%2Fjson`).then(response => {
-        // fetch(`http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:mallas&outputFormat=application%2Fjson`).then(response => {
+        fetch(`http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:procrudo&outputFormat=application%2Fjson`).then(response => {
+        // fetch(`http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:mallas&outputFormat=application%2Fjson`).then(response => {
             if (!response.ok) {
                 // dispatch(alertError(response));
                 return Promise.reject(response.statusText);
@@ -63,7 +63,7 @@ export function fetchTotalProduct() {
     return dispatch => {
         dispatch(fetchTotalProductRequest(true));
 
-        fetch(`http://localhost:8080/geoserver/my_web_app/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=my_web_app:cantidadProductoCompradoCliente&viewparams=cliente:51;producto:g38&outputFormat=application%2Fjson`).then(response => {
+        fetch(`http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:cantidadProductoCompradoCliente&viewparams=cliente:51;producto:g38&outputFormat=application%2Fjson`).then(response => {
             if (!response.ok) {
                 // dispatch(alertError(response));
                 return Promise.reject(response.statusText);
