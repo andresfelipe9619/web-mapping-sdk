@@ -36,14 +36,15 @@ function fetchDispatchedsFailure(error) {
 }
 
 
-export function fetchUserDispatcheds(user, product) {
+export function fetchUserDispatcheds(user, product, mallas) {
     var userDispatcheds = '';
-    // if (product) {
-    //     userDispatcheds = `http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:despachosClienteConProducto&viewparams=cliente:${user};producto:${product}&outputFormat=application%2Fjson`
-    // } else {
+    if(mallas){
+        userDispatcheds = `http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:mallasOrigenProductoCliente&viewparams=cliente:${user};producto:${product}&outputFormat=application%2Fjson`
+    } else if (product) {
+        userDispatcheds = `http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:despachosClienteConProducto&viewparams=cliente:${user};producto:${product}&outputFormat=application%2Fjson`
+    } else {
         userDispatcheds = `http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:despachosCliente&viewparams=cliente:${user}&outputFormat=application%2Fjson`
-
-    // }
+    }
     return dispatch => {
 
         dispatch(fetchUserDispatchedsRequest(user));
