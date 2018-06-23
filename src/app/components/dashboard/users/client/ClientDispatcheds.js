@@ -13,15 +13,25 @@ class ClientDispatcheds extends Component {
     componentDidMount() {
         var { match } = this.props;
         console.log('MATCH', match)
-        if (match.params.productid) {
+        if (match.url.includes('mallas')) {
+
+            this.props.getUserDispatcheds(match.params.clientid, match.params.productid, true)
+        }
+        else if (match.params.productid) {
+
             this.props.getUserDispatcheds(match.params.clientid, match.params.productid)
 
-        } else if (match.params.clientid){
+        } else if (match.params.clientid) {
+
             this.props.getUserDispatcheds(match.params.clientid)
+
+
         }
     }
 
     render() {
+        var { match } = this.props;
+
         const userDispatcheds = this.props.userDispatcheds;
         if (this.props.hasErrored) {
             return <h1>Error</h1>;
@@ -29,6 +39,7 @@ class ClientDispatcheds extends Component {
             return (
                 <Segment
                     style={{
+
                         marginTop: "7em",
                         height: "20em"
                     }}
@@ -39,16 +50,47 @@ class ClientDispatcheds extends Component {
                 </Segment>
             );
         } else if (userDispatcheds) {
-            return (
-                <div>
-                    {/* <Header as="h2">Despachos al cliente {this.props.match.params.clientid}</Header> */}
-                    <Grid.Row>
-                        <FeatureTable data={userDispatcheds} actions={
-                            [{ component: () => <p>Hello</p>, keyItem: 'acciones' }]
-                        } />
-                    </Grid.Row>
-                </div>
-            );
+            if (match.url.includes('mallas')) {
+                return (
+                    <div>
+                        <Header as="h2">Mallas Origen Despachos al cliente {match.params.clientid}</Header>
+
+                        <Grid.Row>
+                            <FeatureTable data={userDispatcheds} actions={
+                                [{ component: () => <p>Hello</p>, keyItem: 'acciones' }]
+                            } />
+                        </Grid.Row>
+                    </div>
+                );
+            }
+            else if (match.params.productid) {
+
+                return (
+                    <div>
+                        <Header as="h2">Despachos al cliente {match.params.clientid} con producto  {match.params.peoductid} </Header>
+                        <Grid.Row>
+                            <FeatureTable data={userDispatcheds} actions={
+                                [{ component: () => <p>Hello</p>, keyItem: 'acciones' }]
+                            } />
+                        </Grid.Row>
+                    </div>
+                );
+
+            } else if (match.params.clientid) {
+
+                return (
+                    <div>
+                        <Header as="h2">Despachos al cliente {match.params.clientid}</Header>
+
+                        <Grid.Row>
+                            <FeatureTable data={userDispatcheds} actions={
+                                [{ component: () => <p>Hello</p>, keyItem: 'acciones' }]
+                            } />
+                        </Grid.Row>
+                    </div>
+                );
+            }
+
         } else return null;
     }
 }
@@ -70,8 +112,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getUserDispatcheds: (user, product) => {
-            dispatch(fetchUserDispatcheds(user, product))
+        getUserDispatcheds: (user, product, mallas) => {
+            dispatch(fetchUserDispatcheds(user, product, mallas))
         },
         getTotalProduct: () => {
             dispatch(fetchTotalProduct())

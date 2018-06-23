@@ -99,7 +99,7 @@ class MapComponent extends Component {
                 root.map((layer) => {
                     console.log('layer', layer)
                     if (layer.Title === 'clasificadoras' || layer.Title === 'cantera' || layer.Title === 'bandas'
-                        || layer.Title === 'trituradoras' || layer.Title === 'procrudo' || layer.Title === 'profinal' || layer.Title === 'mallas') {
+                        || layer.Title === 'trituradoras' || layer.Title === 'procrudo' || layer.Title === 'profinal' || layer.Title === 'mallasOrigenProductoCliente') {
 
                         let superlayer = new TileLayer({
                             id: layer.Title,
