@@ -10,6 +10,7 @@ import FeatureTable from '../../../table/FeatureTable'
 
 class ClientDispatcheds extends Component {
 
+
     componentDidMount() {
         var { match } = this.props;
         console.log('MATCH', match)
@@ -55,11 +56,9 @@ class ClientDispatcheds extends Component {
                     <div>
                         <Header as="h2">Mallas Origen Despachos al cliente {match.params.clientid}</Header>
 
-                        <Grid.Row>
-                            <FeatureTable data={userDispatcheds} actions={
-                                [{ component: () => <p>Hello</p>, keyItem: 'acciones' }]
-                            } />
-                        </Grid.Row>
+                        <FeatureTable data={userDispatcheds} actions={
+                            [{ component: () => <p>Hello</p>, keyItem: 'acciones' }]
+                        } />
                     </div>
                 );
             }
@@ -67,12 +66,10 @@ class ClientDispatcheds extends Component {
 
                 return (
                     <div>
-                        <Header as="h2">Despachos al cliente {match.params.clientid} con producto  {match.params.peoductid} </Header>
-                        <Grid.Row>
-                            <FeatureTable data={userDispatcheds} actions={
-                                [{ component: () => <p>Hello</p>, keyItem: 'acciones' }]
-                            } />
-                        </Grid.Row>
+                        <Header as="h2">Despachos al cliente {match.params.clientid} con producto  {match.params.productid} </Header>
+                        <FeatureTable data={userDispatcheds} actions={
+                            [{ component: () => <p>Hello</p>, keyItem: 'acciones' }]
+                        } />
                     </div>
                 );
 
@@ -82,11 +79,9 @@ class ClientDispatcheds extends Component {
                     <div>
                         <Header as="h2">Despachos al cliente {match.params.clientid}</Header>
 
-                        <Grid.Row>
-                            <FeatureTable data={userDispatcheds} actions={
-                                [{ component: () => <p>Hello</p>, keyItem: 'acciones' }]
-                            } />
-                        </Grid.Row>
+                        <FeatureTable data={userDispatcheds} actions={
+                            [{ component: () => <p>Hello</p>, keyItem: 'acciones' }]
+                        } />
                     </div>
                 );
             }

@@ -3,9 +3,8 @@ import { MenuDashboard } from "./Menu.js";
 import { connect } from "react-redux";
 import { loadDashboard } from "../../actions/dashboardActions";
 import { Grid, Header, Segment, Dimmer, Loader } from "semantic-ui-react";
-import { Route, Switch} from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import ClientsTable from './users/client/ClientsTable';
-import FeatureTable from './../table/FeatureTable';
 class Dashboard extends Component {
   componentDidMount() {
     this.props.loadPage();
@@ -28,18 +27,20 @@ class Dashboard extends Component {
           </Dimmer>
         </Segment>
       );
-    } else if (this.props.message){
+    } else if (this.props.message) {
       return (
         <Grid>
-          <Grid.Column width={4}>
+          <Grid.Row>
+          <Grid.Column style={{marginTop:'10em'}} width={3}>
             <MenuDashboard />
           </Grid.Column>
-          <Grid.Column width={12}>
+          <Grid.Column width={13}>
             <Route path={match.url + "/clientes"} component={ClientsTable} />
           </Grid.Column>
+          </Grid.Row>
         </Grid>
       );
-    }else return false;
+    } else return false;
   }
 }
 const mapStateToProps = state => {

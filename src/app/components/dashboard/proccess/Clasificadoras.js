@@ -25,6 +25,8 @@ class Clasificadoras extends Component {
   }
 
   clickedWatch = ({ id }) => {
+  console.log("u click me" + id)
+
     this.watchClasificadora( id );
 }
 
@@ -39,10 +41,10 @@ watchClasificadora(id){
 
         const ActionsComponent = ({ row, CustomFunction }) => {
             // const clickedEdit = () => editProduct({ imageURL: row[accessor] });
-            const handleclickedWatch = () => CustomFunction({ id: row['_id'] });
+            const handleclickedWatch = () => CustomFunction({ id: row['id_clasif'] });
             return (
                 <Button.Group icon>
-                    <Button> 
+                    <Button onClick={handleclickedWatch}> 
                         <Icon name='eye' />
                     </Button>
                     {/* <Button>

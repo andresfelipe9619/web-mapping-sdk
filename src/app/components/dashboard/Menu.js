@@ -12,7 +12,7 @@ export class MenuDashboard extends Component {
         return (
             <div>
                 <Menu
-                    size='large'
+                    size='small'
                     vertical>
                     <Menu.Item
                         name='usuarios'

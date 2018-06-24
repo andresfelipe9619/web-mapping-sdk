@@ -37,6 +37,7 @@ function fetchDispatchedsFailure(error) {
 
 
 export function fetchUserDispatcheds(user, product, mallas) {
+    console.log('you pass user dispatcheds')
     var userDispatcheds = '';
     if(mallas){
         userDispatcheds = `http://localhost:8080/geoserver/cahibi1/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:mallasOrigenProductoCliente&viewparams=cliente:${user};producto:${product}&outputFormat=application%2Fjson`

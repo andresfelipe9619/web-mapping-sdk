@@ -3,30 +3,28 @@ import ReactCollapsingTable from 'react-collapsing-table'
 import { Segment } from "semantic-ui-react";
 
 class FeatureTable extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            columns: [],
-            accessors: [],
-            mData: []
-        }
-    }
+
 
     loadTableData(data) {
-        let { columns, accessors, mData } = this.state
+        let tableData = {
+            columns:[],
+            accessors:[],
+            mData:[]
+        }
+        let {component} = this.props;
+
 
         for (var element of data) {
 
-            mData.push(element.properties)
+            tableData.mData.push(element.properties)
             const temp = Object.keys(element.properties);
             for (let j = 0, jj = temp.length; j < jj; j++) {
-                if (accessors.indexOf(temp[j]) < 0) {
+                if (tableData.accessors.indexOf(temp[j]) < 0) {
                     if (temp[j] == 'bbox' || temp[j] == 'este' || temp[j] == 'norte' || temp[j] == 'gid') {
                         continue
                     } else {
-                        console.log('EMP', temp[j])
-                        accessors.push(temp[j])
-                        columns.push({
+                        tableData.accessors.push(temp[j])
+                        tableData.columns.push({
                             accessor: temp[j],
                             label: temp[j],
                             priorityLevel: j + 1,
@@ -38,25 +36,22 @@ class FeatureTable extends Component {
                 }
             }
         }
-        return mData;
+        if (component) {
+            let last = tableData.accessors.length
+            tableData.columns.push({ accessor: 'acciones', label: 'acciones', priorityLevel: last, position: last, minWidth: 50, CustomComponent: component })
+        }
+        console.log('cols', tableData.columns)
+        return tableData;
 
     }
 
     render() {
 
-        let { data, component, callbacks } = this.props;
-        let { columns, accessors, mData } = this.state
+        let { data, callbacks } = this.props;
 
+        let {columns, mData} = this.loadTableData(data)
 
-        if (data.length) {
-
-            this.loadTableData(data)
-
-            if (component) {
-                let last = accessors.length
-                columns.push({ accessor: 'acciones', label: 'acciones', priorityLevel: last, position: last, minWidth: 50, CustomComponent: component })
-            }
-            console.log('cols', columns)
+        if (mData.length) {
 
             if (callbacks) {
                 return (

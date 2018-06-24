@@ -20,7 +20,7 @@ class ClientsTable extends Component {
             path: false,
             query: {
                 client: null,
-                product: null,  
+                product: null,
                 dispatched: null,
             }
         }
@@ -32,7 +32,7 @@ class ClientsTable extends Component {
 
 
     handleSubmit(e) {
-        // e.preventDefault();
+        e.preventDefault();
         console.log('You clicked me')
         const { query } = this.state;
         const { history, match } = this.props;
@@ -40,9 +40,6 @@ class ClientsTable extends Component {
         var path = this.evaluateQuery(query);
 
         if (path) {
-            // this.setState(() => ({
-            //     path: path
-            // }))
             history.push(path)
         }
     }
@@ -52,7 +49,7 @@ class ClientsTable extends Component {
 
         var path = false;
         if (query.client[0] === 'todos') {
-            path = '/clientes';
+            path = '/usuarios/clientes';
         } else if (Number(query.client[0])) {
             path = `/usuarios/clientes/${query.client[0]}/despachos`
         }
@@ -84,11 +81,11 @@ class ClientsTable extends Component {
         console.log('TABLE PROPS: ', this.props)
         if (this.props.clientsHasErrored) {
             return <h1>Error</h1>;
-        } 
+        }
         // else if (this.state.path) {
         //     return <Redirect to={this.state.path}></Redirect>
         // }
-         else if (this.props.clientsIsLoading) {
+        else if (this.props.clientsIsLoading) {
             return (
                 <Segment
                     style={{
@@ -164,13 +161,13 @@ class ClientsTable extends Component {
                         </Grid.Row>
                         <br />
                         <Grid.Row>
-                            <Grid.Column width={13}>
+                            <Grid.Column width={16}>
                                 <Switch>
                                     {/* <Route exact path={match.url} render={() => <FeatureTable data={products} />} /> */}
                                     {console.log('match', match.url)}
-                                    <Route exact path={match.url} render={() => <FeatureTable data={clients} />} />//Todos los despachos
-                                    <Route exact path={`${match.url}/despachos`} render={() => <FeatureTable data={dispatcheds} />} />//Todos los despachos
-                                    <Route exact path={`${match.url}/productos`} render={() => <FeatureTable data={products} />} />//Todos los despachos
+                                    <Route exact path={match.url} render={() => <div> <Segment> <h2>Todos los Clientes</h2></Segment><FeatureTable data={clients} /></div>} />//Todos los despachos
+                                    <Route exact path={`${match.url}/despachos`} render={() => <div> <Segment> <h2>Todos los Despachos</h2> </Segment><FeatureTable data={dispatcheds} /></div>} />//Todos los despachos
+                                    <Route exact path={`${match.url}/productos`} render={() => <div> <Segment> <h2>Todos los Productos</h2></Segment> <FeatureTable data={products} /></div>} />//Todos los despachos
                                     <Route exact path={`${match.url}/:clientid/despachos`} component={ClientDispatcheds} />//Todos los despahos del cliente x
                                     {/* <Route exact path={`${match.url}/:clientid/despachos/productos`} component={ClientDispatcheds} />//Todos los despachos del cliente x con todos los productos */}
                                     <Route exact path={`${match.url}/:clientid/despachos/productos/:productid`} component={ClientDispatcheds} />//Todos los despachos del cliente x con producto y
@@ -192,9 +189,11 @@ const mapStateToProps = state => {
         clients: state.userReducer.fetchUsersSuccess,
         clientsHasErrored: state.userReducer.fetchUsersFailure,
         ClientsIsLoading: state.userReducer.fetchUsersRequest,
+
         products: state.productReducer.fetchProductsSuccess,
         productsHasErrored: state.productReducer.fetchProductsFailure,
         productsIsLoading: state.productReducer.fetchProductsRequest,
+
         dispatcheds: state.dispatchedReducer.fetchDispatchedsSuccess,
         dispatchedsHasErrored: state.dispatchedReducer.fetchDispatchedsFailure,
         dispatchedsIsLoading: state.dispatchedReducer.fetchDispatchedsRequest,
