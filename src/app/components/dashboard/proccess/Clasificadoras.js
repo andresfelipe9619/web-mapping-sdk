@@ -24,6 +24,8 @@ class Clasificadoras extends Component {
       })
   }
 
+  
+
   clickedWatch = ({ id }) => {
   console.log("u click me" + id)
 
