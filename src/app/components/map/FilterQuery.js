@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dropdown, Button, Icon, Header, Segment, Dimmer, Grid, Loader } from 'semantic-ui-react';
+import { Dropdown, Button, Icon, Header, Segment, Dimmer,Form,  Grid, Loader } from 'semantic-ui-react';
 import { Select } from 'react-select';
 
 export default class FilterQuery extends Component {
@@ -31,7 +31,12 @@ export default class FilterQuery extends Component {
         if (path) { this.setState({ ...this.state, path }) }
 
     }
+    // const url=`https://api.myjson.com/bins/e69i9/?i=${value}&q=${value2}`;
 
+    // fetch(url,{
+    //     method:'GET'
+    // }).then(response => response.json())
+    // .then(json =>console.log('details',json));
 
     handleChangeLayer = (event) => {
         this.setState({ query: { ...this.state.query, layer: [event.value] } });
@@ -53,22 +58,27 @@ export default class FilterQuery extends Component {
         // if(this.props.){
 
         // }
-        let layerOptions = [
-            { value: '', label: '' }
-        ]
+        let layerOptions = []
 
         let comparacionOptions = [
-            { value: '<', label: '<' },
-            { value: '<=', label: '<=' },
-            { value: '>=', label: '>=' },
-            { value: '>', label: '>' },
-            { value: '==', label: '==' }
+            { key: '<', value: '<', text: '<' },
+            { key: '<=', value: '<=', text: '<=' },
+            { key: '>=', value: '>=', text: '>=' },
+            { key: '>', value: '>', text: '>' },
+            { key: '==', value: '==', text: '==' }
+        ]
+
+        let atributosOptions = [
+            { key: 'velocidad', value: 'velocidad', text: 'velocidad' },
+            { key: 'capacidad', value: 'capacidad', text: 'capacidad' },
+            { key: 'estado', value: 'estado', text: 'estado' },
+
         ]
 
 
         if (this.props.layers) {
             for (let layer of this.props.layers) {
-                layerOptions.push({ value: layer.Title, label: layer.Ttile })
+                layerOptions.push({ key: layer.Title, value: layer.Title, text: layer.Title })
             }
             return (
                 <div>
@@ -77,53 +87,47 @@ export default class FilterQuery extends Component {
                         <Grid.Row>
                             <h3>Informacion geografica</h3>
                             <Dropdown
-                                simple
-                                text='Nombre de la capa'
-                                name="clientes"
+                                placeholder="Nombre Capa"
+                                selection
+                                name="layers"
                                 options={layerOptions}
-                                defaultValue='Todos'
-                                labelContent='Info'
-                                // onChange={this.handleChnageLayer}
-                                isSearchable={true}
+                                onChange={this.handleChangeLayer}
                             />
                         </Grid.Row>
                         <Grid.Row>
                             <br />
                             <h3>Atributos</h3>
                             <Dropdown
-                                text='Nombre'
-
+                                placeholder="atributo"
+                                selection
                                 name="atributos"
-                                // options={dispatchOptions}
-                                defaultValue='Todos'
-                                // onChange={this.handleChangeDispatched}
-                                isSearchable={true}
+                                options={atributosOptions}
+                                onChange={this.handleChangeAtributos}
                             />
                             <br />
                             <Dropdown
-                                text='Comparacion'
-
+                                placeholder='Comparacion'
                                 name="comparacion"
+                                selection
                                 options={comparacionOptions}
-                                defaultValue='Todos'
-                                // onChange={this.handleChangeDispatched}
-                                isSearchable={true}
+                                onChange={this.handleChangeDispatched}
                             />
                             <br />
-                            <Dropdown
-                                text='Valor'
+                            <Form.Input
+                                required
+                                fluid
+                                icon="money"
+                                iconPosition="left"
                                 name="valor"
-                                // options={valorOptions}
-                                defaultValue='Todos'
-                                // onChange={this.handleChangeDispatched}
-                                isSearchable={true}
-                            />
+                                placeholder="Valor a comparar"
+                                onChange={this.handleChangeValor}
+                                value={this.state.query.valor} />
                         </Grid.Row>
 
                         <Button type='submit' style={{ marginTop: '20px' }} onClick={this.handleSubmit} primary >Consultar</Button>
                     </Segment>
                 </div>
             )
-        }else return null
+        } else return null
     }
 }
