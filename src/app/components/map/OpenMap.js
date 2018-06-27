@@ -65,12 +65,14 @@ class OpenMap extends Component {
 
     componentDidMount() {
         var baseLayers = [
+            
             'clasificadoras',
             'cantera',
             'bandas',
             'trituradoras',
             'procrudo',
-            'profinal'
+            'profinal',
+            'mallas'
         ]
         this.props.loadLayersRequest(baseLayers)
     }

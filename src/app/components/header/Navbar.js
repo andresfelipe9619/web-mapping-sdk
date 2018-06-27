@@ -60,7 +60,7 @@ class Navbar extends Component {
                                 name='sql'
                                 active={activeItem === 'sql'}
                                 onClick={this.handleItemClick}
-                                to="mapa/sql"
+                                to="/mapa/sql"
                                 as={Link}>
                                 <Icon name='code' />
                                 SQL</Menu.Item>

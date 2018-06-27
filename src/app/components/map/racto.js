@@ -1,4 +1,3 @@
-
 var ol = require('openlayers');
 var React = require('react');
 var Redux = require('redux');
