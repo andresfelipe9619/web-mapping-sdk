@@ -12,13 +12,15 @@ import loginReducer from "./login"
 import userReducer from './user';
 import dispatchedReducer from './dispatcheds'
 import productReducer from './product'
+import mapReducer from './map'
 
 
 export default combineReducers({
-  map: SdkMapReducer,
-  mapinfo: SdkMapInfoReducer,
-  drawing: SdkDrawingReducer, 
-  wfs: SdkWfsReducer,
+  // map: SdkMapReducer,
+  // mapinfo: SdkMapInfoReducer,
+  // drawing: SdkDrawingReducer, 
+  // wfs: SdkWfsReducer,
+  mapReducer,
   homeReducer,
   dashboardReducer,
   authReducer,

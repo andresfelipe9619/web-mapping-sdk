@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import { loadLayers, zoomToLayer, selectLayer } from '../../actions/mapActions'
 
 import Map from './Map'
 import Menu from './MenuMapa'
@@ -62,53 +63,97 @@ const MallasQuery = () => {
 
 class OpenMap extends Component {
 
+    componentDidMount() {
+        var baseLayers = [
+            'clasificadoras',
+            'cantera',
+            'bandas',
+            'trituradoras',
+            'procrudo',
+            'profinal'
+        ]
+        this.props.loadLayersRequest(baseLayers)
+    }
+
     render() {
         const mBorder = { borderStyle: 'solid', borderColor: '#3BA2FB' };
         const { match } = this.props;
-
-        return (
-            <div>
-                <Grid>
-                    <Grid.Row>
-                        <Grid.Column width={4}>
+        if (this.props.layersHasErrored) {
+            return <h1>Error</h1>;
+        }
+        // else if (this.state.path) {
+        //     return <Redirect to={this.state.path}></Redirect>
+        // }
+        else if (this.props.layersIsLoading) {
+            return (
+                <Segment
+                    style={{
+                        marginTop: "7em",
+                        height: "20em"
+                    }}
+                >
+                    <Dimmer inverted active>
+                        <Loader size="big">Loading</Loader>
+                    </Dimmer>
+                </Segment>
+            );
+        } else if (this.props.layers) {
+                return (
+                    <div>
+                        <Grid>
                             <Grid.Row>
-                                <Grid.Column>
-                                    <Menu />
+                                <Grid.Column width={4}>
+                                    <Grid.Row>
+                                        <Grid.Column>
+                                            <Menu />
+                                        </Grid.Column>
+                                    </Grid.Row>
+                                    <Grid.Row>
+                                        <Grid.Column>
+                                            <Switch>
+                                                <Route path={match.url + "/sql"} render={()=> <FilterQuery layers={this.props.layers}/>} />
+                                                <Route path={match.url + "/mallas"} component={MallasQuery} />
+                                            </Switch>
+                                        </Grid.Column>
+                                    </Grid.Row>
                                 </Grid.Column>
+                                <Grid.Column width={10} style={mBorder}>
+                                <Route path={match.url} render={() => <div> <Map layers={this.props.layers}></Map></div>} />
+                                </Grid.Column>
+
                             </Grid.Row>
                             <Grid.Row>
-                                <Grid.Column>
-                                    <Switch>
-                                        <Route path={match.url + "/sql"} component={FilterQuery} />
-                                        <Route path={match.url + "/mallas"} component={MallasQuery} />
-                                    </Switch>
-                                </Grid.Column>
+                                <Switch>
+                                    <Route path={match.url + "/mallas"} component={Mallas} />
+                                    <Route path={match.url + "/clasificadoras"} component={Clasificadoras} />
+                                    <Route path={match.url + "/trituradoras"} component={Trituradoras} />
+
+                                </Switch>
                             </Grid.Row>
-                        </Grid.Column>
-                        <Grid.Column width={10} style={mBorder}>
-                            <Map></Map>
-                        </Grid.Column>
+                        </Grid>
+                    </div >
+                )
+            } else return null
+    }
+}
 
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Switch>
-                            <Route path={match.url + "/mallas"} component={Mallas} />
-                            <Route path={match.url + "/clasificadoras"} component={Clasificadoras} />
-                            <Route path={match.url + "/trituradoras"} component={Trituradoras} />
+const mapStateToProps = state => {
+    return {
+        layers: state.mapReducer.loadLayersSuccess,
+        layersHasErrored: state.mapReducer.loadLayersError,
+        layersIsLoading: state.mapReducer.loadLayersRequest,
 
-                        </Switch>
-                    </Grid.Row>
-                </Grid>
-            </div >
-        )
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-
+        loadLayersRequest: (layers) => {
+            dispatch(loadLayers(layers))
+        },
     }
 }
 
 
-export default connect(null, mapDispatchToProps)(OpenMap);
+
+export default connect(mapStateToProps, mapDispatchToProps)(OpenMap);

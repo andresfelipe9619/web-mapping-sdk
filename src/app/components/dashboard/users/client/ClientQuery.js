@@ -49,28 +49,34 @@ class ClientQuery extends Component {
 
 
         var path = false;
-        if (Number(query.client[0]) && query.product[0] === 'todos') {
-            path = `/usuarios/clientes/${query.client[0]}/despachos`;
-        } else if (query.client[0] === 'todos') {
-            path = '/usuarios/clientes';
+        if (query.product || query.product && query.client) {
+            if (Number(query.client[0]) && query.product[0] === 'todos') {
+                path = `/usuarios/clientes/${query.client[0]}/despachos`;
+            }
+            else if (Number(query.client[0]) && query.product[0]) {
+                path = `/usuarios/clientes/${query.client[0]}/despachos/productos/${query.product[0]}`
 
-        } else if (query.product[0] === 'todos') {
-            path = `/usuarios/clientes/productos`;
+            } else if (query.product[0] === 'todos') {
+                path = `/usuarios/clientes/productos`;
 
-        }  else if (query.dispatched[0] === 'todos') {
+            }
+        } else if (query.client) {
+            if (Number(query.client[0])) {
+                path = `/usuarios/clientes/${query.client[0]}/despachos`
+
+            } else if (Number(query.client[0])) {
+                path = `/usuarios/clientes/${query.client[0]}/despachos`
+
+            } else if (Number(query.client[0])) {
+                path = `/usuarios/clientes/${query.client[0]}/despachos`
+
+            } else if (query.client[0] === 'todos') {
+                path = '/usuarios/clientes';
+            }
+
+        } else if (query.dispatched[0] === 'todos') {
             path = `/usuarios/clientes/despachos`;
 
-        } else if (Number(query.client[0]) && query.product[0]) {
-            path = `/usuarios/clientes/${query.client[0]}/despachos/productos/${query.product[0]}`
-
-        } else if (Number(query.client[0])) {
-            path = `/usuarios/clientes/${query.client[0]}/despachos`
-
-        } else if (Number(query.client[0])) {
-            path = `/usuarios/clientes/${query.client[0]}/despachos`
-
-        } else if (Number(query.client[0])) {
-            path = `/usuarios/clientes/${query.client[0]}/despachos`
         }
         return path;
     }

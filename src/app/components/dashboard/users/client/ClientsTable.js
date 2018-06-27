@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import Select from 'react-select'
 import { Table, Checkbox, Button, Icon, Header, Segment, Dimmer, Grid, Loader, Modal, Form } from 'semantic-ui-react';
 import { connect } from 'react-redux'
 import { fetchClients } from '../../../../actions/userActions';

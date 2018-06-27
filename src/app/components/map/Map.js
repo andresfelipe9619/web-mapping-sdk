@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react'
 
 import WFS from 'ol/format/wfs';
@@ -34,20 +35,16 @@ class MapComponent extends Component {
         var content = document.getElementById('popup-content');
         var closer = document.getElementById('popup-closer');
 
-        var selectFeature = new Style({
-            stroke: new Stroke({
-                color: '#ff0000',
-                width: 2
-            })
-        });
+        // var selectControl;
+        // var selectedFeature;
 
-        var defaultFeature = new Style({
-            stroke: new Stroke({
-                color: '#0000ff',
-                width: 2
-            })
-        });
-
+        // selectControl = new SelectFeature(vectorLayer,
+        //     {
+        //         onSelect: onFeatureSelect,
+        //         onUnselect: onFeatureUnselect
+        //     });
+        // map.addControl(selectControl);
+        // selectControl.activate();
         /**
          * Create an overlay to anchor the popup to the map.
          */
@@ -96,32 +93,58 @@ class MapComponent extends Component {
                 const info = new WMSCapabilitiesFormat().read(xml);
                 const root = info.Capability.Layer.Layer;
                 console.log('ROOT WMS', root)
-                root.map((layer) => {
-                    console.log('layer', layer)
-                    if (layer.Title === 'clasificadoras' || layer.Title === 'cantera' || layer.Title === 'bandas'
-                        || layer.Title === 'trituradoras' || layer.Title === 'procrudo' || layer.Title === 'profinal' || layer.Title === 'mallasOrigenProductoCliente') {
 
-                        let superlayer = new TileLayer({
-                            id: layer.Title,
-                            type: 'base',
-                            // extent: extent,
-                            source: new TileWMS({
-                                // projection:"EPSG:3115",
-                                url: 'http://localhost:8080/geoserver/cahibi1/wms',
-                                params: {
-                                    'FORMAT': "image/png",
-                                    'LAYERS': `cahibi1:${layer.Title}`,
-                                    tiled: true,
-                                },
-                                serverType: 'geoserver',
+                if (this.props.filter) {
+                    root.map((layer) => {
+                        console.log('layer', layer)
+                        if (layer.Title) {
+
+                            let superlayer = new TileLayer({
+                                id: layer.Title,
+                                type: 'base',
+                                // extent: extent,
+                                source: new TileWMS({
+                                    // projection:"EPSG:3115",
+                                    url: 'http://localhost:8080/geoserver/cahibi1/wms',
+                                    params: {
+                                        'FORMAT': "image/png",
+                                        'LAYERS': `cahibi1:${layer.Title}`,
+                                        tiled: true,
+                                    },
+                                    serverType: 'geoserver',
+                                })
                             })
-                        })
-                        layersName.push(superlayer);
-                    }
-                })
-                return layersName
-            })
-            .then(layers => {
+                            layersName.push(superlayer);
+                        }
+                    })
+                    return layersName
+                } else {
+                    root.map((layer) => {
+                        console.log('layer', layer)
+                        if (layer.Title === 'clasificadoras' || layer.Title === 'cantera' || layer.Title === 'bandas'
+                            || layer.Title === 'trituradoras' || layer.Title === 'procrudo' || layer.Title === 'profinal' || layer.Title === 'mallasOrigenProductoCliente') {
+
+                            let superlayer = new TileLayer({
+                                id: layer.Title,
+                                type: 'base',
+                                // extent: extent,
+                                source: new TileWMS({
+                                    // projection:"EPSG:3115",
+                                    url: 'http://localhost:8080/geoserver/cahibi1/wms',
+                                    params: {
+                                        'FORMAT': "image/png",
+                                        'LAYERS': `cahibi1:${layer.Title}`,
+                                        tiled: true,
+                                    },
+                                    serverType: 'geoserver',
+                                })
+                            })
+                            layersName.push(superlayer);
+                        }
+                    })
+                    return layersName
+                }
+            }).then(layers => {
 
 
                 var selectInteraction = new SelectInteraction({
@@ -167,14 +190,14 @@ class MapComponent extends Component {
                     //             console.log(data.includes(layer.get('id')))
                     //             if(data.includes('table') && data.includes(layer.get('id'))){
                     //                 url = urlPrueba;
-                                    
+
                     //             }
                     //         })
 
                     // }
-                      url = layers[2].getSource().getGetFeatureInfoUrl(
-                            coordinate, viewResolution, viewProjection,
-                            { 'INFO_FORMAT': 'text/html' });
+                    url = layers[2].getSource().getGetFeatureInfoUrl(
+                        coordinate, viewResolution, viewProjection,
+                        { 'INFO_FORMAT': 'text/html' });
                     console.log('url', url)
                     if (url) {
                         document.getElementById('info').innerHTML =

@@ -25,8 +25,6 @@ class ClientDispatcheds extends Component {
         } else if (match.params.clientid) {
 
             this.props.getUserDispatcheds(match.params.clientid)
-
-
         }
     }
 
