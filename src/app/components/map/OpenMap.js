@@ -64,6 +64,8 @@ const MallasQuery = () => {
 class OpenMap extends Component {
 
     componentDidMount() {
+        let {match} = this.props;
+
         var baseLayers = [
             
             'clasificadoras',
@@ -114,22 +116,28 @@ class OpenMap extends Component {
                                         <Grid.Column>
                                             <Switch>
                                                 <Route path={match.url + "/sql"} render={()=> <FilterQuery layers={this.props.layers}/>} />
-                                                <Route path={match.url + "/mallas"} component={MallasQuery} />
+                                                <Route exact path={match.url + "/mallas"} component={MallasQuery} />
                                             </Switch>
                                         </Grid.Column>
                                     </Grid.Row>
                                 </Grid.Column>
                                 <Grid.Column width={10} style={mBorder}>
-                                <Route path={match.url} render={() => <div> <Map layers={this.props.layers}></Map></div>} />
+                                <Route exact path={match.url} render={(props) => <Map {...props} layers={this.props.layers}></Map>} />
+                                <Route path={match.url+ "/sql/bandas/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key='3424' layers={[this.props.layers[0]]} filt></Map>} />
+                                <Route path={match.url+ "/sql/cantera/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key='asd3e' layers={[this.props.layers[1]]} filt></Map>} />
+                                <Route path={match.url+ "/sql/mallas/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key='ewsda' layers={[this.props.layers[2]]} filt></Map>} />
+                                <Route path={match.url+ "/sql/procrudo/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key='asdaw' layers={[this.props.layers[3]]} filt></Map>} />
+                                <Route path={match.url+ "/sql/profinal/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key='asde33' layers={[this.props.layers[4]]} filt></Map>} />
+                                <Route path={match.url+ "/sql/trituradoras/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key='asd3e' layers={[this.props.layers[5]]} filt></Map>} />
+                                <Route path={match.url+ "/sql/clasificadoras/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key='asd3e' layers={[this.props.layers[6]]} filt></Map>} />
                                 </Grid.Column>
 
                             </Grid.Row>
-                            <Grid.Row>
+                            <Grid.Row>  
                                 <Switch>
                                     <Route path={match.url + "/mallas"} component={Mallas} />
                                     <Route path={match.url + "/clasificadoras"} component={Clasificadoras} />
                                     <Route path={match.url + "/trituradoras"} component={Trituradoras} />
-
                                 </Switch>
                             </Grid.Row>
                         </Grid>

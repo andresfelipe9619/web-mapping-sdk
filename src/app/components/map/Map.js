@@ -26,6 +26,7 @@ import SelectInteraction from 'ol/interaction/select';
 // import "ol/css/ol.css"
 
 class MapComponent extends Component {
+
     constructor(props) {
         super(props)
         this.mapId = `map`;
@@ -49,7 +50,7 @@ class MapComponent extends Component {
         })
     }
 
-    addLayerToMap(layer, map) {
+    addLayerToMap(layer, map, filter) {
         if (layer && map) {
             if (layer.Title === 'clasificadoras' || layer.Title === 'cantera' || layer.Title === 'bandas'
                 || layer.Title === 'trituradoras' || layer.Title === 'procrudo' || layer.Title === 'profinal' || layer.Title === 'mallas') {
@@ -73,16 +74,26 @@ class MapComponent extends Component {
                 console.log('alyer', superlayer)
             } else { console.log('ajjajajaja', layer) }
         }
-        var filterParams = {
-            'FILTER': null,
-            'CQL_FILTER': null,
-            'FEATUREID': null
-        };
 
-        filterParams["CQL_FILTER"] = 'estado==0';
-        map.getLayers().forEach(function (lyr) {
-            lyr.getSource().updateParams(filterParams);
-        });
+        // if (this.props.match.url.includes('/mapa/sql/') && this.props.match.params) {
+        //     var filter = {
+        //         atributo: this.props.match.params.atributo,
+        //         comparacion: this.props.match.params.comparacion,
+        //         valor: this.props.match.params.valor
+        //     }
+        //     var filterParams = {
+        //         'FILTER': null,
+        //         'CQL_FILTER': null,
+        //         'FEATUREID': null
+        //     };
+
+        //     filterParams["CQL_FILTER"] = `${filter.atributo}${filter.comparacion}${filter.valor}`;
+        //     console.log("my filter",filterParams["CQL_FILTER"])
+        //     map.getLayers().forEach(function (lyr) {
+        //         lyr.getSource().updateParams(filterParams);
+        //     });
+        // }
+
     }
 
     componentDidMount() {
@@ -94,6 +105,8 @@ class MapComponent extends Component {
         var overlay = this.olOverlay;
         var view = this.olView;
         overlay.setElement(container)
+
+
 
         var map = new Map({
             projection: 'EPSG:3115',

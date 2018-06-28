@@ -11,7 +11,7 @@ export default class FilterQuery extends Component {
                 layer: null,
                 atributos: [],
                 comparacion: null,
-                valor: null
+                valor: ''
             }
         }
         this.handleChangeLayer = this.handleChangeLayer.bind(this);
@@ -31,12 +31,6 @@ export default class FilterQuery extends Component {
         if (path) { this.setState({ ...this.state, path }) }
 
     }
-    // const url=`https://api.myjson.com/bins/e69i9/?i=${value}&q=${value2}`;
-
-    // fetch(url,{
-    //     method:'GET'
-    // }).then(response => response.json())
-    // .then(json =>console.log('details',json));
 
     handleChangeLayer = (event) => {
         this.setState({ query: { ...this.state.query, layer: [event.value] } });
