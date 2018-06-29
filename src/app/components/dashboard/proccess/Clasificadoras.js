@@ -60,10 +60,11 @@ watchClasificadora(id){
             )
         }
 
+        // component={ActionsComponent}  callbacks={callbacks}
     if (this.state.clasificadoras) {
       return (
         <div>
-          <FeatureTable data={this.state.clasificadoras} component={ActionsComponent} callbacks={callbacks} />
+          <FeatureTable data={this.state.clasificadoras}  />
         </div>
       )
     } else return null

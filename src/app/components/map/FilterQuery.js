@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Dropdown, Button, Icon, Header, Segment, Dimmer,Form,  Grid, Loader } from 'semantic-ui-react';
-import { Select } from 'react-select';
+import { Link, Redirect } from 'react-router-dom';
+import { Dropdown, Button, Segment, Dimmer, Form, Grid, Loader } from 'semantic-ui-react';
 
 export default class FilterQuery extends Component {
     constructor(props) {
@@ -9,7 +9,7 @@ export default class FilterQuery extends Component {
             path: false,
             query: {
                 layer: null,
-                atributos: [],
+                atributos: null,
                 comparacion: null,
                 valor: ''
             }
@@ -25,33 +25,48 @@ export default class FilterQuery extends Component {
         e.preventDefault();
         console.log('You clicked me')
         const { query } = this.state;
-        const { history, match } = this.props;
 
         var path = this.evaluateQuery(query);
-        if (path) { this.setState({ ...this.state, path }) }
+        if (path) {
+            this.setState({ ...this.state, path })
+            this.props.history.push(path)
+        }
 
     }
 
-    handleChangeLayer = (event) => {
-        this.setState({ query: { ...this.state.query, layer: [event.value] } });
+    handleChangeLayer = (e, { value }) => {
+        this.setState({ query: { ...this.state.query, layer: { value } } });
     }
-    handleChangeAtributos = (event) => {
-        this.setState({ query: { ...this.state.query, atributos: [event.value] } });
+    handleChangeAtributos = (e, { value }) => {
+        this.setState({ query: { ...this.state.query, atributos: { value } } });
     }
-    handleChangeComparacion = (event) => {
-        this.setState({ query: { ...this.state.query, comparacion: [event.value] } });
+    handleChangeComparacion = (e, { value }) => {
+        this.setState({ query: { ...this.state.query, comparacion: { value } } });
     }
-    handleChangeValor = (event) => {
-        this.setState({ query: { ...this.state.query, valor: [event.value] } });
+    handleChangeValor = (e) => {
+        this.setState({ query: { ...this.state.query, valor: [e.target.value] } });
     }
-    componentDidMount() {
 
+    evaluateQuery(query) {
+        var path = false;
+        console.log('change it bitch', path)
+        console.log('change it bitch', query)
 
+        if (query.layer) {
+            console.log('change it bitch', path)
+
+            if (query.atributos && query.comparacion) {
+                console.log('change it bitch', path)
+
+                path = `/mapa/sql/${query.layer.value}/${query.atributos.value}/${query.comparacion.value}/${query.valor}`
+                return path
+
+            }
+        }
+        return path
     }
     render() {
-        // if(this.props.){
 
-        // }
         let layerOptions = []
 
         let comparacionOptions = [
@@ -63,11 +78,44 @@ export default class FilterQuery extends Component {
         ]
 
         let atributosOptions = [
+            { key: 'nombre', value: 'nombre', text: 'nombre' },
+            { key: 'cota', value: 'cota', text: 'cota' },
+            { key: 'idzona', value: 'idzona', text: 'idzona' },
+            { key: 'fechae', value: 'fechae', text: 'fechae' },
+            { key: 'estado', value: 'estado', text: 'estado' },
             { key: 'velocidad', value: 'velocidad', text: 'velocidad' },
             { key: 'capacidad', value: 'capacidad', text: 'capacidad' },
-            { key: 'estado', value: 'estado', text: 'estado' },
-
+            { key: 'volumen', value: 'volumen', text: 'volumen' },
+            { key: 'fechae', value: 'fechae', text: 'fechae' }
         ]
+        
+        // let atributosOptions = {
+        //     mallas: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
+        //     { key: 'cota', value: 'cota', text: 'cota' },
+        //     { key: 'idzona', value: 'idzona', text: 'idzona' },
+        //     { key: 'fechae', value: 'fechae', text: 'fechae' }],
+        //     clasificadoras: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
+        //     { key: 'estado', value: 'estado', text: 'estado' },
+        //     { key: 'velocidad', value: 'velocidad', text: 'velocidad' },
+        //     { key: 'capacidad', value: 'capacidad', text: 'capacidad' },],
+        //     trituradoras: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
+        //     { key: 'estado', value: 'estado', text: 'estado' },
+        //     { key: 'velocidad', value: 'velocidad', text: 'velocidad' },
+        //     { key: 'capacidad', value: 'capacidad', text: 'capacidad' },],
+        //     bandas: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
+        //     { key: 'estado', value: 'estado', text: 'estado' },
+        //     { key: 'velocidad', value: 'velocidad', text: 'velocidad' },
+        //     { key: 'capacidad', value: 'capacidad', text: 'capacidad' },],
+        //     cantera: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
+        //     { key: 'area', value: 'area', text: 'area' },
+        //     { key: 'idzona', value: 'idzona', text: 'idzona' },],
+        //     procrudo: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
+        //     { key: 'volumen', value: 'volumen', text: 'volumen' },],
+        //     profinal: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
+        //     { key: 'volumen', value: 'volumen', text: 'volumen' },
+        //     { key: 'porceps', value: 'porceps', text: 'porceps' },
+        //     ]
+        // }
 
 
         if (this.props.layers) {
@@ -104,22 +152,22 @@ export default class FilterQuery extends Component {
                                 name="comparacion"
                                 selection
                                 options={comparacionOptions}
-                                onChange={this.handleChangeDispatched}
+                                onChange={this.handleChangeComparacion}
                             />
                             <br />
                             <Form.Input
                                 required
                                 fluid
-                                icon="money"
-                                iconPosition="left"
                                 name="valor"
                                 placeholder="Valor a comparar"
+                                type="text"
                                 onChange={this.handleChangeValor}
                                 value={this.state.query.valor} />
                         </Grid.Row>
 
                         <Button type='submit' style={{ marginTop: '20px' }} onClick={this.handleSubmit} primary >Consultar</Button>
                     </Segment>
+
                 </div>
             )
         } else return null

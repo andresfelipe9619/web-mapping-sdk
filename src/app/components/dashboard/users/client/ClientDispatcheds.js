@@ -53,7 +53,6 @@ class ClientDispatcheds extends Component {
                 return (
                     <div>
                         <Header as="h2">Mallas Origen Despachos al cliente {match.params.clientid}</Header>
-
                         <FeatureTable data={userDispatcheds} actions={
                             [{ component: () => <p>Hello</p>, keyItem: 'acciones' }]
                         } />

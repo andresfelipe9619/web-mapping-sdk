@@ -93,7 +93,7 @@ class ClientQuery extends Component {
         dispatchOptions.push(options[0]);
 
         clients.map(client => {
-            clientOptions.push({ value: client.properties.idcli, label: client.properties.nombre })
+            clientOptions.push({ value: client.properties.gid, label: client.properties.nombre })
         })
 
         products.map(product => {
@@ -101,9 +101,9 @@ class ClientQuery extends Component {
         })
 
         dispatcheds.map(dispatch => {
-            dispatchOptions.push({ value: dispatch.properties.iddes, label: dispatch.id })
+            dispatchOptions.push({ value: dispatch.properties.gid, label: dispatch.id })
         })
-
+        
         return (
 
             <Grid.Row>

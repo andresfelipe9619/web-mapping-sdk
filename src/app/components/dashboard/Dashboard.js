@@ -5,6 +5,8 @@ import { loadDashboard } from "../../actions/dashboardActions";
 import { Grid, Header, Segment, Dimmer, Loader } from "semantic-ui-react";
 import { Route, Switch } from "react-router-dom";
 import ClientsTable from './users/client/ClientsTable';
+import OperariosTable from './users/OperariosTable';
+import JefesTable from './users/JefesTable';
 class Dashboard extends Component {
   componentDidMount() {
     this.props.loadPage();
@@ -36,8 +38,10 @@ class Dashboard extends Component {
           </Grid.Column>
           <Grid.Column width={13}>
             <Route path={match.url + "/clientes"} component={ClientsTable} />
+            <Route path={match.url + "/operarios"} component={OperariosTable} />
+            <Route path={match.url + "/jefesproduccion"} component={JefesTable} />
           </Grid.Column>
-          </Grid.Row>
+          </Grid.Row> 
         </Grid>
       );
     } else return false;

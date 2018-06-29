@@ -56,6 +56,49 @@ export function fetchClients() {
             dispatch(fetchUsersFailure(err));
         });
     };
+
+}
+export function fetchOperarios() {
+
+    return dispatch => {
+        dispatch(fetchUsersRequest(true));
+
+        fetch('http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:operarios&maxFeatures=50&outputFormat=application%2Fjson').then(response => {
+            if (!response.ok) {
+                // dispatch(alertError(response));
+                return Promise.reject(response.statusText);
+            }
+            console.log('USERS RESPONSE', response)
+            return response.json();
+        }).then((response) => {
+            dispatch(fetchUsersRequest(false));
+            dispatch(fetchUsersSuccess(response.features));
+        }).catch((err) => {
+            // dispatch(alertError(err));
+            dispatch(fetchUsersFailure(err));
+        });
+    };
+}
+export function fetchJefes() {
+
+    return dispatch => {
+        dispatch(fetchUsersRequest(true));
+
+        fetch('http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:jefes&maxFeatures=50&outputFormat=application%2Fjson').then(response => {
+            if (!response.ok) {
+                // dispatch(alertError(response));
+                return Promise.reject(response.statusText);
+            }
+            console.log('USERS RESPONSE', response)
+            return response.json();
+        }).then((response) => {
+            dispatch(fetchUsersRequest(false));
+            dispatch(fetchUsersSuccess(response.features));
+        }).catch((err) => {
+            // dispatch(alertError(err));
+            dispatch(fetchUsersFailure(err));
+        });
+    };
 }
 
 

@@ -49,14 +49,13 @@ class ClientsTable extends Component {
 
 
             const DespachosProducto = (props) => <div><ClientDispatcheds {...props} /></div>;
-            const MallasDespachos = (props) => <div><ClientDispatcheds {...props}/></div>;
-            const MallasProductoDespachos = (props) => <div><ClientDispatcheds {...props}/></div>;
+            const MallasDespachos = (props) => <div><ClientDispatcheds {...props} /></div>;
+            const MallasProductoDespachos = (props) => <div><ClientDispatcheds {...props} /></div>;
 
             return (
                 <div>
-                    <Header as="h2">Clientes</Header>
-                    <Grid>
-                        <ClientQuery data={{clients, products, dispatcheds}} history={history} match={match}></ClientQuery>
+                    <Segment> <h2>Clientes</h2></Segment>                    <Grid>
+                        <ClientQuery data={{ clients, products, dispatcheds }} history={history} match={match}></ClientQuery>
                         <br />
                         <Grid.Row>
                             <Grid.Column width={16}>
@@ -78,7 +77,7 @@ class ClientsTable extends Component {
                     </Grid>
                 </div>
             );
-        }else return null;
+        } else return null;
     }
 }
 

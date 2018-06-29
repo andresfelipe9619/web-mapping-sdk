@@ -88,7 +88,7 @@ class Login extends Component {
                 : this.props.alertError
                   ? <AlertMessage type='error' msg={this.props.alertError}/>
                   : null}  */}
-              <Header as="h2" color="teal" textAlign="center">
+              <Header as="h2" color="blue" textAlign="center">
                 Inicia Sesión con tu cuenta
               </Header>
               <Form size="large" onSubmit={this.handleSubmit}>
@@ -113,7 +113,7 @@ class Login extends Component {
                     onChange={this.handleChange}
                     value={this.state.password} />
 
-                  <Button color="teal" type="submit" fluid size="large">
+                  <Button color="blue" type="submit" fluid size="large">
                     Iniciar Sesión
                   </Button>
                 </Segment>

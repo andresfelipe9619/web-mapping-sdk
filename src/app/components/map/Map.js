@@ -71,28 +71,31 @@ class MapComponent extends Component {
                     })
                 })
                 map.addLayer(superlayer)
-                console.log('alyer', superlayer)
-            } else { console.log('ajjajajaja', layer) }
+                console.log('current layers', superlayer)
+            }
         }
 
-        // if (this.props.match.url.includes('/mapa/sql/') && this.props.match.params) {
-        //     var filter = {
-        //         atributo: this.props.match.params.atributo,
-        //         comparacion: this.props.match.params.comparacion,
-        //         valor: this.props.match.params.valor
-        //     }
-        //     var filterParams = {
-        //         'FILTER': null,
-        //         'CQL_FILTER': null,
-        //         'FEATUREID': null
-        //     };
+        if (this.props.match.url.includes('/mapa/sql/') && this.props.match.params) {
+            var filter = {
+                atributo: this.props.match.params.atributo,
+                comparacion: this.props.match.params.comparacion,
+                valor: this.props.match.params.valor
+            }
+            var filterParams = {
+                'FILTER': null,
+                'CQL_FILTER': null,
+                'FEATUREID': null
+            };
 
-        //     filterParams["CQL_FILTER"] = `${filter.atributo}${filter.comparacion}${filter.valor}`;
-        //     console.log("my filter",filterParams["CQL_FILTER"])
-        //     map.getLayers().forEach(function (lyr) {
-        //         lyr.getSource().updateParams(filterParams);
-        //     });
-        // }
+            filterParams["CQL_FILTER"] = `${filter.atributo}${filter.comparacion}${filter.valor}`;
+            console.log("my filter", filterParams["CQL_FILTER"])
+            map.getLayers().forEach(function (lyr) {
+                // var extent = lyr.getSource().getExtent();
+                lyr.getSource().updateParams(filterParams);
+                // map.getView().fit(extent, map.getSize());
+            });
+
+        }
 
     }
 
