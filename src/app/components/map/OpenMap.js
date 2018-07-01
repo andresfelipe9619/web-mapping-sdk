@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { loadLayers, zoomToLayer, selectLayer } from '../../actions/mapActions'
 
 import Map from './Map'
+import MapContainer from './MapContainer'
 import Menu from './MenuMapa'
 import FilterQuery from './FilterQuery'
 import { Switch, Route } from 'react-router-dom';
@@ -123,28 +124,28 @@ class OpenMap extends Component {
                             </Grid.Column>
                             <Grid.Column width={10} style={mBorder}>
                                 <Switch>
-                                    <Route exact path={match.url} render={(props) => <Map {...props} layers={this.props.layers}></Map>} />
-                                    <Route exact path={match.url + "/sql"} render={(props) => <Map {...props} layers={this.props.layers}></Map>} />
+                                    <Route exact path={match.url} render={(props) => <MapContainer {...props} layers={this.props.layers}></MapContainer>} />
+                                    {/* <Route exact path={match.url + "/sql"} render={(props) => <Map {...props} layers={this.props.layers}></Map>} />
                                     <Route exact path={match.url + "/mallas"} render={(props) => <Map {...props} layers={this.props.layers}></Map>} />
                                     <Route exact path={match.url + "/clasificadoras"} render={(props) => <Map {...props} layers={this.props.layers}></Map>} />
-                                    <Route exact path={match.url + "/trituradoras"} render={(props) => <Map {...props} layers={this.props.layers}></Map>} />
+                                    <Route exact path={match.url + "/trituradoras"} render={(props) => <Map {...props} layers={this.props.layers}></Map>} /> */}
+                                    <Route path={match.url + "/sql/bandas/:atributo/:comparacion/:valor"} render={(props) => <MapContainer {...props} key={`bandas${Math.Random}`} layers={[this.props.layers[0]]} filt></MapContainer>} />
 
-                                    <Route path={match.url + "/sql/bandas/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key={`bandas${Math.Random}`} layers={[this.props.layers[0]]} filt></Map>} />
-                                    <Route path={match.url + "/sql/cantera/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key={`cantera${Math.Random}`} layers={[this.props.layers[1]]} filt></Map>} />
+                                    {/* <Route path={match.url + "/sql/cantera/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key={`cantera${Math.Random}`} layers={[this.props.layers[1]]} filt></Map>} />
                                     <Route path={match.url + "/sql/mallas/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key={`mallas${Math.Random}`} layers={[this.props.layers[2]]} filt></Map>} />
                                     <Route path={match.url + "/sql/procrudo/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key={`procrudo${Math.Random}`} layers={[this.props.layers[3]]} filt></Map>} />
                                     <Route path={match.url + "/sql/profinal/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key={`profinal${Math.Random}`} layers={[this.props.layers[4]]} filt></Map>} />
                                     <Route path={match.url + "/sql/trituradoras/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key={`trituradoras${Math.Random}`} layers={[this.props.layers[5]]} filt></Map>} />
-                                    <Route path={match.url + "/sql/clasificadoras/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key={`clasificadoras${Math.Random}`} layers={[this.props.layers[6]]} filt></Map>} />
+                                    <Route path={match.url + "/sql/clasificadoras/:atributo/:comparacion/:valor"} render={(props) => <Map {...props} key={`clasificadoras${Math.Random}`} layers={[this.props.layers[6]]} filt></Map>} /> */}
                                 </Switch>
                             </Grid.Column>
 
                         </Grid.Row>
                         <Grid.Row>
                             <Switch>
-                                <Route path={match.url + "/mallas"} component={Mallas} />
-                                <Route path={match.url + "/clasificadoras"} component={Clasificadoras} />
-                                <Route path={match.url + "/trituradoras"} component={Trituradoras} />
+                                <Route exact path={match.url + "/mallas"} component={Mallas} />
+                                <Route exact path={match.url + "/clasificadoras"} component={Clasificadoras} />
+                                <Route exact path={match.url + "/trituradoras"} component={Trituradoras} />
                             </Switch>
                         </Grid.Row>
                     </Grid>

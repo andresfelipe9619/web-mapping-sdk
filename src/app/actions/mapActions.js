@@ -2,10 +2,11 @@ import {
     LOAD_LAYERS_REQUEST,
     LOAD_LAYERS_ERROR,
     LOAD_LAYERS_SUCCESS,
-    LOAD_LAYERS_QUERY_REQUEST,
-    LOAD_LAYERS_QUERY_ERROR,
-    LOAD_LAYERS_QUERY_SUCCESS,
-    ZOOM_TO_LAYER,
+    FETCH_LAYERS_FEATURES_REQUEST,
+    FETCH_LAYERS_FEATURES_ERROR,
+    FETCH_LAYERS_FEATURES_SUCCESS,
+    FILTER_LAYERS,
+    UPDATE_LAYERS_FEATURES,
     SELECT_LAYER
 } from './constants/ActionTypes';
 
@@ -25,26 +26,30 @@ function loadLayersError(error) {
 }
 
 
-function loadLayersQuerySuccess(layers) {
-    return { type: LOAD_LAYERS_QUERY_SUCCESS, layers };
+function fetchLayersFeaturesSuccess(layers) {
+    return { type: FETCH_LAYERS_FEATURES_SUCCESS, layers };
 }
 
-function loadLayersQueryRequest(query) {
-    return { type: LOAD_LAYERS_QUERY_REQUEST, query };
-
-}
-
-function loadLayersQueryError(error) {
-    return { type: LOAD_LAYERS_QUERY_ERROR, hasErrored: error };
+function fetchLayersFeaturesRequest(query) {
+    return { type: FETCH_LAYERS_FEATURES_REQUEST, query };
 
 }
 
-export function zoomToLayer(layer) {
-    return { type: ZOOM_TO_LAYER, layer };
+function fetchLayersFeaturesError(error) {
+    return { type: FETCH_LAYERS_FEATURES_ERROR, hasErrored: error };
+
 }
 
-export function selectLayer(layer) {
-    return { type: SELECT_LAYER, layer };
+export function updateLayersFeatures(layers) {
+    return { type: UPDATE_LAYERS_FEATURES, layers };
+}
+
+export function filterLayers(filter) {
+    return { type: FILTER_LAYERS, filter };
+}
+
+export function selectLayer(layerName) {
+    return { type: SELECT_LAYER, layerName };
 }
 
 
@@ -66,6 +71,7 @@ export function loadLayers(layers) {
             for (let layer of root) {
 
                 if (layers.indexOf(layer.Title) > 0) {
+                    delete layer.CRS
                     mLayers.push(layer)
                 }
             }
@@ -73,4 +79,21 @@ export function loadLayers(layers) {
             return mLayers
         }).then((layers) => dispatch(loadLayersSuccess(layers))).catch((err) => dispatch(loadLayersError(err)));
     };
+}
+
+export function loadLayersFeatures(layers){
+    return dispatch => {
+        dispatch(fetchLayersFeaturesRequest(layers));
+        const url = `http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:${layers}&maxFeatures=50&outputFormat=application%2Fjson`;
+        fetch(url).then(
+            response => response.json(),
+            error => console.error('An error occured.', error)
+        ).then((response) => {
+            dispatch(fetchLayersFeaturesRequest(false));
+            dispatch(fetchLayersFeaturesSuccess(response.features));
+        }).catch((err) => {
+            // dispatch(alertError(err));
+            dispatch(fetchLayersFeaturesError(err));
+        });
+    }
 }
