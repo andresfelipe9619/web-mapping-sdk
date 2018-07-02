@@ -70,6 +70,48 @@ export default class MenuMapa extends Component {
                         </Header>
                 
                     </Menu.Item>
+
+                    {/* <Menu.Item
+                        name='bandas'
+                        active={activeItem === 'bandas'}
+                        onClick={this.handleItemClick}
+                        to="/mapa/bandas" as={Link}>
+                        <Header as='h4'>
+                            <Icon name='expand arrows alternate' size='mini'/>
+                            <Header.Content>
+                                Bandas
+                            </Header.Content>
+                        </Header>
+                
+                    </Menu.Item>
+
+                    <Menu.Item
+                        name='procrudo'
+                        active={activeItem === 'procrudo'}
+                        onClick={this.handleItemClick}
+                        to="/mapa/procrudo" as={Link}>
+                        <Header as='h4'>
+                            <Icon name='circle' size='mini'/>
+                            <Header.Content>
+                                Producto crudo
+                            </Header.Content>
+                        </Header>
+                
+                    </Menu.Item>
+
+                    <Menu.Item
+                        name='profinal'
+                        active={activeItem === 'profinal'}
+                        onClick={this.handleItemClick}
+                        to="/mapa/profinal" as={Link}>
+                        <Header as='h4'>
+                            <Icon name='dolly' size='mini'/>
+                            <Header.Content>
+                                Producto final
+                            </Header.Content>
+                        </Header>
+                
+                    </Menu.Item> */}
                 </Menu>
             </div>
         );

@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom';
 import { Dropdown, Button, Segment, Dimmer, Form, Grid, Loader } from 'semantic-ui-react';
-
-export default class FilterQuery extends Component {
+import { filterLayers, loadLayers, loadLayersFeatures } from '../../actions/mapActions';
+import { connect } from 'react-redux'
+class FilterQuery extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,6 +22,10 @@ export default class FilterQuery extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    componentDidMount() {
+        this.props.getLayersFeatures(['mallas', 'procrudo'])
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         console.log('You clicked me')
@@ -29,41 +34,49 @@ export default class FilterQuery extends Component {
         var path = this.evaluateQuery(query);
         if (path) {
             this.setState({ ...this.state, path })
+            console.log('another filter', query)
+            this.props.updateFilter(query);
             this.props.history.push(path)
         }
 
     }
 
     handleChangeLayer = (e, { value }) => {
-        this.setState({ query: { ...this.state.query, layer: { value } } });
+        this.setState({ query: { ...this.state.query, layer: value } });
     }
     handleChangeAtributos = (e, { value }) => {
-        this.setState({ query: { ...this.state.query, atributos: { value } } });
+        this.setState({ query: { ...this.state.query, atributos: value } });
     }
     handleChangeComparacion = (e, { value }) => {
-        this.setState({ query: { ...this.state.query, comparacion: { value } } });
+        this.setState({ query: { ...this.state.query, comparacion: value } });
     }
     handleChangeValor = (e) => {
-        this.setState({ query: { ...this.state.query, valor: [e.target.value] } });
+        this.setState({ query: { ...this.state.query, valor: e.target.value } });
     }
 
     evaluateQuery(query) {
         var path = false;
-        console.log('change it bitch', path)
-        console.log('change it bitch', query)
 
-        if (query.layer) {
-            console.log('change it bitch', path)
-
-            if (query.atributos && query.comparacion) {
-                console.log('change it bitch', path)
-
-                path = `/mapa/sql/${query.layer.value}/${query.atributos.value}/${query.comparacion.value}/${query.valor}`
-                return path
-
+        if (query.layer && query.atributos && query.comparacion && query.valor) {
+            let valor = null;
+            if (Number(query.valor)) {
+                valor = Number(query.valor)
+            } else {
+                valor = `'${query.valor}'`
             }
+            console.log('ur filter sr', valor)
+            this.setState({ 
+                ...this.state,
+                query: {
+                    ...query,
+                    valor: valor
+                }
+            })
+
+            path = `/mapa/sql/${query.layer}/`
+            return path
+
         }
-        return path
     }
     render() {
 
@@ -74,7 +87,7 @@ export default class FilterQuery extends Component {
             { key: '<=', value: '<=', text: '<=' },
             { key: '>=', value: '>=', text: '>=' },
             { key: '>', value: '>', text: '>' },
-            { key: '==', value: '==', text: '==' }
+            { key: '=', value: '=', text: '=' }
         ]
 
         let atributosOptions = [
@@ -86,39 +99,9 @@ export default class FilterQuery extends Component {
             { key: 'velocidad', value: 'velocidad', text: 'velocidad' },
             { key: 'capacidad', value: 'capacidad', text: 'capacidad' },
             { key: 'volumen', value: 'volumen', text: 'volumen' },
-            { key: 'fechae', value: 'fechae', text: 'fechae' }
         ]
-        
-        // let atributosOptions = {
-        //     mallas: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
-        //     { key: 'cota', value: 'cota', text: 'cota' },
-        //     { key: 'idzona', value: 'idzona', text: 'idzona' },
-        //     { key: 'fechae', value: 'fechae', text: 'fechae' }],
-        //     clasificadoras: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
-        //     { key: 'estado', value: 'estado', text: 'estado' },
-        //     { key: 'velocidad', value: 'velocidad', text: 'velocidad' },
-        //     { key: 'capacidad', value: 'capacidad', text: 'capacidad' },],
-        //     trituradoras: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
-        //     { key: 'estado', value: 'estado', text: 'estado' },
-        //     { key: 'velocidad', value: 'velocidad', text: 'velocidad' },
-        //     { key: 'capacidad', value: 'capacidad', text: 'capacidad' },],
-        //     bandas: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
-        //     { key: 'estado', value: 'estado', text: 'estado' },
-        //     { key: 'velocidad', value: 'velocidad', text: 'velocidad' },
-        //     { key: 'capacidad', value: 'capacidad', text: 'capacidad' },],
-        //     cantera: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
-        //     { key: 'area', value: 'area', text: 'area' },
-        //     { key: 'idzona', value: 'idzona', text: 'idzona' },],
-        //     procrudo: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
-        //     { key: 'volumen', value: 'volumen', text: 'volumen' },],
-        //     profinal: [{ key: 'nombre', value: 'nombre', text: 'nombre' },
-        //     { key: 'volumen', value: 'volumen', text: 'volumen' },
-        //     { key: 'porceps', value: 'porceps', text: 'porceps' },
-        //     ]
-        // }
 
-
-        if (this.props.layers) {
+        if (true) {
             for (let layer of this.props.layers) {
                 layerOptions.push({ key: layer.Title, value: layer.Title, text: layer.Title })
             }
@@ -173,3 +156,25 @@ export default class FilterQuery extends Component {
         } else return null
     }
 }
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateFilter: (filter) => {
+            dispatch(filterLayers(filter))
+        },
+        getLayersFeatures(layers) {
+            dispatch(loadLayersFeatures(layers))
+        }
+    }
+}
+
+const mapStateToProps = (state) => {
+    return {
+        loadLayerRequest: state.mapReducer.loadLayerRequest,
+        loadLayerError: state.mapReducer.loadLayerError,
+        loadLayerSuccess: state.mapReducer.loadLayerSuccess,
+    }
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FilterQuery)
