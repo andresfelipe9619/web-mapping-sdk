@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import DataTable from '../DataTable'
 import FeatureTable from './../../table/FeatureTable';
+import { Grid, Header, Segment, Dimmer, Loader, Button } from "semantic-ui-react";
+
 
 class Trituradoras extends Component {
   constructor(props) {
@@ -27,6 +28,8 @@ class Trituradoras extends Component {
     if (this.state.trituradoras) {
       return (
         <div>
+          <Segment> <h2>Trituradoras</h2></Segment>
+
           <FeatureTable data={this.state.trituradoras} />
         </div>
       )

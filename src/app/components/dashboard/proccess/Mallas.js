@@ -33,9 +33,9 @@ class Mallas extends Component {
     if (this.state.mallas) {
       return (
         <div>
-            <Grid.Column width={13}>
+            <Segment> <h2>Mallas</h2></Segment>
+
               <FeatureTable data={this.state.mallas} />
-            </Grid.Column>
         </div>
       )
     } else return null;

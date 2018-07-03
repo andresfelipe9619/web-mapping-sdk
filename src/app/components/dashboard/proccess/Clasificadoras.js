@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import {Button, Icon} from "semantic-ui-react"
 import FeatureTable from './../../table/FeatureTable';
+import { Grid, Header, Segment, Dimmer, Loader, Icon , Button } from "semantic-ui-react";
 
 class Clasificadoras extends Component {
   constructor(props) {
@@ -24,47 +24,49 @@ class Clasificadoras extends Component {
       })
   }
 
-  
+
 
   clickedWatch = ({ id }) => {
-  console.log("u click me" + id)
+    console.log("u click me" + id)
 
-    this.watchClasificadora( id );
-}
+    this.watchClasificadora(id);
+  }
 
-watchClasificadora(id){
-  console.log("u click me" + id)
-}
+  watchClasificadora(id) {
+    console.log("u click me" + id)
+  }
 
   render() {
 
     const callbacks = { acciones: this.clickedWatch }
 
 
-        const ActionsComponent = ({ row, CustomFunction }) => {
-            // const clickedEdit = () => editProduct({ imageURL: row[accessor] });
-            const handleclickedWatch = () => CustomFunction({ id: row['id_clasif'] });
-            return (
-                <Button.Group icon>
-                    <Button onClick={handleclickedWatch}> 
-                        <Icon name='eye' />
-                    </Button>
-                    {/* <Button>
+    const ActionsComponent = ({ row, CustomFunction }) => {
+      // const clickedEdit = () => editProduct({ imageURL: row[accessor] });
+      const handleclickedWatch = () => CustomFunction({ id: row['id_clasif'] });
+      return (
+        <Button.Group icon>
+          <Button onClick={handleclickedWatch}>
+            <Icon name='eye' />
+          </Button>
+          {/* <Button>
                         <Icon name='edit' />
                     </Button>
                     <Button  >
                         <Icon name='trash' />
                     </Button> */}
 
-                </Button.Group>
-            )
-        }
+        </Button.Group>
+      )
+    }
 
-        // component={ActionsComponent}  callbacks={callbacks}
+    // component={ActionsComponent}  callbacks={callbacks}
     if (this.state.clasificadoras) {
       return (
         <div>
-          <FeatureTable data={this.state.clasificadoras}  />
+          <Segment> <h2>Clasificadoras</h2></Segment>
+
+          <FeatureTable data={this.state.clasificadoras} />
         </div>
       )
     } else return null

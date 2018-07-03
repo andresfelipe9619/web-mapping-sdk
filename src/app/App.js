@@ -11,7 +11,7 @@ import NoMatch from './components/home/NoMatch.js';
 import PrivateRoute from './components/auth/PrivateRoute';
 // import Contact from './components/contact/Contact.js';
 import { Route, withRouter, Switch } from 'react-router-dom';
-// import "ol/ol.css"
+import "ol/ol.css"
 
 import './App.css';
 import {

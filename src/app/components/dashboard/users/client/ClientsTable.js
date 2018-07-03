@@ -54,7 +54,8 @@ class ClientsTable extends Component {
 
             return (
                 <div>
-                    <Segment> <h2>Clientes</h2></Segment>                    <Grid>
+                    <Segment> <h2>Clientes</h2></Segment>
+                    <Grid>
                         <ClientQuery data={{ clients, products, dispatcheds }} history={history} match={match}></ClientQuery>
                         <br />
                         <Grid.Row>

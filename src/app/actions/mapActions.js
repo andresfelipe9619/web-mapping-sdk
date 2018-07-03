@@ -52,6 +52,19 @@ export function selectLayer(layerName) {
     return { type: SELECT_LAYER, layerName };
 }
 
+export function clearFilterLayers() {
+    return (dispatch)=> {
+        dispatch(filterLayers(null))
+    }
+}
+
+export function clearSelectLayer() {
+    return (dispatch)=> {
+        dispatch(selectLayer(null))
+    }
+}
+
+
 
 
 export function loadLayers(layers) {

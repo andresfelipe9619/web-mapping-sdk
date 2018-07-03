@@ -4,9 +4,12 @@ import ReactDOM from 'react-dom'
 
 import WFS from 'ol/format/wfs';
 import Map from 'ol/map';
+import { Dropdown, Button, Segment, Dimmer, Form, Grid, Loader } from 'semantic-ui-react';
+
 import Zoom from 'ol/control/zoom';
 import Scale from 'ol/control/scaleline';
 import MousePosition from 'ol/control/mouseposition';
+import Coordinate from 'ol/coordinate';
 import Control from 'ol/control';
 import View from 'ol/view';
 import TileLayer from 'ol/layer/tile';
@@ -110,19 +113,29 @@ class MapComponent extends Component {
             'CQL_FILTER': null,
             'FEATUREID': null
         };
+        if (filter) {
 
-        let filterString = `${filter.atributos}${filter.comparacion}${filter.valor}`
-        console.log(filterString)
-        filterParams["CQL_FILTER"] = filterString;
-        console.log("my filter", filterParams["CQL_FILTER"])
-        if (this.mMap) {
+            let filterString = `${filter.atributos}${filter.comparacion}${filter.valor}`
+            console.log(filterString)
+            filterParams["CQL_FILTER"] = filterString;
+            console.log("my filter", filterParams["CQL_FILTER"])
+            if (this.mMap) {
 
-            this.mMap.getLayers().forEach(function (lyr) {
-                // var extent = lyr.getSource().getExtent();
-                lyr.getSource().updateParams(filterParams);
-                console.log('layer', lyr.getSource)
-                // this.mMap.getView().fit(extent, this.mMap.getSize());
-            });
+                this.mMap.getLayers().forEach(function (lyr) {
+                    // var extent = lyr.getSource().getExtent();
+                    lyr.getSource().updateParams(filterParams);
+                    console.log('layer', lyr.getSource)
+                    // this.mMap.getView().fit(extent, this.mMap.getSize());
+                });
+            }
+        } else {
+            if (this.mMap) {
+                this.mMap.getLayers().forEach(function (lyr) {
+                    // var extent = lyr.getSource().getExtent();
+                    lyr.getSource().updateParams(filterParams);
+                    // this.mMap.getView().fit(extent, this.mMap.getSize());
+                });
+            }
         }
     }
 
@@ -131,26 +144,27 @@ class MapComponent extends Component {
             if (layer.Title === 'clasificadoras' || layer.Title === 'cantera' || layer.Title === 'bandas'
                 || layer.Title === 'trituradoras' || layer.Title === 'procrudo' || layer.Title === 'profinal' || layer.Title === 'mallas') {
 
-                let superlayer = new LayerGroup({
-                    title: layer.Title, 
-                    layers: [
-                        new TileLayer({
-                            id: layer.Title,
-                            type: 'base',
-                            // extent: extent,
-                            source: new TileWMS({
-                                // projection:"EPSG:3115",
-                                url: 'http://localhost:8080/geoserver/cahibi1/wms',
-                                params: {
-                                    'FORMAT': "image/png",
-                                    'LAYERS': `cahibi1:${layer.Title}`,
-                                    tiled: true,
-                                },
-                                serverType: 'geoserver',
-                            })
+                let superlayer =
+                    // new LayerGroup({
+                    //     title: layer.Title,
+                    // layers: [
+                    new TileLayer({
+                        id: layer.Title,
+                        type: 'base',
+                        // extent: extent,
+                        source: new TileWMS({
+                            // projection:"EPSG:3115",
+                            url: 'http://localhost:8080/geoserver/cahibi1/wms',
+                            params: {
+                                'FORMAT': "image/png",
+                                'LAYERS': `cahibi1:${layer.Title}`,
+                                tiled: true,
+                            },
+                            serverType: 'geoserver',
                         })
-                    ]
-                })
+                        //     })
+                        // ]
+                    })
                 map.addLayer(superlayer)
                 console.log('current layers', superlayer)
             }
@@ -185,7 +199,9 @@ class MapComponent extends Component {
 
         this.mMap = new Map({
             projection: 'EPSG:3115',
-            controls: [new Zoom(), new Scale({ units: 'metric' }), new MousePosition()],
+            controls: [new Zoom(), new Scale({ units: 'metric' }), new MousePosition({
+                coordinateFormat: Coordinate.createStringXY(3),
+            })],
             target: mapElement,
             pixelRatio: 1,
             view: mView,
@@ -206,13 +222,16 @@ class MapComponent extends Component {
 
         this.mMap.on('click', this.clickHandler, this)
 
-        if (layers) {
 
+        if (layers) {
             layers.map((layer) => {
                 console.log('layer', layer)
                 this.addLayerToMap(layer, this.mMap)
             })
             if (filter) { this.updateFeatures(filter) }
+            else {
+                this.updateFeatures(null)
+            }
             onLayersChange(layers)
 
         }
@@ -223,22 +242,26 @@ class MapComponent extends Component {
     render() {
         const { selected, filter, } = this.props
 
-        if (filter) {
-            console.log('Here u have, your fuckin filter sir', filter)
-            this.updateFeatures(filter)
-        }
+        // if (filter) {
+        console.log('Here u have, your fuckin filter sir', filter)
+        this.updateFeatures(filter)
+        // }
 
         // this.updateSelection(selected)
         return (
-            <section className="panel-map">
-                <div ref='map' className="map" ></div>
-                <div ref="popup" className="ol-popup">
-                    <a href="#" ref="popup-closer" className="ol-popup-closer"></a>
-                    <div ref="popup-content"></div>
-                    <div ref="info">&nbsp;</div>
-                </div>
-                <div ref="information">&nbsp;</div>
-            </section>
+            <Segment>
+
+                <section className="panel-map">
+                    <div ref='map' className="map" ></div>
+                    <div ref="popup" className="ol-popup">
+                        <a href="#" ref="popup-closer" className="ol-popup-closer"></a>
+                        <div ref="popup-content"></div>
+                        <div ref="info">&nbsp;</div>
+                    </div>
+                    <div ref="information">&nbsp;</div>
+                </section>
+            </Segment>
+
         );
     }
 }

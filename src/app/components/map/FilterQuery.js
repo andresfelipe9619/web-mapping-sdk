@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { Link, Redirect } from 'react-router-dom';
 import { Dropdown, Button, Segment, Dimmer, Form, Grid, Loader } from 'semantic-ui-react';
-import { filterLayers, loadLayers, loadLayersFeatures } from '../../actions/mapActions';
+import { filterLayers, loadLayers, loadLayersFeatures, clearFilterLayers } from '../../actions/mapActions';
 import { connect } from 'react-redux'
 class FilterQuery extends Component {
     constructor(props) {
@@ -149,6 +148,7 @@ class FilterQuery extends Component {
                         </Grid.Row>
 
                         <Button type='submit' style={{ marginTop: '20px' }} onClick={this.handleSubmit} primary >Consultar</Button>
+                        <Button  style={{ marginTop: '20px' }} onClick={this.props.clearFilter} primary >Reiniciar</Button>
                     </Segment>
 
                 </div>
@@ -157,6 +157,7 @@ class FilterQuery extends Component {
     }
 }
 
+
 const mapDispatchToProps = (dispatch) => {
     return {
         updateFilter: (filter) => {
@@ -164,6 +165,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         getLayersFeatures(layers) {
             dispatch(loadLayersFeatures(layers))
+        },
+        clearFilter: (filter) => {
+            dispatch(clearFilterLayers(filter))
         }
     }
 }
