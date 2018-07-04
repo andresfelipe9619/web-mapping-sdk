@@ -111,24 +111,52 @@ class MapComponent extends Component {
         var filterParams = {
             'FILTER': null,
             'CQL_FILTER': null,
-            'FEATUREID': null
+            'FEATUREID': null,
+            "VIEWPARAMS": null
         };
         if (filter) {
+            console.log('enter filter')
+            if (filter.atributos && filter.comparacion) {
+                console.log('enter filter compa')
 
-            let filterString = `${filter.atributos}${filter.comparacion}${filter.valor}`
-            console.log(filterString)
-            filterParams["CQL_FILTER"] = filterString;
-            console.log("my filter", filterParams["CQL_FILTER"])
-            if (this.mMap) {
+                let filterString = `${filter.atributos}${filter.comparacion}${filter.valor}`
+                console.log(filterString)
+                filterParams["CQL_FILTER"] = filterString;
+                console.log("my filter", filterParams["CQL_FILTER"])
+                if (this.mMap) {
 
-                this.mMap.getLayers().forEach(function (lyr) {
-                    // var extent = lyr.getSource().getExtent();
-                    lyr.getSource().updateParams(filterParams);
-                    console.log('layer', lyr.getSource)
-                    // this.mMap.getView().fit(extent, this.mMap.getSize());
-                });
+                    this.mMap.getLayers().forEach(function (lyr) {
+                        // var extent = lyr.getSource().getExtent();
+                        lyr.getSource().updateParams(filterParams);
+                        console.log('layer', lyr.getSource)
+                        // this.mMap.getView().fit(extent, this.mMap.getSize());
+                    });
+                }
+            } else if (filter.client && filter.product) {
+            console.log('enter filter client')
+
+                let viewString = `cliente:${filter.client};producto:${filter.product}`
+                console.log('view', viewString)
+                filterParams["VIEWPARAMS"] = viewString;
+
+                if (filter.zona) {
+
+                }
+                let filterString = null
+                filterParams["CQL_FILTER"] = filterString;
+                if (this.mMap) {
+
+                    this.mMap.getLayers().forEach(function (lyr) {
+                        // var extent = lyr.getSource().getExtent();
+                        lyr.getSource().updateParams(filterParams);
+                        console.log('layer', lyr.getSource)
+                        // this.mMap.getView().fit(extent, this.mMap.getSize());
+                    });
+                }
             }
         } else {
+            console.log('no fuckin filter')
+
             if (this.mMap) {
                 this.mMap.getLayers().forEach(function (lyr) {
                     // var extent = lyr.getSource().getExtent();
@@ -142,7 +170,7 @@ class MapComponent extends Component {
     addLayerToMap(layer, map) {
         if (layer && map) {
             if (layer.Title === 'clasificadoras' || layer.Title === 'cantera' || layer.Title === 'bandas'
-                || layer.Title === 'trituradoras' || layer.Title === 'procrudo' || layer.Title === 'profinal' || layer.Title === 'mallas') {
+                || layer.Title === 'trituradoras' || layer.Title === 'procrudo' || layer.Title === 'profinal' || layer.Title === 'mallas' || layer.Title === 'mallasOrigenProductoCliente') {
 
                 let superlayer =
                     // new LayerGroup({
