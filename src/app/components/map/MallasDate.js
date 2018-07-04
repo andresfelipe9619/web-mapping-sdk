@@ -23,9 +23,9 @@ class MallasDate extends Component {
     render() {
 
         var zonaOptions = [
-            { value: 'z1', label: 'Zona 1' },
-            { value: 'z2', label: 'Zona 2' },
-            { value: 'z3', label: 'Zona 3' }]
+            { value: 'z1', key: 'z1', text: 'Zona 1' },
+            { value: 'z2', key: 'z2', text: 'Zona 2' },
+            { value: 'z3', key: 'z3', text: 'Zona 3' }]
         return (
             <div style={{ marginTop: '10px' }}>
                 <Segment>

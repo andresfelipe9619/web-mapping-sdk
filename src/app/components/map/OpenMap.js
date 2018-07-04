@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { loadLayers, zoomToLayer, selectLayer } from '../../actions/mapActions'
 import MallasProcedence from "./MallasProcedence";
-
-
+import { fetchClients } from '../../actions/userActions';
+import { fetchProducts } from '../../actions/productActions';
+import { fetchDispatcheds } from '../../actions/dispatchedsActions';
 import MapContainer from './MapContainer'
 import Menu from './MenuMapa'
 import MallasDate from './MallasDate'
@@ -28,9 +29,10 @@ class OpenMap extends Component {
 
     componentDidMount() {
         let { match } = this.props;
-
+        this.props.getClients();
+        this.props.getProducts();
         var baseLayers = [
-
+            'mallasOrigenProductoCliente',
             'clasificadoras',
             'cantera',
             'bandas',
@@ -45,14 +47,14 @@ class OpenMap extends Component {
     render() {
         const mBorder = { borderStyle: 'solid', borderColor: '#3BA2FB' };
         const fondo = { padding: '10px', backgroundColor: '#3BA2FB' };
-        const { match } = this.props;
-        if (this.props.layersHasErrored) {
+        const { match, layersHasErrored, layersIsLoading, layers, clients, products, totalProduct, userDispatcheds } = this.props;
+        if (layersHasErrored) {
             return <h1>Error</h1>;
         }
         // else if (this.state.path) {
         //     return <Redirect to={this.state.path}></Redirect>
         // }
-        else if (this.props.layersIsLoading) {
+        else if (layersIsLoading) {
             return (
                 <Segment
                     style={{
@@ -65,7 +67,7 @@ class OpenMap extends Component {
                     </Dimmer>
                 </Segment>
             );
-        } else if (this.props.layers) {
+        } else if (layers) {
             return (
                 <div>
                     <Grid>
@@ -78,37 +80,43 @@ class OpenMap extends Component {
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Grid.Column>
-                                        <Switch>
-                                            <Route path={match.url + "/sql"} render={(props) => <FilterQuery {...props} layers={this.props.layers} />} />
-                                            <Route exact path={match.url + "/mallas"} component={MallasDate} />
-                                        </Switch>
+                                        {(clients && products) ?
+                                            (<Switch>
+                                                <Route path={match.url + "/sql"} render={(props) => <FilterQuery {...props} layers={layers} />} />
+                                                <Route exact path={match.url + "/mallas"} component={MallasDate} />
+                                            </Switch>) : null}
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid.Column>
                             <Grid.Column width={12} style={fondo}>
                                 <Switch>
-                                    <Route exact path={match.url} render={(props) => <MapContainer {...props} layers={this.props.layers}></MapContainer>} />
-                                    <Route exact path={match.url + "/sql"} render={(props) => <MapContainer {...props} layers={this.props.layers}></MapContainer>} />
-                                    <Route exact path={match.url + "/mallas"} render={(props) => <MapContainer {...props} layers={this.props.layers}></MapContainer>} />
-                                    <Route exact path={match.url + "/clasificadoras"} render={(props) => <MapContainer {...props} layers={this.props.layers}></MapContainer>} />
-                                    <Route exact path={match.url + "/trituradoras"} render={(props) => <MapContainer {...props} layers={this.props.layers}></MapContainer>} />
-                                    <Route path={match.url + "/sql/bandas/"} render={(props) => <MapContainer {...props} key={`bandas${Math.Random}`} layers={[this.props.layers[0]]} ></MapContainer>} />
+                                    <Route exact path={match.url} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
+                                    <Route exact path={match.url + "/clasificadoras"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
+                                    <Route exact path={match.url + "/trituradoras"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
+                                    <Route exact path={match.url + "/mallas"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
 
-                                    <Route path={match.url + "/sql/cantera/"} render={(props) => <MapContainer {...props} key={`cantera${Math.Random}`} layers={[this.props.layers[1]]} filt></MapContainer>} />
-                                    <Route path={match.url + "/sql/mallas/"} render={(props) => <MapContainer {...props} key={`mallas${Math.Random}`} layers={[this.props.layers[2]]} filt></MapContainer>} />
-                                    <Route path={match.url + "/sql/procrudo/"} render={(props) => <MapContainer {...props} key={`procrudo${Math.Random}`} layers={[this.props.layers[3]]} filt></MapContainer>} />
-                                    <Route path={match.url + "/sql/profinal/"} render={(props) => <MapContainer {...props} key={`profinal${Math.Random}`} layers={[this.props.layers[4]]} filt></MapContainer>} />
-                                    <Route path={match.url + "/sql/trituradoras/"} render={(props) => <MapContainer {...props} key={`trituradoras${Math.Random}`} layers={[this.props.layers[5]]} filt></MapContainer>} />
-                                    <Route path={match.url + "/sql/clasificadoras/"} render={(props) => <MapContainer {...props} key={`clasificadoras${Math.Random}`} layers={[this.props.layers[6]]} filt></MapContainer>} />
+                                    <Route path={match.url + "/mallas/origen"} render={(props) => <MapContainer key={`origen${Math.Random}`} {...props} layers={[layers[4]]}></MapContainer>} />
+                                    <Route path={match.url + "/mallas/fecha"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
+
+                                    <Route exact path={match.url + "/sql"}   render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
+                                    <Route path={match.url + "/sql/bandas/"} render={(props) => <MapContainer {...props} key={`bandas${Math.Random}`} layers={[layers[0]]} ></MapContainer>} />
+                                    <Route path={match.url + "/sql/cantera/"} render={(props) => <MapContainer {...props} key={`cantera${Math.Random}`} layers={[layers[1]]} filt></MapContainer>} />
+                                    <Route path={match.url + "/sql/clasificadoras/"} render={(props) => <MapContainer {...props} key={`clasificadoras${Math.Random}`} layers={[layers[2]]} filt></MapContainer>} />
+                                    <Route path={match.url + "/sql/mallas/"} render={(props) => <MapContainer {...props} key={`mallas${Math.Random}`} layers={[layers[3]]} filt></MapContainer>} />
+                                    <Route path={match.url + "/sql/procrudo/"} render={(props) => <MapContainer {...props} key={`procrudo${Math.Random}`} layers={[layers[5]]} filt></MapContainer>} />
+                                    <Route path={match.url + "/sql/profinal/"} render={(props) => <MapContainer {...props} key={`profinal${Math.Random}`} layers={[layers[6]]} filt></MapContainer>} />
+                                    <Route path={match.url + "/sql/trituradoras/"} render={(props) => <MapContainer {...props} key={`trituradoras${Math.Random}`} layers={[layers[7]]} filt></MapContainer>} />
                                 </Switch>
-                                <Route exact path={match.url + "/mallas"} component={MallasProcedence} />
+                                {(clients && products) ?
+                                    <Route path={match.url + "/mallas"} render={(props) => <MallasProcedence clients={clients} products={products} {...props} />} />
+                                    : null}
                             </Grid.Column>
 
                         </Grid.Row>
                         <Grid.Row>
 
                             <Switch>
-                                <Route exact path={match.url + "/mallas"} component={Mallas} />
+                                <Route  path={match.url + "/mallas"} component={Mallas} />
                                 {/* <Route exact path={match.url + "/mallas"} component={Mallas} /> */}
                                 <Route exact path={match.url + "/clasificadoras"} component={Clasificadoras} />
                                 <Route exact path={match.url + "/trituradoras"} component={Trituradoras} />
@@ -124,6 +132,22 @@ class OpenMap extends Component {
 
 const mapStateToProps = state => {
     return {
+        clients: state.userReducer.fetchUsersSuccess,
+        clientsHasErrored: state.userReducer.fetchUsersFailure,
+        ClientsIsLoading: state.userReducer.fetchUsersRequest,
+
+        products: state.productReducer.fetchProductsSuccess,
+        productsHasErrored: state.productReducer.fetchProductsFailure,
+        productsIsLoading: state.productReducer.fetchProductsRequest,
+
+        userDispatcheds: state.dispatchedReducer.fetchUserDispatchedsSuccess,
+        userDispatchedsFailure: state.dispatchedReducer.fetchUserDispatchedsFailure,
+        userDispatchedsLoading: state.dispatchedReducer.fetchUserDispatchedsRequest,
+
+        totalProduct: state.productReducer.fetchTotalProductSuccess,
+        totalProductHasErrored: state.productReducer.fetchTotalProductFailure,
+        totalProductIsLoading: state.productReducer.fetchTotalProductRequest,
+
         layers: state.mapReducer.loadLayersSuccess,
         layersHasErrored: state.mapReducer.loadLayersError,
         layersIsLoading: state.mapReducer.loadLayersRequest,
@@ -133,9 +157,22 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        getClients: () => {
+            dispatch(fetchClients())
+        },
+        getProducts: () => {
+            dispatch(fetchProducts())
+        },
+
         loadLayersRequest: (layers) => {
             dispatch(loadLayers(layers))
         },
+        // getUserDispatcheds: (user, product, mallas) => {
+        //     dispatch(fetchUserDispatcheds(user, product, mallas))
+        // },
+        // getTotalProduct: () => {
+        //     dispatch(fetchTotalProduct())
+        // },
     }
 }
 

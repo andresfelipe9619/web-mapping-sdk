@@ -83,10 +83,10 @@ export function loadLayers(layers) {
             let mLayers = []
             for (let layer of root) {
 
-                if (layers.indexOf(layer.Title) > 0) {
-                    delete layer.CRS
+                // if (layers.indexOf(layer.Title) > 0) {
+                //     delete layer.CRS
                     mLayers.push(layer)
-                }
+                // }
             }
 
             return mLayers

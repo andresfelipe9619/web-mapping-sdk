@@ -14,8 +14,6 @@ class ClientsTable extends Component {
 
 
     componentDidMount() {
-        const { clientes, productos, despachos } = this.props;
-
         this.props.getClients();
         this.props.getProducts();
         this.props.getDispatcheds();
