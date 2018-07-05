@@ -5,7 +5,7 @@ import {
     Segment,
     Button, Dropdown
 } from "semantic-ui-react";
-import { filterLayers } from '../../actions/mapActions';
+import { filterLayers, clearFilterLayers } from '../../actions/mapActions';
 
 class MallasProcedence extends Component {
 
@@ -67,16 +67,16 @@ class MallasProcedence extends Component {
         var options = [{ value: 'todos', key: 'todos', text: 'Todos' }];
         let calidadOptions = [
             ...options,
-            { key: 'bueno', value: 'bueno', text: 'Bueno' },
-            { key: 'malo', value: 'malo', text: 'Malo' },
-            { key: 'regular', value: 'regular', text: 'Regular' },
+            { key: 'bueno', value: "'bueno'", text: 'Bueno' },
+            { key: 'malo', value: "'malo'", text: 'Malo' },
+            { key: 'regular', value: "'regular'", text: 'Regular' },
 
         ]
         var zonaOptions = [
             ...options,
-            { value: 'z1', key: 'zz1', text: 'Zona 1' },
-            { value: 'z2', key: 'zz2', text: 'Zona 2' },
-            { value: 'z3', key: 'zz3', text: 'Zona 3' }]
+            { value: "'z1'", key: 'zz1', text: 'Zona 1' },
+            { value: "'z2'", key: 'zz2', text: 'Zona 2' },
+            { value: "'z3'", key: 'zz3', text: 'Zona 3' }]
 
 
         var clientOptions = [], productOptions = [];
@@ -125,7 +125,7 @@ class MallasProcedence extends Component {
                         />
 
                         <Button type='submit' style={{ marginTop: '20px' }} onClick={this.handleSubmit} primary >Consultar</Button>
-                        <Button style={{ marginTop: '20px' }} primary >Reiniciar</Button>
+                        <Button  style={{ marginTop: '20px' }} onClick={this.props.clearFilter} primary >Reiniciar</Button>
 
                     </Segment>
                 </div>
@@ -138,6 +138,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         updateFilter: (filter) => {
             dispatch(filterLayers(filter))
+        },
+        clearFilter: (filter) => {
+            dispatch(clearFilterLayers(filter))
         }
     }
 }

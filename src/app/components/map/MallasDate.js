@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import {
     Grid,
     Segment,
@@ -12,20 +12,46 @@ class MallasDate extends Component {
         super(props)
         this.state = {
             query: {
-                layer: null,
-                atributos: null,
-                comparacion: null,
-                valor: ''
+                desde: null,
+                hasta: null,
+                zona: null,
             }
         }
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const { query } = this.state;
+        console.log('You clicked me', query)
+        if(query){
+            this.props.updateFilter(query);
+            this.props.history.push('/mapa/mallas/fecha')
+        }
+
+        // var path = this.evaluateQuery(query);
+        // if (path) {
+        //     this.setState({ ...this.state, path })
+        //     console.log('another filter', query)
+
+        // }
+    }
+
+    handleChangeZona = (e, { value }) => {
+        this.setState({ query: { ...this.state.query, zona: value } });
+    }
+    handleChangeDesde = (e) => {
+        this.setState({ query: { ...this.state.query, desde: e.target.value } });
+    }
+    handleChangeHasta = (e) => {
+        this.setState({ query: { ...this.state.query, hasta: e.target.value } });
     }
 
     render() {
 
         var zonaOptions = [
-            { value: 'z1', key: 'z1', text: 'Zona 1' },
-            { value: 'z2', key: 'z2', text: 'Zona 2' },
-            { value: 'z3', key: 'z3', text: 'Zona 3' }]
+            { value: "'z1'", key: 'z1', text: 'Zona 1' },
+            { value: "'z2'", key: 'z2', text: 'Zona 2' },
+            { value: "'z3'", key: 'z3', text: 'Zona 3' }]
         return (
             <div style={{ marginTop: '10px' }}>
                 <Segment>
@@ -33,14 +59,14 @@ class MallasDate extends Component {
                     <Grid.Row>
                         <Grid.Column width={4}>
                             Desde
-                    <input type="date" />
+                    <input type="date" onChange={this.handleChangeDesde} />
                         </Grid.Column>
                     </Grid.Row>
 
                     <Grid.Row>
                         <Grid.Column width={4}>
                             Hasta
-                        <input type="date" />
+                        <input type="date" onChange={this.handleChangeHasta} />
                         </Grid.Column>
                     </Grid.Row>
                     <br />
@@ -48,11 +74,11 @@ class MallasDate extends Component {
                         placeholder="Zona"
                         selection
                         options={zonaOptions}
-                    // onChange={this.handleChangeDispatched}
+                        onChange={this.handleChangeZona}
                     />
                     <Grid.Column width={4}>
-                        <Button style={{ marginTop: '20px' }} primary >Consultar</Button>
-                        <Button style={{ marginTop: '20px' }} primary >Reiniciar</Button>
+                        <Button style={{ marginTop: '20px' }} onClick={this.handleSubmit} primary >Consultar</Button>
+                        <Button style={{ marginTop: '20px' }} onClick={this.props.clearFilter} primary >Reiniciar</Button>
                     </Grid.Column>
                 </Segment>
             </div>

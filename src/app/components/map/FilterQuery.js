@@ -11,7 +11,7 @@ class FilterQuery extends Component {
                 layer: null,
                 atributos: null,
                 comparacion: null,
-                valor: ''
+                valor: null
             }
         }
         this.handleChangeLayer = this.handleChangeLayer.bind(this);
@@ -71,7 +71,6 @@ class FilterQuery extends Component {
                     valor: valor
                 }
             })
-
             path = `/mapa/sql/${query.layer}/`
             return path
 

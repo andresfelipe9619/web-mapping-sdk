@@ -15,6 +15,8 @@ import View from 'ol/view';
 import TileLayer from 'ol/layer/tile';
 import LayerGroup from 'ol/layer/group';
 import TileWMS from 'ol/source/tilewms';
+import BingMaps from 'ol/source/bingmaps.js';
+
 import OSM from 'ol/source/osm.js';
 import Projection from 'ol/proj/projection';
 import Overlay from 'ol/overlay';
@@ -75,14 +77,17 @@ class MapComponent extends Component {
         let content = this.popupContent
         let popup = this.popup
         this.mMap.getLayers().forEach(function (lyr) {
-            url = lyr.getSource().getGetFeatureInfoUrl(
-                coordinate, viewResolution, viewProjection,
-                { 'INFO_FORMAT': 'text/html' });
-            console.log('url', url)
-            if (url) {
-                popup.setPosition(coordinate);
-                content.innerHTML =
-                    '<iframe seamless src="' + url + '"></iframe>';
+            if(lyr.getSource()["getGetFeatureInfoUrl"] !== undefined){
+                
+                url = lyr.getSource().getGetFeatureInfoUrl(
+                    coordinate, viewResolution, viewProjection,
+                    { 'INFO_FORMAT': 'text/html' });
+                console.log('url', url)
+                if (url) {
+                    popup.setPosition(coordinate);
+                    content.innerHTML =
+                        '<iframe seamless src="' + url + '"></iframe>';
+                }
             }
         })
         // this.mMap.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
@@ -115,9 +120,7 @@ class MapComponent extends Component {
             "VIEWPARAMS": null
         };
         if (filter) {
-            console.log('enter filter')
             if (filter.atributos && filter.comparacion) {
-                console.log('enter filter compa')
 
                 let filterString = `${filter.atributos}${filter.comparacion}${filter.valor}`
                 console.log(filterString)
@@ -127,29 +130,72 @@ class MapComponent extends Component {
 
                     this.mMap.getLayers().forEach(function (lyr) {
                         // var extent = lyr.getSource().getExtent();
-                        lyr.getSource().updateParams(filterParams);
-                        console.log('layer', lyr.getSource)
+                        if (lyr.getSource()["updateParams"] !== undefined) {
+                            lyr.getSource().updateParams(filterParams);
+                            console.log('layer', lyr.getSource)
+                        }
                         // this.mMap.getView().fit(extent, this.mMap.getSize());
                     });
                 }
-            } else if (filter.client && filter.product) {
-            console.log('enter filter client')
+            } else if(filter.desde && filter.hasta){
+                let filterString = null
+
+                if(filter.zona == 'todos'){
+                    filterString  = `fechae>${filter.desde} and fechae<${filter.hasta}`
+                }else if(filter.zona){
+                    filterString  =`fechae>${filter.desde} and fechae<${filter.hasta} and idzona=${filter.zona}`
+
+                }
+                console.log(filterString)
+                filterParams["CQL_FILTER"] = filterString;
+                console.log("my filter", filterParams["CQL_FILTER"])
+                if (this.mMap) {
+
+                    this.mMap.getLayers().forEach(function (lyr) {
+                        // var extent = lyr.getSource().getExtent();
+                        if (lyr.getSource()["updateParams"] !== undefined) {
+                            lyr.getSource().updateParams(filterParams);
+                            console.log('layer', lyr.getSource)
+                        }
+                        // this.mMap.getView().fit(extent, this.mMap.getSize());
+                    });
+                }
+
+            }else if (filter.client && filter.product) {
 
                 let viewString = `cliente:${filter.client};producto:${filter.product}`
                 console.log('view', viewString)
                 filterParams["VIEWPARAMS"] = viewString;
 
-                if (filter.zona) {
+                let filterString = null;
+                if (filter.calidad && filter.zona) {
 
+                    if (filter.calidad == 'todos' && filter.zona == 'todos') {
+                        filterString = null
+                    } else if (filter.calidad == 'todos' && filter.zona) {
+                        filterString = `idzona=${filter.zona}`
+                        filterParams["CQL_FILTER"] = filterString;
+                    } else if (filter.zona == 'todos' && filter.calidad) {
+                        filterString = `calificaci=${filter.calidad}`
+                        filterParams["CQL_FILTER"] = filterString;
+                    } else {
+                        filterString = `idzona=${filter.zona} and calificaci=${filter.calidad}`
+                        filterParams["CQL_FILTER"] = filterString;
+                    }
+
+                } else {
+                    filterString = null
+                    filterParams["CQL_FILTER"] = filterString;
                 }
-                let filterString = null
-                filterParams["CQL_FILTER"] = filterString;
+                console.log('string', filterString)
                 if (this.mMap) {
 
                     this.mMap.getLayers().forEach(function (lyr) {
                         // var extent = lyr.getSource().getExtent();
-                        lyr.getSource().updateParams(filterParams);
-                        console.log('layer', lyr.getSource)
+                        if (lyr.getSource()["updateParams"] !== undefined) {
+                            lyr.getSource().updateParams(filterParams);
+                            console.log('layer', lyr.getSource)
+                        }
                         // this.mMap.getView().fit(extent, this.mMap.getSize());
                     });
                 }
@@ -160,14 +206,17 @@ class MapComponent extends Component {
             if (this.mMap) {
                 this.mMap.getLayers().forEach(function (lyr) {
                     // var extent = lyr.getSource().getExtent();
-                    lyr.getSource().updateParams(filterParams);
-                    // this.mMap.getView().fit(extent, this.mMap.getSize());
+                    if (lyr.getSource()["updateParams"] !== undefined) {
+                        lyr.getSource().updateParams(filterParams);
+                        console.log('layer', lyr.getSource)
+                    }                    // this.mMap.getView().fit(extent, this.mMap.getSize());
                 });
             }
         }
     }
 
     addLayerToMap(layer, map) {
+
         if (layer && map) {
             if (layer.Title === 'clasificadoras' || layer.Title === 'cantera' || layer.Title === 'bandas'
                 || layer.Title === 'trituradoras' || layer.Title === 'procrudo' || layer.Title === 'profinal' || layer.Title === 'mallas' || layer.Title === 'mallasOrigenProductoCliente') {
@@ -226,17 +275,24 @@ class MapComponent extends Component {
 
 
         this.mMap = new Map({
-            projection: 'EPSG:3115',
+            // projection: 'EPSG:3115',
             controls: [new Zoom(), new Scale({ units: 'metric' }), new MousePosition({
-                coordinateFormat: Coordinate.createStringXY(3),
+                coordinateFormat: Coordinate.createStringXY(2),
             })],
             target: mapElement,
             pixelRatio: 1,
             view: mView,
             overlays: [this.popup],
-            // layers: [new TileLayer({
-            //     source: new OSM()
-            // })]
+            layers: [new TileLayer({
+                preload: Infinity,
+                source: new BingMaps({
+                    key: 'ApCBYrgr6BF61iw9_7-cJOO5zCEv7-Vvv4yoc5XQH7ywq7JjNxgOy40UOhWyCFGD',
+                    imagerySet: 'Road'
+                    // use maxZoom 19 to see stretched tiles instead of the BingMaps
+                    // "no photos at this zoom level" tiles
+                    // maxZoom: 19
+                })
+            })]
         });
 
         let mPopup = this.popup
