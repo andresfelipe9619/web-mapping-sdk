@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {
     Grid,
+    Form,
     Segment,
     Button, Dropdown
 } from "semantic-ui-react";
@@ -41,16 +42,16 @@ class MallasProcedence extends Component {
         }
     }
 
-    handleChangeClient = (e,{value}) => {
+    handleChangeClient = (e, { value }) => {
         this.setState({ query: { ...this.state.query, client: value } });
     }
-    handleChangeZona = (e,{value}) => {
+    handleChangeZona = (e, { value }) => {
         this.setState({ query: { ...this.state.query, zona: value } });
     }
-    handleChangeCalidad = (e,{value}) => {
+    handleChangeCalidad = (e, { value }) => {
         this.setState({ query: { ...this.state.query, calidad: value } });
     }
-    handleChangeProduct = (e,{value}) => {
+    handleChangeProduct = (e, { value }) => {
         this.setState({ query: { ...this.state.query, product: value } });
     }
 
@@ -97,37 +98,59 @@ class MallasProcedence extends Component {
 
             return (
                 <div>
+              <Form size="large" onSubmit={this.handleSubmit}>
                     <Segment>
                         <h3>Consulte Mallas de Origen </h3>
-                        <Dropdown
-                            placeholder="Cliente"
-                            selection
-                            options={clientOptions}
-                            onChange={this.handleChangeClient}
-                        />
-                        <Dropdown
-                            placeholder="Producto"
-                            selection
-                            options={productOptions}
-                            onChange={this.handleChangeProduct}
-                        />
-                        <Dropdown
-                            placeholder="Zona"
-                            selection
-                            options={zonaOptions}
-                            onChange={this.handleChangeZona}
-                        />
-                        <Dropdown
-                            placeholder="Calidad"
-                            selection
-                            options={calidadOptions}
-                            onChange={this.handleChangeCalidad}
-                        />
+                        <Form.Group widths='equal'>
+                            <Form.Field>
 
-                        <Button type='submit' style={{ marginTop: '20px' }} onClick={this.handleSubmit} primary >Consultar</Button>
-                        <Button  style={{ marginTop: '20px' }} onClick={this.props.clearFilter} primary >Reiniciar</Button>
+                                <Form.Select
+                                    required
+                                    label="Cliente"
+                                    placeholder="Cliente"
+                                    selection
+                                    options={clientOptions}
+                                    onChange={this.handleChangeClient}
+                                />
+                            </Form.Field>
+                            <Form.Field>
+                                <Form.Select
+                                    required
+                                    label="Producto"
+                                    placeholder="Producto"
+                                    selection
+                                    options={productOptions}
+                                    onChange={this.handleChangeProduct}
+                                />
+                            </Form.Field>
+                            <Form.Field>
+
+                                <Form.Select
+                                    required
+                                    label="Zona"
+                                    placeholder="Zona"
+                                    selection
+                                    options={zonaOptions}
+                                    onChange={this.handleChangeZona}
+                                />
+                            </Form.Field>
+                            <Form.Field>
+                                <Form.Select
+                                    required
+                                    label="Calificacion"
+                                    placeholder="Calificacion"
+                                    selection
+                                    options={calidadOptions}
+                                    onChange={this.handleChangeCalidad}
+                                />
+                            </Form.Field>
+                        </Form.Group>
+
+                        <Button type='submit' style={{ marginTop: '20px' }} primary >Consultar</Button>
+                        <Button style={{ marginTop: '20px' }} onClick={this.props.clearFilter} primary >Reiniciar</Button>
 
                     </Segment>
+                    </Form>
                 </div>
             )
         } else return null

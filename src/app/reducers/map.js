@@ -72,7 +72,7 @@ function currentLayersFeatures(state = false, action) {
 function fetchLayersFeatures(state = null, action) {
     switch (action.type) {
         case FETCH_LAYERS_FEATURES_REQUEST:
-            return action.layersName;
+            return action.layers;
         default:
             return state;
     }
@@ -81,7 +81,7 @@ function fetchLayersFeatures(state = null, action) {
 function fetchLayersFeaturesSuccess(state = false, action) {
     switch (action.type) {
         case FETCH_LAYERS_FEATURES_SUCCESS:
-            return action.features; 
+            return action.layers; 
         default:
             return state;
     }

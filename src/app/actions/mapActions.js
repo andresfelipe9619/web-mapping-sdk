@@ -30,8 +30,8 @@ function fetchLayersFeaturesSuccess(layers) {
     return { type: FETCH_LAYERS_FEATURES_SUCCESS, layers };
 }
 
-function fetchLayersFeaturesRequest(query) {
-    return { type: FETCH_LAYERS_FEATURES_REQUEST, query };
+function fetchLayersFeaturesRequest(layers) {
+    return { type: FETCH_LAYERS_FEATURES_REQUEST, layers };
 
 }
 
@@ -95,11 +95,11 @@ export function loadLayers(layers) {
 }
 
 export function loadLayersFeatures(layers) {
-    return dispatch => {
+    return (dispatch) => {
         dispatch(fetchLayersFeaturesRequest(layers));
         fetchFeatures(layers).then((response) => {
             dispatch(fetchLayersFeaturesRequest(false));
-            dispatch(fetchLayersFeaturesSuccess(response.features));
+            dispatch(fetchLayersFeaturesSuccess(response));
         }).catch((err) => {
             // dispatch(alertError(err));
             dispatch(fetchLayersFeaturesError(err));
@@ -107,12 +107,19 @@ export function loadLayersFeatures(layers) {
     }
 }
 
+
 function fetchFeatures(layers) {
     return Promise.all(layers.map(layer => {
         let url = `http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:${layer}&maxFeatures=50&outputFormat=application%2Fjson`;
         fetch(url).then(
-            response => response.json(),
+            response => response,
             error => console.error('An error occured.', error)
         )
     }))
+    .then(responses =>
+        Promise.all(responses.map(res => {
+            console.log('response', res.json());
+            return res.json()
+        }))
+    )
 }

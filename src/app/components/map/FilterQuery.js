@@ -11,7 +11,7 @@ class FilterQuery extends Component {
                 layer: null,
                 atributos: null,
                 comparacion: null,
-                valor: null
+                valor: ''
             }
         }
         this.handleChangeLayer = this.handleChangeLayer.bind(this);
@@ -173,9 +173,10 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
     return {
-        loadLayerRequest: state.mapReducer.loadLayerRequest,
-        loadLayerError: state.mapReducer.loadLayerError,
-        loadLayerSuccess: state.mapReducer.loadLayerSuccess,
+        layersFeaturesError: state.mapReducerfetchLayersFeaturesError,
+        layersFeaturesSuccess: state.mapReducerfetchLayersFeaturesSuccess,
+        layersFeaturesRequest: state.mapReducerfetchLayersFeaturesRequest,
+
     }
 
 }

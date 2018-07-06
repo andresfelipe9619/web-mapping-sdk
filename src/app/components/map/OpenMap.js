@@ -95,7 +95,7 @@ class OpenMap extends Component {
                                     <Route exact path={match.url + "/trituradoras"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
                                     <Route exact path={match.url + "/mallas"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
 
-                                    <Route path={match.url + "/mallas/origen"} render={(props) => <MapContainer key={`origen${Math.Random}`} {...props} layers={[layers[4]]}></MapContainer>} />
+                                    <Route path={match.url + "/mallas/origen"} render={(props) => <MapContainer key={`origen${Math.Random}`} {...props} layers={[layers[4], layers[1]]}></MapContainer>} />
                                     <Route path={match.url + "/mallas/fecha"} render={(props) => <MapContainer {...props} key={`fecha${Math.Random}`} layers={[layers[3]]}></MapContainer>} />
 
                                     <Route exact path={match.url + "/sql"}   render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />

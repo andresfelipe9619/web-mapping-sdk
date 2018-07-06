@@ -12,14 +12,16 @@ import {
 } from "semantic-ui-react";
 import { login } from "../../actions/authActions";
 import { loadLogin } from "../../actions/loginActions";
-// import AlertMessage from "./AlertMessage";
+import { Redirect, Link } from 'react-router-dom';
+import AlertMsg from "./AlertMsg";
+
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: "",
-      password: ""
+      password: "",
     };
 
     this.handleChange = this
@@ -30,6 +32,12 @@ class Login extends Component {
       .bind(this);
   }
 
+  handleChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+  
 
   handleSubmit(e) {
     e.preventDefault();
@@ -43,18 +51,13 @@ class Login extends Component {
       .props
       .requestLogin(user);
   }
-  
-  handleChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  }
-
   componentDidMount() {
     this
       .props
       .loadPage();
   }
+
+
   render() {
     if (this.props.hasErrored) {
       return <h1>Error</h1>;
@@ -70,6 +73,9 @@ class Login extends Component {
           </Dimmer>
         </Segment>
       );
+    } else if (this.props.hasSuccessed) {
+      // localStorage.setItem('user', JSON.stringify(this.props.hasSuccessed));
+      return (<Redirect to="/dashboard" />)
     } else {
       return (
         <div>
@@ -83,12 +89,8 @@ class Login extends Component {
             <Grid.Column style={{
               maxWidth: 450
             }}>
-              {/* {this.props.alertSucces
-                ? <AlertMessage type='success' msg={this.props.alertSucces}/>
-                : this.props.alertError
-                  ? <AlertMessage type='error' msg={this.props.alertError}/>
-                  : null}  */}
-              <Header as="h2" color="blue" textAlign="center">
+              {this.props.alertError ? <AlertMsg type='error' msg={this.props.alertError} /> : null}
+              <Header as="h2" color="teal" textAlign="center">
                 Inicia Sesión con tu cuenta
               </Header>
               <Form size="large" onSubmit={this.handleSubmit}>
@@ -101,7 +103,10 @@ class Login extends Component {
                     name="username"
                     placeholder="Nombre de usuario"
                     onChange={this.handleChange}
-                    value={this.state.username} />
+                    value={this.state.username}
+                    autoFocus
+                    // error={this.state.username.length < 1 ? 1 : 0} 
+                    />
                   <Form.Input
                     required
                     fluid
@@ -111,16 +116,18 @@ class Login extends Component {
                     placeholder="Contraseña"
                     type="password"
                     onChange={this.handleChange}
-                    value={this.state.password} />
+                    value={this.state.password}
+                    // error={this.state.password.length < 1 ? 1 : 0}
+                     />
 
-                  <Button color="blue" type="submit" fluid size="large">
+                  <Button color="teal" type="submit" fluid size="large">
                     Iniciar Sesión
                   </Button>
                 </Segment>
               </Form>
               <Message>
                 No tienes cuenta?
-                <a href="#">Crear Cuenta</a>
+                <Link to="/registro"> Crear Cuenta </Link>
               </Message>
               <Message>
                 *Es necesario tener una cuenta con los datos completos de la empresa para poder
@@ -136,14 +143,14 @@ class Login extends Component {
 }
 const mapStateToProps = state => {
   return {
+    //auth
     hasRequested: state.authReducer.loginRequest,
     hasSuccessed: state.authReducer.loginSuccess,
     hasFailed: state.authReducer.loginFailure,
-    message: state.loginReducer.loginLoaded,
+    //page
     isLoading: state.loginReducer.loginLoading,
     hasErrored: state.loginReducer.loginErrored,
-    // alertSucces: state.alertReducer.alertSuccess,
-    // alertError: state.alertReducer.alertError
+    alertError: state.alertReducer.alertError
   };
 };
 const mapDispatchToProps = dispatch => {
@@ -156,4 +163,5 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

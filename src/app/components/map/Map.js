@@ -77,8 +77,8 @@ class MapComponent extends Component {
         let content = this.popupContent
         let popup = this.popup
         this.mMap.getLayers().forEach(function (lyr) {
-            if(lyr.getSource()["getGetFeatureInfoUrl"] !== undefined){
-                
+            if (lyr.getSource()["getGetFeatureInfoUrl"] !== undefined) {
+
                 url = lyr.getSource().getGetFeatureInfoUrl(
                     coordinate, viewResolution, viewProjection,
                     { 'INFO_FORMAT': 'text/html' });
@@ -137,13 +137,13 @@ class MapComponent extends Component {
                         // this.mMap.getView().fit(extent, this.mMap.getSize());
                     });
                 }
-            } else if(filter.desde && filter.hasta){
+            } else if (filter.desde && filter.hasta) {
                 let filterString = null
 
-                if(filter.zona == 'todos'){
-                    filterString  = `fechae>${filter.desde} and fechae<${filter.hasta}`
-                }else if(filter.zona){
-                    filterString  =`fechae>${filter.desde} and fechae<${filter.hasta} and idzona=${filter.zona}`
+                if (filter.zona == 'todos') {
+                    filterString = `fechae>${filter.desde} and fechae<${filter.hasta}`
+                } else if (filter.zona) {
+                    filterString = `fechae>${filter.desde} and fechae<${filter.hasta} and idzona=${filter.zona}`
 
                 }
                 console.log(filterString)
@@ -161,7 +161,7 @@ class MapComponent extends Component {
                     });
                 }
 
-            }else if (filter.client && filter.product) {
+            } else if (filter.client && filter.product) {
 
                 let viewString = `cliente:${filter.client};producto:${filter.product}`
                 console.log('view', viewString)
@@ -238,6 +238,7 @@ class MapComponent extends Component {
                                 tiled: true,
                             },
                             serverType: 'geoserver',
+                            transparent: true
                         })
                         //     })
                         // ]
@@ -284,14 +285,22 @@ class MapComponent extends Component {
             view: mView,
             overlays: [this.popup],
             layers: [new TileLayer({
-                preload: Infinity,
-                source: new BingMaps({
-                    key: 'ApCBYrgr6BF61iw9_7-cJOO5zCEv7-Vvv4yoc5XQH7ywq7JjNxgOy40UOhWyCFGD',
-                    imagerySet: 'Road'
-                    // use maxZoom 19 to see stretched tiles instead of the BingMaps
-                    // "no photos at this zoom level" tiles
-                    // maxZoom: 19
+                id: 'mapa_base',
+                type: 'base',
+                // extent: extent,
+                source: new TileWMS({
+                    // projection:"EPSG:3115",
+                    url: 'http://localhost:8080/geoserver/cahibi1/wms',
+                    params: {
+                        'FORMAT': "image/png",
+                        'LAYERS': `cahibi1:mapa_base`,
+                        tiled: true,
+                    },
+                    serverType: 'geoserver',
+                    transparent: true
                 })
+                //     })
+                // ]
             })]
         });
 
@@ -316,6 +325,13 @@ class MapComponent extends Component {
             else {
                 this.updateFeatures(null)
             }
+
+            let currentLayers = []
+
+            // this.mMap.getLayers().forEach(layer => {
+            //     currentLayers.push(layer.getSource().getFeatures())
+            // })
+
             onLayersChange(layers)
 
         }
