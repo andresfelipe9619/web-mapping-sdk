@@ -75,7 +75,7 @@ class Login extends Component {
       );
     } else if (this.props.hasSuccessed) {
       // localStorage.setItem('user', JSON.stringify(this.props.hasSuccessed));
-      return (<Redirect to="/dashboard" />)
+      return (<Redirect to="/mapa" />)
     } else {
       return (
         <div>

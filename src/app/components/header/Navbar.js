@@ -22,6 +22,9 @@ class Navbar extends Component {
         // this.handleLogoutClick = this.handleLogoutClick.bind(this);
 
     }
+    handleLogoutClick = (e)=> {
+        this.props.requestLogout();
+    }
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
     // handleLogoutClick(e) {     this.props.requestLogout(); }
     render() {
@@ -64,49 +67,37 @@ class Navbar extends Component {
                                 as={Link}>
                                 <Icon name='code' />
                                 SQL</Menu.Item>
-                            <Menu.Item
-                                color='blue'
-                                name='usuarios'
-                                active={activeItem === 'usuarios'}
-                                onClick={this.handleItemClick}
-                                to="/usuarios"
-                                as={Link}>
-                                <Icon name='users' />
-                                Usuarios</Menu.Item>
-
-                            <Menu.Item
-                                color='blue'
-                                name='ingreso'
-                                active={activeItem === 'ingreso'}
-                                onClick={this.handleItemClick}
-                                to="/ingreso"
-                                as={Link}>
-                                <Icon name='sign in' />
-                                Ingreso</Menu.Item>
-                            {/* {this.props.user.admin
-                                ? <Menu.Item
-                                        name='dashboard'
-                                        active={activeItem === 'dashboard'}
-                                        onClick={this.handleItemClick}
-                                        to="/dashboard"
-                                        as={Link}>Dashboard</Menu.Item>
-                                : ''}
-                            <Menu.Item position='right'>
-                                {this.props.user.admin
-                                    ? <Segment>
-                                        <Header as='h3' color='green'>
-                                        <Header.Content>
-                                                {this.props.user.username}
-                                        </Header.Content>
-                                            <Button as={Link} floated="right" to="/ingreso" onClick={this.handleLogoutClick}>Cerrar Sesion</Button>
-                                        </Header>
-                                    </Segment>
-
-                                    : <Segment>
-                                        <Button as={Link} to="/ingreso">Ingreso</Button> <Button as = {Link}
-                                            to = "/registro" style = {{marginLeft: '0.5em'}} > Registrarse </Button>
-                                </Segment>   }
-                            </Menu.Item> */}
+                                {this.props.user.rol==1?( <Menu.Item
+                                    color='blue'
+                                    name='usuarios'
+                                    active={activeItem === 'usuarios'}
+                                    onClick={this.handleItemClick}
+                                    to="/usuarios"
+                                    as={Link}>
+                                    <Icon name='users' />
+                                    Usuarios</Menu.Item>):null}
+                            
+                                {this.props.user.rol>0
+                                    ? 
+                                    <Menu.Item
+                                    color='blue'
+                                    name='salir'
+                                    active={activeItem === 'salir'}
+                                    onClick={this.handleLogoutClick}
+                                    to="/ingreso"
+                                    as={Link}>
+                                    <Icon name='log out' />
+                                    {this.props.user.usn} Cerrar Sesion</Menu.Item>
+                                    :
+                                <Menu.Item
+                                    color='blue'
+                                    name='ingreso'
+                                    active={activeItem === 'ingreso'}
+                                    onClick={this.handleItemClick}
+                                    to="/ingreso"
+                                    as={Link}>
+                                    <Icon name='sign in' />
+                                    Ingreso</Menu.Item>   }
                         </Menu.Menu>
                     </Menu>
                 </Segment>
@@ -114,10 +105,15 @@ class Navbar extends Component {
         );
     }
 }
+const mapStateToProps = (state) => {
+    return {user: state.authReducer.loginSuccess};
+};  
+const mapDispatchToProps = (dispatch) => {
+    return {
+        requestLogout: () =>{
+            dispatch(logout())
+        }
+    }
+};
 
-// const mapStateToProps = (state) => {     return {user:
-// state.authReducer.loginSuccess}; }; const mapDispatchToProps = (dispatch) =>
-// {     return {         requestLogout: () =>{             dispatch(logout())
-//     }     } }; export default connect(mapStateToProps,
-// mapDispatchToProps)(Navbar);
-export default Navbar;
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

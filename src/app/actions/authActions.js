@@ -7,24 +7,24 @@ import {
     REGISTER_SUCCESS,
     LOGOUT_REQUEST
 } from './constants/ActionTypes';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
-import {alertError, alertSuccess, alertClear, clearAlerts} from './alertActions';
+import { alertError, alertSuccess, alertClear, clearAlerts } from './alertActions';
 
 function logoutRequest(user) {
-    return {type: LOGOUT_REQUEST, user};
+    return { type: LOGOUT_REQUEST, user };
 }
 
 function loginRequest(user) {
-    return {type: LOGIN_REQUEST, user};
+    return { type: LOGIN_REQUEST, user };
 }
 
 function loginSuccess(user) {
-    return {type: LOGIN_SUCCESS, user};
+    return { type: LOGIN_SUCCESS, user };
 }
 
 function loginFailure(error) {
-    return {type: LOGIN_FAILURE, error};
+    return { type: LOGIN_FAILURE, error };
 
 }
 
@@ -35,28 +35,31 @@ export function logout() {
 }
 
 export function login(user) {
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-    };
 
     return dispatch => {
         dispatch(loginRequest(user));
+
         
-        fetch('/authenticate', requestOptions).then(response => {
+        let url = `http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:auth&viewparams=usn:${user.username};psw:${user.password}&maxFeatures=50&outputFormat=application%2Fjson`
+
+        fetch(url).then(response => {
             if (!response.ok) {
                 return Promise.reject(response.statusText);
             }
-            dispatch(loginRequest(null));
-            return response.json();
+            return response.json()
+
+        }).then(user => {
+            if(user.features.length>0){
+                return user.features 
+            }
+            else return {err: "Wrong"}
+
         }).then((user) => {
+            console.log('user', user)
             if (user.err) {
                 dispatch(alertError(user.err));
             } else {
-                dispatch(loginSuccess(user));
+                dispatch(loginSuccess(user[0].properties));
             }
         }).catch((err) => {
             dispatch(alertError(err));
@@ -65,6 +68,6 @@ export function login(user) {
     };
 }
 
-function authenticateUser(){
-    
+function authenticateUser(user) {
+
 }

@@ -75,7 +75,8 @@ class OpenMap extends Component {
                             <Grid.Column width={4}>
                                 <Grid.Row>
                                     <Grid.Column>
-                                        <Menu />
+                                        {this.props.currentUser ? <Menu /> : null}
+                                       
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
@@ -89,15 +90,21 @@ class OpenMap extends Component {
                                 </Grid.Row>
                             </Grid.Column>
                             <Grid.Column width={12} style={fondo}>
+
+                                    
+                                    {this.props.currentUser ?
+                                         (
+                                        <Switch> <Route exact path={match.url + "/clasificadoras"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
+                                         <Route exact path={match.url + "/trituradoras"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
+                                         <Route exact path={match.url + "/mallas"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
+                                         <Route path={match.url + "/mallas/fecha"} render={(props) => <MapContainer {...props} key={`fecha${Math.Random}`} layers={[layers[3]]}></MapContainer>} />
+                                         <Route path={match.url + "/mallas/origen"} render={(props) => <MapContainer key={`origen${Math.Random}`} {...props} layers={[layers[4], layers[1]]}></MapContainer>} />
+                                         </Switch>) : null}
+
+                                    
+
                                 <Switch>
                                     <Route exact path={match.url} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
-                                    <Route exact path={match.url + "/clasificadoras"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
-                                    <Route exact path={match.url + "/trituradoras"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
-                                    <Route exact path={match.url + "/mallas"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
-
-                                    <Route path={match.url + "/mallas/origen"} render={(props) => <MapContainer key={`origen${Math.Random}`} {...props} layers={[layers[4], layers[1]]}></MapContainer>} />
-                                    <Route path={match.url + "/mallas/fecha"} render={(props) => <MapContainer {...props} key={`fecha${Math.Random}`} layers={[layers[3]]}></MapContainer>} />
-
                                     <Route exact path={match.url + "/sql"}   render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
                                     <Route path={match.url + "/sql/bandas/"} render={(props) => <MapContainer {...props} key={`bandas${Math.Random}`} layers={[layers[0]]} ></MapContainer>} />
                                     <Route path={match.url + "/sql/cantera/"} render={(props) => <MapContainer {...props} key={`cantera${Math.Random}`} layers={[layers[1]]} ></MapContainer>} />
@@ -132,6 +139,8 @@ class OpenMap extends Component {
 
 const mapStateToProps = state => {
     return {
+        currentUser: state.authReducer.loginSuccess,
+
         clients: state.userReducer.fetchUsersSuccess,
         clientsHasErrored: state.userReducer.fetchUsersFailure,
         ClientsIsLoading: state.userReducer.fetchUsersRequest,
