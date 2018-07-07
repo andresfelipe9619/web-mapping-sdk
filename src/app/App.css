@@ -1,4 +1,7 @@
 @charset "UTF-8";
+.ol-mouse-position {
+  background-color: white; }
+
 .ol-popup {
   position: absolute;
   background-color: white;

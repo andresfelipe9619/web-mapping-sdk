@@ -45,7 +45,7 @@ export function login(user) {
 
     return dispatch => {
         dispatch(loginRequest(user));
-
+        
         fetch('/authenticate', requestOptions).then(response => {
             if (!response.ok) {
                 return Promise.reject(response.statusText);
@@ -63,4 +63,8 @@ export function login(user) {
             dispatch(loginFailure(err));
         });
     };
+}
+
+function authenticateUser(){
+    
 }

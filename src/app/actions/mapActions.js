@@ -111,15 +111,9 @@ export function loadLayersFeatures(layers) {
 function fetchFeatures(layers) {
     return Promise.all(layers.map(layer => {
         let url = `http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:${layer}&maxFeatures=50&outputFormat=application%2Fjson`;
-        fetch(url).then(
-            response => response,
-            error => console.error('An error occured.', error)
-        )
+        return fetch(url)
     }))
-    .then(responses =>
-        Promise.all(responses.map(res => {
-            console.log('response', res.json());
-            return res.json()
-        }))
-    )
+    .then(responses =>  Promise.all(responses.map(res => res.json())))
+    .then(features=>features)
+    .catch(err=> console.log('Error catching features', err))
 }

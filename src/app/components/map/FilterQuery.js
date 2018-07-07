@@ -2,6 +2,17 @@ import React, { Component } from 'react'
 import { Dropdown, Button, Segment, Dimmer, Form, Grid, Loader } from 'semantic-ui-react';
 import { filterLayers, loadLayers, loadLayersFeatures, clearFilterLayers } from '../../actions/mapActions';
 import { connect } from 'react-redux'
+
+const baseLayers =  [
+    'clasificadoras',
+    'cantera',
+    'bandas',
+    'trituradoras',
+    'procrudo',
+    'profinal',
+    'mallas'
+]
+
 class FilterQuery extends Component {
     constructor(props) {
         super(props);
@@ -22,7 +33,7 @@ class FilterQuery extends Component {
     }
 
     componentDidMount() {
-        this.props.getLayersFeatures(['mallas', 'procrudo'])
+        this.props.getLayersFeatures(baseLayers)
     }
 
     handleSubmit(e) {
@@ -88,20 +99,25 @@ class FilterQuery extends Component {
             { key: '=', value: '=', text: '=' }
         ]
 
-        let atributosOptions = [
-            { key: 'nombre', value: 'nombre', text: 'nombre' },
-            { key: 'cota', value: 'cota', text: 'cota' },
-            { key: 'idzona', value: 'idzona', text: 'idzona' },
-            { key: 'fechae', value: 'fechae', text: 'fechae' },
-            { key: 'estado', value: 'estado', text: 'estado' },
-            { key: 'velocidad', value: 'velocidad', text: 'velocidad' },
-            { key: 'capacidad', value: 'capacidad', text: 'capacidad' },
-            { key: 'volumen', value: 'volumen', text: 'volumen' },
-        ]
+        let atributosOptions = []
 
-        if (true) {
-            for (let layer of this.props.layers) {
-                layerOptions.push({ key: layer.Title, value: layer.Title, text: layer.Title })
+        if (this.props.layersFeaturesSuccess) {
+            for (let layer of baseLayers) {
+                layerOptions.push({ key: layer, value: layer, text: layer })
+            }
+
+            for(let feature of this.props.layersFeaturesSuccess){
+                console.log(feature)
+                if(this.state.query.layer){
+                    if(feature.features[0].id.includes(this.state.query.layer)){
+                        
+                        const temp = Object.keys(feature.features[0].properties);
+                        for(let t of temp){
+                            atributosOptions.push({ key: t, value: t, text: t })
+                        }
+                    }
+
+                }
             }
             return (
                 <div>
@@ -173,9 +189,9 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
     return {
-        layersFeaturesError: state.mapReducerfetchLayersFeaturesError,
-        layersFeaturesSuccess: state.mapReducerfetchLayersFeaturesSuccess,
-        layersFeaturesRequest: state.mapReducerfetchLayersFeaturesRequest,
+        layersFeaturesError: state.mapReducer.fetchLayersFeaturesError,
+        layersFeaturesSuccess: state.mapReducer.fetchLayersFeaturesSuccess,
+        layersFeaturesRequest: state.mapReducer.fetchLayersFeaturesRequest,
 
     }
 
