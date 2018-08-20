@@ -6,7 +6,9 @@ import {
     FETCH_LAYERS_FEATURES_ERROR,
     FETCH_LAYERS_FEATURES_SUCCESS,
     FILTER_LAYERS,
-    UPDATE_LAYERS_FEATURES,
+    UPDATE_FEATURES_SUCCESS,
+    UPDATE_FEATURES_ERROR,
+    UPDATE_FEATURES_REQUEST,
     SELECT_LAYER
 } from './constants/ActionTypes';
 
@@ -40,10 +42,6 @@ function fetchLayersFeaturesError(error) {
 
 }
 
-export function updateLayersFeatures(features) {
-    return { type: UPDATE_LAYERS_FEATURES, features };
-}
-
 export function filterLayers(filter) {
     return { type: FILTER_LAYERS, filter };
 }
@@ -53,18 +51,28 @@ export function selectLayer(layerName) {
 }
 
 export function clearFilterLayers() {
-    return (dispatch)=> {
+    return (dispatch) => {
         dispatch(filterLayers(null))
     }
 }
 
 export function clearSelectLayer() {
-    return (dispatch)=> {
+    return (dispatch) => {
         dispatch(selectLayer(null))
     }
 }
 
+function updateMapFeaturesSuccess(features) {
+    return { type: UPDATE_FEATURES_SUCCESS, features };
+}
 
+function updateMapFeaturesError(error) {
+    return { type: UPDATE_FEATURES_ERROR, error };
+}
+
+function updateMapFeaturesRequest (filter) {
+    return { type: UPDATE_FEATURES_REQUEST, filter };
+}
 
 
 export function loadLayers(layers) {
@@ -84,7 +92,7 @@ export function loadLayers(layers) {
             for (let layer of root) {
                 // if (layers.indexOf(layer.Title) > 0) {
                 //     delete layer.CRS
-                    mLayers.push(layer)
+                mLayers.push(layer)
                 // }
             }
 
@@ -92,6 +100,24 @@ export function loadLayers(layers) {
         }).then((layers) => dispatch(loadLayersSuccess(layers))).catch((err) => dispatch(loadLayersError(err)));
     };
 }
+
+export function updateMapFeatures(filter) {
+    return (dispatch) => {
+        dispatch(updateMapFeaturesRequest(filter));
+        let filterString = `${filter.atributos}${filter.comparacion}${filter.valor}`
+        const url = `http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:${filter.layer}&maxFeatures=50&outputFormat=application%2Fjson&CQL_FILTER=${filterString}`;
+        fetch(url).then(
+            response => response.json(),
+            error => console.error('An error occured.', error)
+        ).then(features => {
+            dispatch(updateMapFeaturesRequest(null));
+            dispatch(updateMapFeaturesSuccess(features));
+        }).catch(err => {
+            dispatch(updateMapFeaturesError(err));
+        })
+    }
+}
+
 
 export function loadLayersFeatures(layers) {
     return (dispatch) => {
@@ -112,7 +138,7 @@ function fetchFeatures(layers) {
         let url = `http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:${layer}&maxFeatures=50&outputFormat=application%2Fjson`;
         return fetch(url)
     }))
-    .then(responses =>  Promise.all(responses.map(res => res.json())))
-    .then(features=>features)
-    .catch(err=> console.log('Error catching features', err))
+        .then(responses => Promise.all(responses.map(res => res.json())))
+        .then(features => features)
+        .catch(err => console.log('Error catching features', err))
 }

@@ -6,7 +6,9 @@ import {
     FETCH_LAYERS_FEATURES_ERROR,
     FETCH_LAYERS_FEATURES_SUCCESS,
     FILTER_LAYERS,
-    UPDATE_LAYERS_FEATURES,
+    UPDATE_FEATURES_SUCCESS,
+    UPDATE_FEATURES_ERROR,
+    UPDATE_FEATURES_REQUEST,
     SELECT_LAYER
 } from '../actions/constants/ActionTypes';
 
@@ -23,7 +25,7 @@ function loadLayersRequest(state = null, action) {
 function loadLayersSuccess(state = false, action) {
     switch (action.type) {
         case LOAD_LAYERS_SUCCESS:
-            return action.layers; 
+            return action.layers;
         default:
             return state;
     }
@@ -58,16 +60,30 @@ function currentFilter(state = null, action) {
     }
 }
 
-function currentLayersFeatures(state = false, action) {
+function currentMapFeaturesSuccess(state = null, action) {
     switch (action.type) {
-        case UPDATE_LAYERS_FEATURES:
+        case UPDATE_FEATURES_SUCCESS:
             return action.features;
         default:
             return state;
     }
 }
-
-
+function currentMapFeaturesError(state = null, action) {
+    switch (action.type) {
+        case UPDATE_FEATURES_ERROR:
+            return action.error;
+        default:
+            return state;
+    }
+}
+function currentMapFeaturesRequest(state = null, action) {
+    switch (action.type) {
+        case UPDATE_FEATURES_REQUEST:
+            return action.filter;
+        default:
+            return state;
+    }
+}
 
 function fetchLayersFeatures(state = null, action) {
     switch (action.type) {
@@ -81,7 +97,7 @@ function fetchLayersFeatures(state = null, action) {
 function fetchLayersFeaturesSuccess(state = false, action) {
     switch (action.type) {
         case FETCH_LAYERS_FEATURES_SUCCESS:
-            return action.layers; 
+            return action.layers;
         default:
             return state;
     }
@@ -98,7 +114,8 @@ function fetchLayersFeaturesError(state = false, action) {
 
 
 
-export default function mapReducer(state = {}, action){
+
+export default function mapReducer(state = {}, action) {
     return {
         fetchLayersFeaturesError: fetchLayersFeaturesError(state.fetchLayersFeaturesError, action),
         fetchLayersFeaturesSuccess: fetchLayersFeaturesSuccess(state.fetchLayersFeaturesSuccess, action),
@@ -109,7 +126,10 @@ export default function mapReducer(state = {}, action){
         loadLayersRequest: loadLayersRequest(state.loadLayersRequest, action),
 
         selectedLayer: selectedLayer(state.selectedLayer, action),
-        currentLayersFeatures: currentLayersFeatures(state.currentLayersFeatures, action),
         currentFilter: currentFilter(state.currentFilter, action),
+
+        currentMapFeaturesSuccess: currentMapFeaturesSuccess(state.currentMapFeaturesSuccess, action),
+        currentMapFeaturesError: currentMapFeaturesError(state.currentMapFeaturesError, action),
+        currentMapFeaturesRequest: currentMapFeaturesRequest(state.currentMapFeaturesRequest, action),
     }
 }

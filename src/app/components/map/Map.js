@@ -64,13 +64,17 @@ class MapComponent extends Component {
         // }
         // }
     }
+    onLayersChange(filter) {
+        console.log('ON LAYER CHANGE FILTER', filter)
+        if (filter) {
+            this.props.updateMapFeatures(filter)
+        }
+    }
 
     clickHandler(event) {
         const viewResolution = this.mMap.getView().getResolution();
         const viewProjection = this.mMap.getView().getProjection();
         const { onSelectClick } = this.props
-        const placeLayer = this.mLayers
-
         var coordinate = event.coordinate;
 
         var url = ""
@@ -90,11 +94,6 @@ class MapComponent extends Component {
                 }
             }
         })
-        // this.mMap.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
-        //     let selected = feature.getProperties();
-        //     onSelectClick(selected);
-        //     return true // truthy return ends the iteration through the features
-        // }, { layerFilter: candidate => candidate === placeLayer })
     }
 
     getCurrentFeatures() {
@@ -111,7 +110,7 @@ class MapComponent extends Component {
         return null
     }
 
-    updateFeatures(filter) {
+    filterMapLayers(filter) {
 
         var filterParams = {
             'FILTER': null,
@@ -219,12 +218,10 @@ class MapComponent extends Component {
 
         if (layer && map) {
             if (layer.Title === 'clasificadoras' || layer.Title === 'cantera' || layer.Title === 'bandas'
-                || layer.Title === 'trituradoras' || layer.Title === 'procrudo' || layer.Title === 'profinal' || layer.Title === 'mallas' || layer.Title === 'mallasOrigenProductoCliente') {
+                || layer.Title === 'trituradoras' || layer.Title === 'procrudo' || layer.Title === 'profinal'
+                || layer.Title === 'mallas' || layer.Title === 'mallasOrigenProductoCliente') {
 
                 let superlayer =
-                    // new LayerGroup({
-                    //     title: layer.Title,
-                    // layers: [
                     new TileLayer({
                         id: layer.Title,
                         type: 'base',
@@ -240,11 +237,8 @@ class MapComponent extends Component {
                             serverType: 'geoserver',
                             transparent: true
                         })
-                        //     })
-                        // ]
                     })
                 map.addLayer(superlayer)
-                console.log('current layers', superlayer)
             }
         }
     }
@@ -310,42 +304,31 @@ class MapComponent extends Component {
             closer.blur();
             return false;
         };
-        // var layerSwitcher = new LayerSwitcher();
-        // this.mMap.addControl(layerSwitcher);
 
         this.mMap.on('click', this.clickHandler, this)
 
-
         if (layers) {
             layers.map((layer) => {
-                console.log('layer', layer)
                 this.addLayerToMap(layer, this.mMap)
             })
-            if (filter) { this.updateFeatures(filter) }
-            else {
-                this.updateFeatures(null)
+
+            console.log('layers', layers)
+            if (filter) {
+                this.filterMapLayers(filter)
+                this.onLayersChange(filter)
+            } else {
+                this.filterMapLayers(null)
             }
-
-            let currentLayers = []
-
-            // this.mMap.getLayers().forEach(layer => {
-            //     currentLayers.push(layer.getSource().getFeatures())
-            // })
-
-            onLayersChange(layers)
-
         }
     }
 
 
 
     render() {
-        const { selected, filter, } = this.props
+        const { selected, filter } = this.props
 
-        // if (filter) {
-        console.log('Here u have, your fuckin filter sir', filter)
-        this.updateFeatures(filter)
-        // }
+        this.filterMapLayers(filter)
+        // this.onLayersChange(filter)
 
         // this.updateSelection(selected)
         return (

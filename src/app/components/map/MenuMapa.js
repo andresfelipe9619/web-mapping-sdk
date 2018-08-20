@@ -74,7 +74,7 @@ export default class MenuMapa extends Component {
 
                     </Menu.Item>
 
-                    {/* <Menu.Item
+                    <Menu.Item
                         name='bandas'
                         active={activeItem === 'bandas'}
                         onClick={this.handleItemClick}
@@ -85,7 +85,7 @@ export default class MenuMapa extends Component {
                                 Bandas
                             </Header.Content>
                         </Header>
-                
+                        
                     </Menu.Item>
 
                     <Menu.Item
@@ -114,7 +114,7 @@ export default class MenuMapa extends Component {
                             </Header.Content>
                         </Header>
                 
-                    </Menu.Item> */}
+                    </Menu.Item>
                 </Menu>
             </div>
         );

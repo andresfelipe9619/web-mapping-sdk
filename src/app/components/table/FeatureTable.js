@@ -7,11 +7,11 @@ class FeatureTable extends Component {
 
     loadTableData(data) {
         let tableData = {
-            columns:[],
-            accessors:[],
-            mData:[]
+            columns: [],
+            accessors: [],
+            mData: []
         }
-        let {component} = this.props;
+        let { component } = this.props;
 
 
         for (var element of data) {
@@ -49,33 +49,35 @@ class FeatureTable extends Component {
 
         let { data, callbacks } = this.props;
 
-        let {columns, mData} = this.loadTableData(data)
+        if (data) {
+            let { columns, mData } = this.loadTableData(data)
+            
+            if (mData.length) {
 
-        if (mData.length) {
+                if (callbacks) {
+                    return (
+                        <div>
+                            <Segment>
+                                <ReactCollapsingTable theme={{ width: "60px" }} rows={mData} columns={columns} callbacks={callbacks} showSearch showPagination rowSize={10} />
+                            </Segment>
+                        </div>
+                    )
+                }
 
-            if (callbacks) {
                 return (
                     <div>
                         <Segment>
-                            <ReactCollapsingTable theme={{ width: "60px" }} rows={mData} columns={columns} callbacks={callbacks} showSearch showPagination rowSize={10} />
+                            <ReactCollapsingTable rows={mData} columns={columns} showSearch showPagination rowSize={10} />
                         </Segment>
                     </div>
                 )
-            }
-
-            return (
-                <div>
+            } else {
+                return (
                     <Segment>
-                        <ReactCollapsingTable rows={mData} columns={columns} showSearch showPagination rowSize={10} />
-                    </Segment>
-                </div>
-            )
-        } else {
-            return (
-                <Segment>
-                    <h2>No hay datos para mostrar</h2>
-                </Segment>)
-        }
+                        <h2>No hay datos para mostrar</h2>
+                    </Segment>)
+            }
+        }else return null
     }
 }
 

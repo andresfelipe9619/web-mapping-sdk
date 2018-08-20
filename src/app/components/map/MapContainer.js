@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import Map from './Map'
-import { updateLayersFeatures, selectLayer } from '../../actions/mapActions';
+import { updateMapFeatures, selectLayer } from '../../actions/mapActions';
 
 // Map Redux state to component props
 const mapStateToProps = (state) => {
@@ -15,7 +15,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onSelectClick: selected => dispatch(selectLayer(selected)),
-    onLayersChange: (layers) => dispatch(updateLayersFeatures(layers))
+    updateMapFeatures: (filter) => dispatch(updateMapFeatures(filter))
   }
 }
 
