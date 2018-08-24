@@ -90,10 +90,12 @@ export function loadLayers(layers) {
             dispatch(loadLayersRequest(null));
             let mLayers = []
             for (let layer of root) {
-                // if (layers.indexOf(layer.Title) > 0) {
-                //     delete layer.CRS
-                mLayers.push(layer)
-                // }
+                for(let i in layers){
+                    if(layer.Title === layers[i]){
+                        mLayers.push(layer)
+                    }
+                }
+
             }
 
             return mLayers

@@ -41,7 +41,7 @@ class OpenMap extends Component {
             'procrudo',
             'profinal',
             'mallas',
-            
+
         ]
         this.props.loadLayersRequest(baseLayers)
     }
@@ -78,9 +78,10 @@ class OpenMap extends Component {
                                 <Grid.Row>
                                     <Grid.Column>
                                         {this.props.currentUser ? <Menu /> : null}
-                                       
+
                                     </Grid.Column>
                                 </Grid.Row>
+
                                 <Grid.Row>
                                     <Grid.Column>
                                         {(clients && products) ?
@@ -92,44 +93,39 @@ class OpenMap extends Component {
                                 </Grid.Row>
                             </Grid.Column>
                             <Grid.Column width={12} style={fondo}>
-
-                                    
-                                    {this.props.currentUser ?
-                                         (
+                                {this.props.currentUser ?
+                                    (
                                         <Switch> <Route exact path={match.url + "/clasificadoras"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
-                                         <Route exact path={match.url + "/trituradoras"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
-                                         <Route exact path={match.url + "/mallas"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
-                                         <Route path={match.url + "/mallas/fecha"} render={(props) => <MapContainer {...props} key={`fecha${Math.Random}`} layers={[layers[layers.findIndex(x=> x.Title == "mallas")]]}></MapContainer>} />
-                                         <Route path={match.url + "/mallas/origen"} render={(props) => <MapContainer key={`origen${Math.Random}`} {...props} layers={[layers[layers.findIndex(x=> x.Title == "mallasOrigenProductoCliente")], layers[layers.findIndex(x=> x.Title == "cantera")]]}></MapContainer>} />
-                                         </Switch>) : null}
-
-                                    
-
+                                            <Route exact path={match.url + "/trituradoras"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
+                                            <Route exact path={match.url + "/mallas"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
+                                            <Route path={match.url + "/mallas/fecha"} render={(props) => <MapContainer {...props} key={`fecha${Math.Random}`} layers={[layers[layers.findIndex(x => x.Title == "mallas")]]}></MapContainer>} />
+                                            <Route path={match.url + "/mallas/origen"} render={(props) => <MapContainer key={`origen${Math.Random}`} {...props} layers={[layers[layers.findIndex(x => x.Title == "mallasOrigenProductoCliente")], layers[layers.findIndex(x => x.Title == "cantera")]]}></MapContainer>} />
+                                        </Switch>) : null}
                                 <Switch>
                                     <Route exact path={match.url} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
-                                    <Route exact path={match.url + "/sql"}   render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
-                                    <Route path={match.url + "/sql/bandas/"} render={(props) => <MapContainer {...props} key={`bandas${Math.Random}`} layers={[layers[layers.findIndex(x=> x.Title == "bandas")]]} ></MapContainer>} />
-                                    <Route path={match.url + "/sql/cantera/"} render={(props) => <MapContainer {...props} key={`cantera${Math.Random}`} layers={[layers[layers.findIndex(x=> x.Title == "cantera")]]} ></MapContainer>} />
-                                    <Route path={match.url + "/sql/clasificadoras/"} render={(props) => <MapContainer {...props} key={`clasificadoras${Math.Random}`} layers={[layers[layers.findIndex(x=> x.Title == "clasificadoras")]]} ></MapContainer>} />
-                                    <Route path={match.url + "/sql/mallas/"} render={(props) => <MapContainer {...props} key={`mallas${Math.Random}`} layers={[layers[layers.findIndex(x=> x.Title == "mallas")]]} ></MapContainer>} />
-                                    <Route path={match.url + "/sql/procrudo/"} render={(props) => <MapContainer {...props} key={`procrudo${Math.Random}`} layers={[layers[layers.findIndex(x=> x.Title == "prodcrudo")]]} ></MapContainer>} />
-                                    <Route path={match.url + "/sql/profinal/"} render={(props) => <MapContainer {...props} key={`profinal${Math.Random}`} layers={[layers[layers.findIndex(x=> x.Title == "profinal")]]} ></MapContainer>} />
-                                    <Route path={match.url + "/sql/trituradoras/"} render={(props) => <MapContainer {...props} key={`trituradoras${Math.Random}`} layers={[layers[layers.findIndex(x=> x.Title == "trituradoras")]]} ></MapContainer>} />
+                                    <Route exact path={match.url + "/sql"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
+                                    <Route path={match.url + "/sql/bandas/"} render={(props) => <MapContainer {...props} key={`bandas${Math.Random}`} layers={[layers[layers.findIndex(x => x.Title == "bandas")]]} ></MapContainer>} />
+                                    <Route path={match.url + "/sql/cantera/"} render={(props) => <MapContainer {...props} key={`cantera${Math.Random}`} layers={[layers[layers.findIndex(x => x.Title == "cantera")]]} ></MapContainer>} />
+                                    <Route path={match.url + "/sql/clasificadoras/"} render={(props) => <MapContainer {...props} key={`clasificadoras${Math.Random}`} layers={[layers[layers.findIndex(x => x.Title == "clasificadoras")]]} ></MapContainer>} />
+                                    <Route path={match.url + "/sql/mallas/"} render={(props) => <MapContainer {...props} key={`mallas${Math.Random}`} layers={[layers[layers.findIndex(x => x.Title == "mallas")]]} ></MapContainer>} />
+                                    <Route path={match.url + "/sql/procrudo/"} render={(props) => <MapContainer {...props} key={`procrudo${Math.Random}`} layers={[layers[layers.findIndex(x => x.Title == "procrudo")]]} ></MapContainer>} />
+                                    <Route path={match.url + "/sql/profinal/"} render={(props) => <MapContainer {...props} key={`profinal${Math.Random}`} layers={[layers[layers.findIndex(x => x.Title == "profinal")]]} ></MapContainer>} />
+                                    <Route path={match.url + "/sql/trituradoras/"} render={(props) => <MapContainer {...props} key={`trituradoras${Math.Random}`} layers={[layers[layers.findIndex(x => x.Title == "trituradoras")]]} ></MapContainer>} />
                                 </Switch>
                                 {(clients && products) ?
                                     <Route path={match.url + "/mallas"} render={(props) => <MallasProcedence clients={clients} products={products} {...props} />} />
                                     : null}
+                                {(currentMapFeatures) ?
+                                    <Route exact path={match.url + "/sql/:entity"} render={(props) => <FeatureTable {...props} data={currentMapFeatures.features} />} />
+                                    : null}
                             </Grid.Column>
-
                         </Grid.Row>
-                        <Grid.Row centered>
 
+                        <Grid.Row centered>
                             <Switch>
-                                <Route  path={match.url + "/mallas"} component={Mallas} />
-                                {/* <Route exact path={match.url + "/mallas"} component={Mallas} /> */}
+                                <Route exact path={match.url + "/mallas"} component={Mallas} />
                                 <Route exact path={match.url + "/clasificadoras"} component={Clasificadoras} />
                                 <Route exact path={match.url + "/trituradoras"} component={Trituradoras} />
-                                <Route exact path={match.url + "/sql/:entity"} render={(props)=> <FeatureTable {...props} data={currentMapFeatures} />} />
                             </Switch>
                         </Grid.Row>
                     </Grid>
@@ -142,6 +138,7 @@ class OpenMap extends Component {
 const mapStateToProps = state => {
     return {
         currentUser: state.authReducer.loginSuccess,
+        currentMapFeatures: state.mapReducer.currentMapFeaturesSuccess,
 
         clients: state.userReducer.fetchUsersSuccess,
         clientsHasErrored: state.userReducer.fetchUsersFailure,
@@ -163,7 +160,6 @@ const mapStateToProps = state => {
         layersHasErrored: state.mapReducer.loadLayersError,
         layersIsLoading: state.mapReducer.loadLayersRequest,
 
-        currentMapFeatures: state.mapReducer.updateFeaturesMapSuccess,
 
     }
 }

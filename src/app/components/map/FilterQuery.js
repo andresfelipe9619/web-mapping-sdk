@@ -107,7 +107,7 @@ class FilterQuery extends Component {
             }
 
             for(let feature of this.props.layersFeaturesSuccess){
-                console.log(feature)
+                // console.log(feature)
                 if(this.state.query.layer){
                     if(feature.features[0].id.includes(this.state.query.layer)){
                         

@@ -1,29 +1,21 @@
 
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-
-import WFS from 'ol/format/wfs';
-import Map from 'ol/map';
-import { Dropdown, Button, Segment, Dimmer, Form, Grid, Loader } from 'semantic-ui-react';
-
-import Zoom from 'ol/control/zoom';
-import Scale from 'ol/control/scaleline';
 import MousePosition from 'ol/control/mouseposition';
+import Scale from 'ol/control/scaleline';
+import Zoom from 'ol/control/zoom';
 import Coordinate from 'ol/coordinate';
-import Control from 'ol/control';
-import View from 'ol/view';
 import TileLayer from 'ol/layer/tile';
-import LayerGroup from 'ol/layer/group';
-import TileWMS from 'ol/source/tilewms';
-import BingMaps from 'ol/source/bingmaps.js';
-
-import OSM from 'ol/source/osm.js';
-import Projection from 'ol/proj/projection';
+import Map from 'ol/map';
 import Overlay from 'ol/overlay';
-import Style from 'ol/style/style';
-import Stroke from 'ol/style/stroke';
-import LayerSwitcher from "./LayerSwitcher"
-import SelectInteraction from 'ol/interaction/select';
+import Projection from 'ol/proj/projection';
+import TileWMS from 'ol/source/tilewms';
+import View from 'ol/view';
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import { Grid, Segment } from 'semantic-ui-react';
+import LayerSwitcher from "./LayerSwitcher";
+
+
+
 // import "ol/css/ol.css"
 
 class MapComponent extends Component {
@@ -74,18 +66,30 @@ class MapComponent extends Component {
     clickHandler(event) {
         const viewResolution = this.mMap.getView().getResolution();
         const viewProjection = this.mMap.getView().getProjection();
-        const { onSelectClick } = this.props
+        const { layers } = this.props
         var coordinate = event.coordinate;
 
         var url = ""
         let content = this.popupContent
         let popup = this.popup
+        let queryLayers = ''
+
+        if(layers){
+            layers.forEach(function(lyr,i){
+                queryLayers += `cahibi1:${lyr.Title}${(i<layers.length-1)?',' :''}`
+            })
+            console.log(queryLayers)
+        }
         this.mMap.getLayers().forEach(function (lyr) {
             if (lyr.getSource()["getGetFeatureInfoUrl"] !== undefined) {
 
                 url = lyr.getSource().getGetFeatureInfoUrl(
                     coordinate, viewResolution, viewProjection,
-                    { 'INFO_FORMAT': 'text/html' });
+                    { 
+                        'INFO_FORMAT': 'text/html' ,
+                        'QUERY_LAYERS':queryLayers,
+                        'LAYERS':  queryLayers
+                    });
                 console.log('url', url)
                 if (url) {
                     popup.setPosition(coordinate);
@@ -96,19 +100,6 @@ class MapComponent extends Component {
         })
     }
 
-    getCurrentFeatures() {
-        if (this.mMap) {
-            if (this.mLayers.length) {
-                return this.mLayer.map(layer => {
-                    let source = layer.getSource()
-                    if (source) {
-                        return source.getFeatures()
-                    }
-                })
-            }
-        }
-        return null
-    }
 
     filterMapLayers(filter) {
 
@@ -333,16 +324,22 @@ class MapComponent extends Component {
         // this.updateSelection(selected)
         return (
             <Segment>
-
-                <section className="panel-map">
-                    <div ref='map' className="map" ></div>
-                    <div ref="popup" className="ol-popup">
-                        <a href="#" ref="popup-closer" className="ol-popup-closer"></a>
-                        <div ref="popup-content"></div>
-                        <div ref="info">&nbsp;</div>
-                    </div>
-                    <div ref="information">&nbsp;</div>
-                </section>
+                <Grid.Row>
+                    <Grid.Column width={10}>
+                        <section className="panel-map">
+                            <div ref='map' className="map" ></div>
+                            <div ref="popup" className="ol-popup">
+                                <a href="#" ref="popup-closer" className="ol-popup-closer"></a>
+                                <div ref="popup-content"></div>
+                                <div ref="info">&nbsp;</div>
+                            </div>
+                            <div ref="information">&nbsp;</div>
+                        </section>
+                    </Grid.Column>
+                    <Grid.Column width={3}>
+                        <LayerSwitcher></LayerSwitcher>
+                    </Grid.Column>
+                </Grid.Row>
             </Segment>
 
         );
