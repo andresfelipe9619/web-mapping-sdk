@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux';
 import FeatureTable from './../../table/FeatureTable';
-import { Grid, Header, Segment, Dimmer, Loader, Icon , Button } from "semantic-ui-react";
+import { Segment, Icon , Button } from "semantic-ui-react";
 
 class Clasificadoras extends Component {
   constructor(props) {

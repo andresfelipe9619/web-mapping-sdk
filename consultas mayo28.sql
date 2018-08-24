@@ -1,5 +1,13 @@
 ﻿-- CONSULTAS
 
+select d.idcli,d.idpc,d.calificaci,d.fechades, m.gid, c.fid, m.geom from mallas2 m, despachos d,cantera c
+where m.fechae<=(d.fechades - interval '1 month')  and
+ST_intersects(m.geom,c.geom) and c.fid = 0 
+and d.idcli='1' and d.idpc='g34'
+and d.calificaci = 'bueno';
+
+
+
 1 --los despachos a el cliente 52 del producto asfa
 
 SELECT D.iddes, D.cliente, D.idpc, PC.nombre, D.cantidadpc 

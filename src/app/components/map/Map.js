@@ -269,7 +269,25 @@ class MapComponent extends Component {
             pixelRatio: 1,
             view: mView,
             overlays: [this.popup],
-            layers: [new TileLayer({
+            layers: [
+            new TileLayer({
+                id: 'OSM_DE',
+                type: 'base',
+                // extent: extent,
+                source: new TileWMS({
+                    // projection:"EPSG:3115",
+                    url: 'http://localhost:8080/geoserver/cahibi1/wms',
+                    params: {
+                        'FORMAT': "image/png",
+                        'LAYERS': `cahibi1:OSM_DE`,
+                        tiled: true,
+                    },
+                    serverType: 'geoserver',
+                    transparent: true
+                })
+
+            }),
+            new TileLayer({
                 id: 'mapa_base',
                 type: 'base',
                 // extent: extent,
@@ -284,8 +302,7 @@ class MapComponent extends Component {
                     serverType: 'geoserver',
                     transparent: true
                 })
-                //     })
-                // ]
+
             })]
         });
 
@@ -306,7 +323,7 @@ class MapComponent extends Component {
             console.log('layers', layers)
             if (filter) {
                 this.filterMapLayers(filter)
-                this.onLayersChange(filter)
+                // this.onLayersChange(filter)
             } else {
                 this.filterMapLayers(null)
             }
@@ -337,7 +354,7 @@ class MapComponent extends Component {
                         </section>
                     </Grid.Column>
                     <Grid.Column width={3}>
-                        <LayerSwitcher></LayerSwitcher>
+                        {/* <LayerSwitcher></LayerSwitcher> */}
                     </Grid.Column>
                 </Grid.Row>
             </Segment>

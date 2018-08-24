@@ -14,7 +14,7 @@ const mapStateToProps = (state) => {
 // Map Redux actions to component props
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSelectClick: selected => dispatch(selectLayer(selected)),
+    onSelectClick: (selected) => dispatch(selectLayer(selected)),
     updateMapFeatures: (filter) => dispatch(updateMapFeatures(filter))
   }
 }

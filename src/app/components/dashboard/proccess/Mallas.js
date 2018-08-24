@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
-import DataTable from '../DataTable'
-import { connect } from 'react-redux';
-import SortableTbl from 'react-sort-search-table';
-import { Grid, Header, Segment, Dimmer, Loader, Button } from "semantic-ui-react";
+import { Segment, Icon , Button } from "semantic-ui-react";
 import FeatureTable from '../../table/FeatureTable'
-import { fetchProducts } from '../../../actions/productActions';
 
 class Mallas extends Component {
   constructor(props) {

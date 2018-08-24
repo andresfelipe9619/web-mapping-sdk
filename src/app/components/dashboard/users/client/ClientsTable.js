@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Checkbox, Button, Icon, Header, Segment, Dimmer, Grid, Loader, Modal, Form } from 'semantic-ui-react';
+import { Segment, Dimmer, Grid, Loader } from 'semantic-ui-react';
 import { connect } from 'react-redux'
 import { fetchClients } from '../../../../actions/userActions';
 import { fetchProducts } from '../../../../actions/productActions';
@@ -27,9 +27,7 @@ class ClientsTable extends Component {
         if (this.props.clientsHasErrored) {
             return <h1>Error</h1>;
         }
-        // else if (this.state.path) {
-        //     return <Redirect to={this.state.path}></Redirect>
-        // }
+
         else if (this.props.clientsIsLoading) {
             return (
                 <Segment

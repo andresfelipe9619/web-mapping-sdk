@@ -4,7 +4,6 @@ export default class LayerSwitcher extends Component {
     render() {
         return (
             <div id="layertree">
-                <h5>Click on layer nodes below to change their properties.</h5>
                 <ul>
                     <li><span>OSM layer</span>
                         <fieldset id="layer0">

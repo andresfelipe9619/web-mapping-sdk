@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ReactCollapsingTable from 'react-collapsing-table'
-import { Segment } from "semantic-ui-react";
+import { Segment, Icon , Button } from "semantic-ui-react";
 
 class FeatureTable extends Component {
 
