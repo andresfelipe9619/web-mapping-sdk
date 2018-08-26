@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Dropdown, Button, Segment, Dimmer, Form, Grid, Loader } from 'semantic-ui-react';
-import { filterLayers, loadLayers, loadLayersFeatures, clearFilterLayers } from '../../actions/mapActions';
+import { filterLayers, loadLayers, loadLayersFeatures, clearFilterLayers, updateMapFilter } from '../../actions/mapActions';
 import { connect } from 'react-redux'
 
 const baseLayers =  [
@@ -176,7 +176,7 @@ class FilterQuery extends Component {
 const mapDispatchToProps = (dispatch) => {
     return {
         updateFilter: (filter) => {
-            dispatch(filterLayers(filter))
+            dispatch(updateMapFilter(filter))
         },
         getLayersFeatures(layers) {
             dispatch(loadLayersFeatures(layers))

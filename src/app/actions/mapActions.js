@@ -42,6 +42,13 @@ function fetchLayersFeaturesError(error) {
 
 }
 
+export function updateMapFilter(filter){
+    return dispatch=>{
+        dispatch(filterLayers(filter))
+        dispatch(updateMapFeatures(filter))
+    }
+}
+
 export function filterLayers(filter) {
     return { type: FILTER_LAYERS, filter };
 }

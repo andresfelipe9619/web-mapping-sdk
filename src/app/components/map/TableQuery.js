@@ -17,9 +17,11 @@ class TableQuery extends Component {
   }
 
   componentDidMount() {
-    if (this.props.filter) {
-      this.props.updateMapFeatures(this.props.filter)
-    }
+    console.log('QUERY PROPS', this.props)
+
+    // if (this.props.filter) {
+    //   this.props.updateMapFeatures(this.props.filter)
+    // }
   }
 
   render() {
@@ -55,18 +57,21 @@ class TableQuery extends Component {
       return <h1>Error</h1>;
 
     } else if (currentMapFeatures) {
-
+      {
+        console.log('QUERY PROPS', this.props)
+        console.log(match.url + "/mallas/")
+      }
       return (
         <div>
           <Switch>
-            <Route exact path={match.url + "/mallas"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
-            <Route exact path={match.url + "/bandas"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
-            <Route exact path={match.url + "/cantera"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
-            <Route exact path={match.url + "/clasificadora"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
-            <Route exact path={match.url + "/trituradora"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
-            <Route exact path={match.url + "/procrudo"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
-            <Route exact path={match.url + "/profinal"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
-            <Route exact path={match.url + "/origen"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
+            <Route exact path={match.url} render={()=><FeatureTable data={currentMapFeatures.features} />} />
+            {/* <Route exact path={match.url + "/bandas/"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
+            <Route exact path={match.url + "/cantera/"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
+            <Route exact path={match.url + "/clasificadora/"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
+            <Route exact path={match.url + "/trituradora/"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
+            <Route exact path={match.url + "/procrudo/"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
+            <Route exact path={match.url + "/profinal/"} render={()=><FeatureTable data={currentMapFeatures.features} />} />
+            <Route exact path={match.url + "/origen/"} render={()=><FeatureTable data={currentMapFeatures.features} />} /> */}
           </Switch>
           {/* <FeatureTable data={currentMapFeatures.features} component={ActionsComponent} callbacks={callbacks}></FeatureTable> */}
         </div>

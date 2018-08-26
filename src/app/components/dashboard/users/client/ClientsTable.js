@@ -69,7 +69,6 @@ class ClientsTable extends Component {
                                     <Route exact path={`${match.url}/:clientid/despachos/:despachoid/productos/:productid/mallas`} component={MallasProductoDespachos} />//Todas las mallas de procedencua del producto x del despacho x 
                                 </Switch>
                             </Grid.Column>
-
                         </Grid.Row>
                     </Grid>
                 </div>

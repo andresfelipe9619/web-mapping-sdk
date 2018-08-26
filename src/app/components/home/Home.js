@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Dimmer, Loader, Segment, Container, Grid, Header, Button } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import { loadHome } from '../../actions/homeActions';
-import {Route, Link} from 'react-router-dom';
-
-
+import { Route, Link } from 'react-router-dom';
+import clasificadora from './clasificadora.jpg'
+import transporte from './transporte.jpg'
 
 class Home extends Component {
 
@@ -39,30 +39,68 @@ class Home extends Component {
 
                         }}>
                         <Grid.Row centered >
-                            <Grid.Column width={8} >
+                            <Grid.Column centered={true} width={12} >
                                 <Header as='h1' textAlign="center">
-                                    SIG Minero
+                                    SIG Para Cantera De Agregados
                                     </Header>
-                                <Segment textAlign="center">
-                                <p>Este es un aplicativo SIG desarrollado con el fin  de suministrar información geográfica de forma dinámica sobre el proceso productivo de la mina Cachibi</p>
-                                <Button primary as={Link} to="/ingreso">Ingreso</Button> <Button secondary as = {Link}
-                                            to = "/registro" style = {{marginLeft: '0.5em'}} > Registrarse </Button>
-                                </Segment>
+                                <Header as='h3' textAlign="center">
+                                    Este es un proyecto enfocado en Desarrollar e implementar un ambiente web que integre y relacione la información espacial y alfanumérica referente a la cadena productiva de la planta de agregados y mezclas Cachibi</Header>
+                                <Button primary as={Link} to="/ingreso">Ingreso</Button>
+                                <Button secondary as={Link} to="/registro" style={{ marginLeft: '0.5em' }} > Registrarse </Button>
                             </Grid.Column>
 
                         </Grid.Row >
                         <Grid.Row centered>
-                            <Grid.Column width={8} textAlign="center">
-                                <p>Este sistema permite establecer una zonificación y Preclasificación de la cantera con las principales propiedades de la roca y su litología, y efectuar un grado de trazabilidad efectivo del proceso de conversión de la materia prima a producto final en las manos del cliente
-</p>
+                            <Grid.Column width={8} textAlign="center" style={{ backgroundImage: `url("${clasificadora}")` }}>
+                            </Grid.Column>
+                            <Grid.Column width={8} textAlign="center" style={{ backgroundImage: `url("${transporte}")` }}>
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row centered>
                             <Grid.Column width={8} textAlign="center">
+                                <Header as='h3' textAlign="center">
+                                    Diseñado por:<br />
+                                    Wildeman Alonso Alomia <br />
+                                    Ruben Dario Cuervo
+                                </Header>
+                            </Grid.Column>
+                            <Grid.Column width={8} textAlign="center">
+                                <Header as='h3' textAlign="center">
+                                    Dirigido por:<br />
+                                    Ingeniero Eduardo Peña <br />
+                                </Header>
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row centered>
+                            <Header as='h1' textAlign="center">
+                                Cantera de Agregados Y Mezclas Cachibi
+                            </Header>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column width={8} textAlign="center">
+                                <Header as='h3' textAlign="center">
+                                    Este desarrollo se logro a partir del Establecimiento de la zonificación y Preclasificación de la cantera con las principales propiedades de la roca y su litología, Desarrollando este  SIG para que responda a los principales requerimientos del proceso productivo de la planta; así como también, con la Creación de este aplicativo se pudo efectuar un grado de trazabilidad efectivo del proceso de conversión de la materia prima a producto final el cual es llevado a las manos del cliente.
+                                </Header>
+
+                            </Grid.Column>
+                            <Grid.Column width={8} textAlign="center">
+                                <Header as='h4' textAlign="center">
+                                    En este proyecto se analizaron los procesos y mecanismos utilizados para la explotación de materiales a cielo abierto, enfocados en la cantera de Agregados Cachibí ubicada en el municipio de Yumbo, se desarrollo este sistema de información geográfica que permitió mejorar la productividad general de todo el proceso de los productos, analizando su distribución y tecnología.
+                                </Header>
+                            </Grid.Column>
+                        </Grid.Row>
+                        <br /><br />
+                        <Grid.Row>
+                            <Grid.Column width={8} textAlign="center">
                                 <Header as='h2' textAlign="center">
-                                    Desarrolladores
-                                    </Header>
-                                <p>Alonso Alomia - Ruben Cuervo</p>
+                                    Ingenieria Topografica<br />Facultad de Ingenieria Civil y Geommatica
+                            </Header>
+                                <br /><br />
+                            </Grid.Column>
+                            <Grid.Column width={8} textAlign="center">
+                                <Header as='h2' textAlign="center">
+                                    Universidad del Valle<br />Proyecto de Grado
+                            </Header>
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>

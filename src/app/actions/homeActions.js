@@ -17,7 +17,7 @@ export function loadHome() {
     return (dispatch) => {
         dispatch(homePageLoading(true));
 
-        fetch('https://jsonplaceholder.typicode.com/posts/1').then((response) => {
+        fetch('http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:bandas&maxFeatures=50&outputFormat=application%2Fjson').then((response) => {
             if (!response.ok) {
                 throw Error(response.statusText);
             }

@@ -119,7 +119,7 @@ class OpenMap extends Component {
                                     <Route path={match.url + "/mallas"} render={(props) => <MallasProcedence clients={clients} products={products} {...props} />} />
                                     : null}
                                 <Switch>
-                                    <Route path={match.url + "/sql"} component={TableQuery} />
+                                    <Route exact path={match.url + "/sql/:entity"} component={TableQuery} />
                                     <Route path={match.url + "/mallas/"} component={TableQuery} />
                                     <Route exact path={match.url + "/mallas"} component={Mallas} />
                                     <Route exact path={match.url + "/clasificadoras"} component={Clasificadoras} />
