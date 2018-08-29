@@ -29,6 +29,7 @@ import {
     Button
 } from "semantic-ui-react";
 import TableQuery from './TableQuery';
+import BandasRuta from './BandasRuta';
 
 class OpenMap extends Component {
 
@@ -45,7 +46,7 @@ class OpenMap extends Component {
             'procrudo',
             'profinal',
             'mallas',
-
+            'recorridoAProducto'
         ]
         this.props.loadLayersRequest(baseLayers)
     }
@@ -90,6 +91,7 @@ class OpenMap extends Component {
                                             (<Switch>
                                                 <Route path={match.url + "/sql"} render={(props) => <FilterQuery {...props} layers={layers} />} />
                                                 <Route path={match.url + "/mallas"} component={MallasDate} />
+                                                <Route path={match.url + "/bandas"} component={BandasRuta} />
                                             </Switch>) : null}
                                     </Grid.Column>
                                 </Grid.Row>
@@ -98,7 +100,11 @@ class OpenMap extends Component {
                             <Grid.Column width={13} style={fondo}>
                                 {this.props.currentUser ?
                                     (
-                                        <Switch> 
+                                        <Switch>
+                                            <Route path={match.url + "/bandas/ruta"} render={(props) => <MapContainer {...props} key={`ruta${Math.Random}`}
+                                                layers={[layers[layers.findIndex(x => x.Title == "recorridoAProducto")], layers[layers.findIndex(x => x.Title == "procrudo")], layers[layers.findIndex(x => x.Title == "clasificadoras")],
+                                                layers[layers.findIndex(x => x.Title == "bandas")], layers[layers.findIndex(x => x.Title == "trituradoras")]]}></MapContainer>} />
+
                                             <Route exact path={match.url + "/clasificadoras"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
                                             <Route exact path={match.url + "/profinal"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
                                             <Route exact path={match.url + "/bandas"} render={(props) => <MapContainer {...props} layers={layers}></MapContainer>} />
@@ -130,6 +136,7 @@ class OpenMap extends Component {
                                     <Route exact path={match.url + "/mallas/fecha/"} component={TableQuery} />
                                     <Route exact path={match.url + "/mallas"} component={Mallas} />
                                     <Route exact path={match.url + "/bandas"} component={Bandas} />
+                                    <Route exact path={match.url + "/bandas/ruta"} component={TableQuery} />
                                     <Route exact path={match.url + "/clasificadoras"} component={Clasificadoras} />
                                     <Route exact path={match.url + "/trituradoras"} component={Trituradoras} />
                                     <Route exact path={match.url + "/procrudo"} component={Procrudo} />

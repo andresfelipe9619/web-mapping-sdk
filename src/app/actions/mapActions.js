@@ -121,6 +121,9 @@ export function updateMapFeatures(filter) {
         }else if(filter.desde){
             filterString = `fechae>${filter.desde} and fechae<${filter.hasta} and idzona=${filter.zona}`
             url = `http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:mallas&maxFeatures=100&outputFormat=application%2Fjson&CQL_FILTER=${filterString}`;
+        }else if(filter.llegada){
+            filterString = `llegada:${filter.llegada};partida:8`
+            url = `http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:recorridoAProducto&maxFeatures=100&outputFormat=application%2Fjson&VIEWPARAMS=${filterString}`;
         }else{
             filterString = `${filter.atributos}${filter.comparacion}${filter.valor}`
             url = `http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:${filter.layer}&maxFeatures=150&outputFormat=application%2Fjson&CQL_FILTER=${filterString}`;

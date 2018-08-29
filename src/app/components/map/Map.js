@@ -74,9 +74,9 @@ class MapComponent extends Component {
         let popup = this.popup
         let queryLayers = ''
 
-        if(layers){
-            layers.forEach(function(lyr,i){
-                queryLayers += `cahibi1:${lyr.Title}${(i<layers.length-1)?',' :''}`
+        if (layers) {
+            layers.forEach(function (lyr, i) {
+                queryLayers += `cahibi1:${lyr.Title}${(i < layers.length - 1) ? ',' : ''}`
             })
             console.log(queryLayers)
         }
@@ -85,10 +85,10 @@ class MapComponent extends Component {
 
                 url = lyr.getSource().getGetFeatureInfoUrl(
                     coordinate, viewResolution, viewProjection,
-                    { 
-                        'INFO_FORMAT': 'text/html' ,
-                        'QUERY_LAYERS':queryLayers,
-                        'LAYERS':  queryLayers
+                    {
+                        'INFO_FORMAT': 'text/html',
+                        'QUERY_LAYERS': queryLayers,
+                        'LAYERS': queryLayers
                     });
                 console.log('url', url)
                 if (url) {
@@ -157,22 +157,21 @@ class MapComponent extends Component {
                 console.log('view', viewString)
                 filterParams["VIEWPARAMS"] = viewString;
 
-                let filterString = null;
-                // if (filter.calidad && filter.zona) {
+                if (this.mMap) {
 
-                //     if (filter.calidad == 'todos' && filter.zona == 'todos') {
-                //         filterString = null
-                //     } else if (filter.calidad == 'todos' && filter.zona) {
-                //         filterString = `idzona=${filter.zona}`
-                //         filterParams["CQL_FILTER"] = filterString;
-                //     } else if (filter.zona == 'todos' && filter.calidad) {
-                //         filterString = `calificaci=${filter.calidad}`
-                //         filterParams["CQL_FILTER"] = filterString;
-                //     } else {
-                //         filterString = `idzona=${filter.zona} and calificaci=${filter.calidad}`
-                //         filterParams["CQL_FILTER"] = filterString;
-                //     }
-
+                    this.mMap.getLayers().forEach(function (lyr) {
+                        // var extent = lyr.getSource().getExtent();
+                        if (lyr.getSource()["updateParams"] !== undefined) {
+                            lyr.getSource().updateParams(filterParams);
+                            console.log('layer', lyr.getSource)
+                        }
+                        // this.mMap.getView().fit(extent, this.mMap.getSize());
+                    });
+                }
+            } else if (filter.llegada) {
+                let viewString = `llegada:${filter.llegada};partida:8`
+                console.log('view', viewString)
+                filterParams["VIEWPARAMS"] = viewString;
                 if (this.mMap) {
 
                     this.mMap.getLayers().forEach(function (lyr) {
@@ -205,7 +204,7 @@ class MapComponent extends Component {
         if (layer && map) {
             if (layer.Title === 'clasificadoras' || layer.Title === 'cantera' || layer.Title === 'bandas'
                 || layer.Title === 'trituradoras' || layer.Title === 'procrudo' || layer.Title === 'profinal'
-                || layer.Title === 'mallas' || layer.Title === 'mallasOrigenProductoCliente') {
+                || layer.Title === 'mallas' || layer.Title === 'mallasOrigenProductoCliente' || layer.Title === 'recorridoAProducto') {
 
                 let superlayer =
                     new TileLayer({
@@ -265,40 +264,40 @@ class MapComponent extends Component {
             view: mView,
             overlays: [this.popup],
             layers: [
-            new TileLayer({
-                id: 'OSM_DE',
-                type: 'base',
-                // extent: extent,
-                source: new TileWMS({
-                    // projection:"EPSG:3115",
-                    url: 'http://localhost:8080/geoserver/cahibi1/wms',
-                    params: {
-                        'FORMAT': "image/png",
-                        'LAYERS': `cahibi1:OSM_DE`,
-                        tiled: true,
-                    },
-                    serverType: 'geoserver',
-                    transparent: true
-                })
+                new TileLayer({
+                    id: 'OSM_DE',
+                    type: 'base',
+                    // extent: extent,
+                    source: new TileWMS({
+                        // projection:"EPSG:3115",
+                        url: 'http://localhost:8080/geoserver/cahibi1/wms',
+                        params: {
+                            'FORMAT': "image/png",
+                            'LAYERS': `cahibi1:OSM_DE`,
+                            tiled: true,
+                        },
+                        serverType: 'geoserver',
+                        transparent: true
+                    })
 
-            }),
-            new TileLayer({
-                id: 'mapa_base',
-                type: 'base',
-                // extent: extent,
-                source: new TileWMS({
-                    // projection:"EPSG:3115",
-                    url: 'http://localhost:8080/geoserver/cahibi1/wms',
-                    params: {
-                        'FORMAT': "image/png",
-                        'LAYERS': `cahibi1:mapa_base`,
-                        tiled: true,
-                    },
-                    serverType: 'geoserver',
-                    transparent: true
-                })
+                }),
+                new TileLayer({
+                    id: 'mapa_base',
+                    type: 'base',
+                    // extent: extent,
+                    source: new TileWMS({
+                        // projection:"EPSG:3115",
+                        url: 'http://localhost:8080/geoserver/cahibi1/wms',
+                        params: {
+                            'FORMAT': "image/png",
+                            'LAYERS': `cahibi1:mapa_base`,
+                            tiled: true,
+                        },
+                        serverType: 'geoserver',
+                        transparent: true
+                    })
 
-            })]
+                })]
         });
 
         let mPopup = this.popup
@@ -312,7 +311,7 @@ class MapComponent extends Component {
 
         if (layers) {
             console.log('layers', layers)
-            layers.push(layers.splice(layers.findIndex(x=>x.Title == 'cantera'), 1)[0]);
+            layers.push(layers.splice(layers.findIndex(x => x.Title == 'cantera'), 1)[0]);
             layers.map((layer) => {
                 this.addLayerToMap(layer, this.mMap)
             })
