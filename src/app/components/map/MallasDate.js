@@ -5,7 +5,7 @@ import {
     Button, Dropdown
 } from "semantic-ui-react";
 import { connect } from 'react-redux'
-import { filterLayers, clearFilterLayers } from '../../actions/mapActions';
+import { updateMapFilter, clearFilterLayers } from '../../actions/mapActions';
 
 class MallasDate extends Component {
     constructor(props) {
@@ -65,20 +65,21 @@ class MallasDate extends Component {
 
                     <Grid.Row>
                         <Grid.Column width={4}>
-                            Hasta
+                            Hasta <br/>
                         <input type="date" onChange={this.handleChangeHasta} />
                         </Grid.Column>
                     </Grid.Row>
                     <br />
                     <Dropdown
                         placeholder="Zona"
+                        compact
                         selection
                         options={zonaOptions}
                         onChange={this.handleChangeZona}
                     />
-                    <Grid.Column width={4}>
-                        <Button style={{ marginTop: '20px' }} onClick={this.handleSubmit} primary >Consultar</Button>
-                        <Button style={{ marginTop: '20px' }} onClick={this.props.clearFilter} primary >Reiniciar</Button>
+                    <Grid.Column width={8}>
+                        <Button style={{ marginTop: '20px', marginLeft: '-10px'}} size='mini' onClick={this.handleSubmit} primary >Consultar</Button>
+                        <Button style={{ marginTop: '20px'}} size='mini' onClick={this.props.clearFilter} primary >Reiniciar</Button>
                     </Grid.Column>
                 </Segment>
             </div>
@@ -89,7 +90,7 @@ class MallasDate extends Component {
 const mapDispatchToProps = dispatch => {
     return {
         updateFilter: (filter) => {
-            dispatch(filterLayers(filter))
+            dispatch(updateMapFilter(filter))
         },
         clearFilter: (filter) => {
             dispatch(clearFilterLayers(filter))

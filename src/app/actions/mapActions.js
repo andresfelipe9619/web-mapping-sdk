@@ -113,8 +113,18 @@ export function loadLayers(layers) {
 export function updateMapFeatures(filter) {
     return (dispatch) => {
         dispatch(updateMapFeaturesRequest(filter));
-        let filterString = `${filter.atributos}${filter.comparacion}${filter.valor}`
-        const url = `http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:${filter.layer}&maxFeatures=50&outputFormat=application%2Fjson&CQL_FILTER=${filterString}`;
+        let url = ''
+        let filterString = ''
+        if(filter.calidad){
+            filterString = `cliente:${filter.client};producto:${filter.product};calificacion:${filter.calidad};zona:${filter.zona}`
+            url = `http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:mallasOrigenProductoCliente&maxFeatures=50&outputFormat=application%2Fjson&VIEWPARAMS=${filterString}`;
+        }else if(filter.desde){
+            filterString = `fechae>${filter.desde} and fechae<${filter.hasta} and idzona=${filter.zona}`
+            url = `http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:mallas&maxFeatures=100&outputFormat=application%2Fjson&CQL_FILTER=${filterString}`;
+        }else{
+            filterString = `${filter.atributos}${filter.comparacion}${filter.valor}`
+            url = `http://localhost:8080/geoserver/cahibi1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cahibi1:${filter.layer}&maxFeatures=150&outputFormat=application%2Fjson&CQL_FILTER=${filterString}`;
+        }
         fetch(url).then(
             response => response.json(),
             error => console.error('An error occured.', error)

@@ -6,7 +6,7 @@ import {
     Segment,
     Button, Dropdown
 } from "semantic-ui-react";
-import { filterLayers, clearFilterLayers } from '../../actions/mapActions';
+import { updateMapFilter, clearFilterLayers } from '../../actions/mapActions';
 
 class MallasProcedence extends Component {
 
@@ -21,11 +21,7 @@ class MallasProcedence extends Component {
                 zona: null,
             }
         }
-        // this.handleSubmit = this.handleSubmit.bind(this);
-        // this.handleChangeClient = this.handleChangeClient.bind(this);
-        // this.handleChangeZona = this.handleChangeZona.bind(this);
-        // this.handleChangeCalidad = this.handleChangeCalidad.bind(this);
-        // this.handleChangeProduct = this.handleChangeProduct.bind(this);
+
     }
 
     handleSubmit = (e) => {
@@ -58,26 +54,26 @@ class MallasProcedence extends Component {
     evaluateQuery(query) {
         let path = false;
 
-        if (query.client && query.product && query.zona && query.calidad) {
+        if (query.client && query.product && query.zona>=0 && query.calidad) {
             path = `/mapa/mallas/origen/`
             return path
 
         }
     }
     render() {
-        var options = [{ value: 'todos', key: 'todos', text: 'Todos' }];
+        var options = [{ value: '%', key: 'todos', text: 'Todos' }];
         let calidadOptions = [
             ...options,
-            { key: 'bueno', value: "'bueno'", text: 'Bueno' },
-            { key: 'malo', value: "'malo'", text: 'Malo' },
-            { key: 'regular', value: "'regular'", text: 'Regular' },
+            { key: 'bueno', value: 'bueno', text: 'Bueno' },
+            { key: 'malo', value: 'malo', text: 'Malo' },
+            { key: 'regular', value: 'regular', text: 'Regular' },
 
         ]
         var zonaOptions = [
-            ...options,
-            { value: "'z1'", key: 'zz1', text: 'Zona 1' },
-            { value: "'z2'", key: 'zz2', text: 'Zona 2' },
-            { value: "'z3'", key: 'zz3', text: 'Zona 3' }]
+            { value: 4, key: 'zz0', text: 'Total' },
+            { value: 0, key: 'zz1', text: 'Zona A' },
+            { value: 1, key: 'zz2', text: 'Zona B' },
+            { value: 2, key: 'zz3', text: 'Zona C' }]
 
 
         var clientOptions = [], productOptions = [];
@@ -160,7 +156,7 @@ class MallasProcedence extends Component {
 const mapDispatchToProps = (dispatch) => {
     return {
         updateFilter: (filter) => {
-            dispatch(filterLayers(filter))
+            dispatch(updateMapFilter(filter))
         },
         clearFilter: (filter) => {
             dispatch(clearFilterLayers(filter))

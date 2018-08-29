@@ -12,7 +12,7 @@ export default class MenuMapa extends Component {
         return (
             <div>
                 <Menu
-                    size='large'
+                    size='small'
                     vertical>
                     <Menu.Item
                         name='proceso'
@@ -28,7 +28,19 @@ export default class MenuMapa extends Component {
                             </Header.Content>
                         </Header>
                     </Menu.Item>
+                    <Menu.Item
+                        color="blue"
+                        name='transaccional'
+                        active={activeItem === 'transaccional'}
+                        onClick={this.handleItemClick}>
+                        <Header as='h4'>
+                            <Icon name='street view' size='mini' />
+                            <Header.Content>
+                                <a href="http://localhost:8080/quickview" target="blank">Vista3D y Transaccional</a>  
+                            </Header.Content>
+                        </Header>
 
+                    </Menu.Item>
                     <Menu.Item
                         color="blue"
                         name='mallas'
@@ -36,7 +48,7 @@ export default class MenuMapa extends Component {
                         onClick={this.handleItemClick}
                         to="/mapa/mallas" as={Link}>
                         <Header as='h4'>
-                            <Icon name='connectdevelop' size='mini' />
+                            <Icon name='circle' size='mini' color='red' />
                             <Header.Content>
                                 Mallas
                             </Header.Content>
@@ -51,7 +63,7 @@ export default class MenuMapa extends Component {
                         onClick={this.handleItemClick}
                         to="/mapa/trituradoras" as={Link}>
                         <Header as='h4'>
-                            <Icon name='cut' size='mini' />
+                            <Icon name='square' color='grey' size='mini' />
                             <Header.Content>
                                 Trituradoras
                             </Header.Content>
@@ -66,7 +78,7 @@ export default class MenuMapa extends Component {
                         onClick={this.handleItemClick}
                         to="/mapa/clasificadoras" as={Link}>
                         <Header as='h4'>
-                            <Icon name='map signs' size='mini' />
+                            <Icon name='square' size='mini' />
                             <Header.Content>
                                 Clasificadoras
                             </Header.Content>
@@ -80,7 +92,7 @@ export default class MenuMapa extends Component {
                         onClick={this.handleItemClick}
                         to="/mapa/bandas" as={Link}>
                         <Header as='h4'>
-                            <Icon name='expand arrows alternate' size='mini'/>
+                            <Icon name='minus' size='mini' color='blue'/>
                             <Header.Content>
                                 Bandas
                             </Header.Content>
@@ -94,7 +106,7 @@ export default class MenuMapa extends Component {
                         onClick={this.handleItemClick}
                         to="/mapa/procrudo" as={Link}>
                         <Header as='h4'>
-                            <Icon name='circle' size='mini'/>
+                            <Icon name='square' color='green' size='mini'/>
                             <Header.Content>
                                 Producto crudo
                             </Header.Content>
@@ -108,7 +120,7 @@ export default class MenuMapa extends Component {
                         onClick={this.handleItemClick}
                         to="/mapa/profinal" as={Link}>
                         <Header as='h4'>
-                            <Icon name='dolly' size='mini'/>
+                            <Icon name='square' color='yellow' size='mini'/>
                             <Header.Content>
                                 Producto final
                             </Header.Content>

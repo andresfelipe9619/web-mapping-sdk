@@ -153,31 +153,26 @@ class MapComponent extends Component {
 
             } else if (filter.client && filter.product) {
 
-                let viewString = `cliente:${filter.client};producto:${filter.product}`
+                let viewString = `cliente:${filter.client};producto:${filter.product};calificacion:${filter.calidad};zona:${filter.zona}`
                 console.log('view', viewString)
                 filterParams["VIEWPARAMS"] = viewString;
 
                 let filterString = null;
-                if (filter.calidad && filter.zona) {
+                // if (filter.calidad && filter.zona) {
 
-                    if (filter.calidad == 'todos' && filter.zona == 'todos') {
-                        filterString = null
-                    } else if (filter.calidad == 'todos' && filter.zona) {
-                        filterString = `idzona=${filter.zona}`
-                        filterParams["CQL_FILTER"] = filterString;
-                    } else if (filter.zona == 'todos' && filter.calidad) {
-                        filterString = `calificaci=${filter.calidad}`
-                        filterParams["CQL_FILTER"] = filterString;
-                    } else {
-                        filterString = `idzona=${filter.zona} and calificaci=${filter.calidad}`
-                        filterParams["CQL_FILTER"] = filterString;
-                    }
+                //     if (filter.calidad == 'todos' && filter.zona == 'todos') {
+                //         filterString = null
+                //     } else if (filter.calidad == 'todos' && filter.zona) {
+                //         filterString = `idzona=${filter.zona}`
+                //         filterParams["CQL_FILTER"] = filterString;
+                //     } else if (filter.zona == 'todos' && filter.calidad) {
+                //         filterString = `calificaci=${filter.calidad}`
+                //         filterParams["CQL_FILTER"] = filterString;
+                //     } else {
+                //         filterString = `idzona=${filter.zona} and calificaci=${filter.calidad}`
+                //         filterParams["CQL_FILTER"] = filterString;
+                //     }
 
-                } else {
-                    filterString = null
-                    filterParams["CQL_FILTER"] = filterString;
-                }
-                console.log('string', filterString)
                 if (this.mMap) {
 
                     this.mMap.getLayers().forEach(function (lyr) {
@@ -316,11 +311,12 @@ class MapComponent extends Component {
         this.mMap.on('click', this.clickHandler, this)
 
         if (layers) {
+            console.log('layers', layers)
+            layers.push(layers.splice(layers.findIndex(x=>x.Title == 'cantera'), 1)[0]);
             layers.map((layer) => {
                 this.addLayerToMap(layer, this.mMap)
             })
 
-            console.log('layers', layers)
             if (filter) {
                 this.filterMapLayers(filter)
                 // this.onLayersChange(filter)

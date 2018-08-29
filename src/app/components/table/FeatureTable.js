@@ -20,7 +20,8 @@ class FeatureTable extends Component {
             const temp = Object.keys(element.properties);
             for (let j = 0, jj = temp.length; j < jj; j++) {
                 if (tableData.accessors.indexOf(temp[j]) < 0) {
-                    if (temp[j] == 'bbox' || temp[j] == 'este' || temp[j] == 'norte' || temp[j] == 'gid') {
+                    if (temp[j] == 'bbox' || temp[j] == 'este' || temp[j] == 'norte' || temp[j] == 'gid' || temp[j] == '__gid'
+                     || temp[j] == 'idbad' || temp[j] == 'x1' || temp[j] == 'x2' || temp[j] == 'y1' || temp[j] == 'y2' || temp[j] == 'reverse_co' ) {
                         continue
                     } else {
                         tableData.accessors.push(temp[j])

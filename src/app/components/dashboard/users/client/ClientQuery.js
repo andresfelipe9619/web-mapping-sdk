@@ -100,9 +100,9 @@ class ClientQuery extends Component {
             productOptions.push({ value: product.properties.idpc, label: product.properties.nombre })
         })
 
-        dispatcheds.map(dispatch => {
-            dispatchOptions.push({ value: dispatch.properties.gid, label: dispatch.id })
-        })
+        // dispatcheds.map(dispatch => {
+        //     dispatchOptions.push({ value: dispatch.properties.gid, label: dispatch.id })
+        // })
         
         return (
 

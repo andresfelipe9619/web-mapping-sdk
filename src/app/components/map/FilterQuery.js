@@ -124,10 +124,11 @@ class FilterQuery extends Component {
                     <Segment style={{ marginTop: '4em' }}>
                         <h2>Consulta Sql</h2>
                         <Grid.Row>
-                            <h3>Informacion geografica</h3>
+                            <h4>Informacion geografica</h4>
                             <Dropdown
                                 placeholder="Nombre Capa"
                                 selection
+                                compact
                                 name="layers"
                                 options={layerOptions}
                                 onChange={this.handleChangeLayer}
@@ -135,10 +136,11 @@ class FilterQuery extends Component {
                         </Grid.Row>
                         <Grid.Row>
                             <br />
-                            <h3>Atributos</h3>
+                            <h4>Atributos</h4>
                             <Dropdown
                                 placeholder="atributo"
                                 selection
+                                compact
                                 name="atributos"
                                 options={atributosOptions}
                                 onChange={this.handleChangeAtributos}
@@ -148,6 +150,7 @@ class FilterQuery extends Component {
                                 placeholder='Comparacion'
                                 name="comparacion"
                                 selection
+                                compact
                                 options={comparacionOptions}
                                 onChange={this.handleChangeComparacion}
                             />
@@ -155,6 +158,7 @@ class FilterQuery extends Component {
                             <Form.Input
                                 required
                                 fluid
+                                size='tiny'
                                 name="valor"
                                 placeholder="Valor a comparar"
                                 type="text"
@@ -162,8 +166,8 @@ class FilterQuery extends Component {
                                 value={this.state.query.valor} />
                         </Grid.Row>
 
-                        <Button type='submit' style={{ marginTop: '20px' }} onClick={this.handleSubmit} primary >Consultar</Button>
-                        <Button  style={{ marginTop: '20px' }} onClick={this.props.clearFilter} primary >Reiniciar</Button>
+                        <Button type='submit' style={{ marginTop: '20px', marginLeft: '-10px' }} onClick={this.handleSubmit} primary size='mini'>Consultar</Button>
+                        <Button  style={{ marginTop: '20px' }} onClick={this.props.clearFilter} primary size='mini'>Reiniciar</Button>
                     </Segment>
 
                 </div>
